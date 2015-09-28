@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>
+			Mooog test - jsFiddle demo by mrisher
+		</title>
+		<script type='text/javascript' src='//code.jquery.com/jquery-2.1.0.js'>
+</script>
+		<script type="text/javascript" src="//code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js">
+</script>
+		<link rel="stylesheet" type="text/css" href="//code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
+		<link rel="stylesheet" type="text/css" href="/css/result-light.css">
+		<script type='text/javascript' src="https://rawgithub.com/mattlima/mooog/master/dist/mooog.min.js">
+</script>
+		<style type='text/css'>
+body {
+		width: 320px;
+		}
+		</style>
+
+
+<script type='text/javascript'>
+//<![CDATA[
+		$(window).load(function(){
+
+		$("#slider-1").on("slidestop", function (event, ui) {
+		guess.node("guess").param("frequency", ui.value);
+		});
+
+		var secretFreq = Math.floor((Math.random() * 600) + 200);
+
+		var guess = new Mooog();
+		guess.node({
+		id: "guess",
+		node_type: "Oscillator",
+		type: "triangle",
+		frequency: $('#slider-1').val()
+		});
+
+		$(document)
+		.on("mousedown", ".trigger2", function () {
+		guess.node("guess").start();
+		})
+		.on("mouseup", ".trigger2", function () {
+		guess.node("guess").stop();
+		});
+
+
+
+		var reference = new Mooog();
+		reference.node({
+		id: "reference",
+		node_type: "Oscillator",
+		type: "triangle",
+		frequency: secretFreq
+		});
+
+		$(document)
+		.on("mousedown", ".trigger1", function () {
+		reference.node("reference").start();
+		})
+		.on("mouseup", ".trigger1", function () {
+		reference.node("reference").stop();
+		})
+		.on("mousedown", ".trigger3", function () {
+		$("#answer").html(secretFreq + " Hz. (off by " + Math.abs(secretFreq - $('#slider-1').val()) + " Hz.)").show();
+		guess.node("guess").start();
+		reference.node("reference").start();
+		})
+
+		.on("mouseup", ".trigger3", function () {
+		$("#answer").hide();
+		guess.node("guess").stop();
+		reference.node("reference").stop();
+		});
+
+
+		});//]]> 
+
+</script>
+</head>
+	<body>
+		<ol>
+			<li>
+				<p>
+					Play reference tone: <button class="trigger1 ui-btn">Play</button>
+				</p>
+			</li>
+			<li style="width:80%">
+				<label for="slider-1">Adjust your guess (Hz.)</label> <input type="range" data-type="range" name="slider" id="slider-1" min="200" max="800" value="200">
+			</li>
+			<li>
+				<p>
+					Play your guess: <button class="trigger2 ui-btn">Play</button>
+				</p>
+			</li>
+			<li>
+				<p>
+					Reveal the answer <button class="trigger3 ui-btn">Reveal</button>==&gt; <span id="answer"></span>
+				</p>
+			</li>
+		</ol>
+	</body>
+</html>
