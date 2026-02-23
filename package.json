@@ -1,0 +1,17 @@
+{
+  "name": "namethattune",
+  "version": "1.0.0",
+  "description": "Heardle clone",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "heroku-postbuild": "cd client && npm install && npm run build",
+    "gcp-build": "cd client && npm install && npm run build"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
