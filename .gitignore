@@ -1,1 +1,3 @@
 node_modules/\nclient/node_modules/\nclient/build/\n.DS_Store
+node_modules/**
+
