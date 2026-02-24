@@ -127,56 +127,59 @@ const Game = () => {
   if (!targetSong) return <div style={{ color: '#00ff00' }}>LOADING...</div>;
 
   return (
-    <div className="dudle-container">
-      <div className="left-column">
-        <div id="webamp-container" ref={webampContainerRef}></div>
-      </div>
+    <>
+      <h1 className="dudle-header">DUDLE</h1>
+      <div className="dudle-container">
+        <div className="left-column">
+          <div id="webamp-container" ref={webampContainerRef}></div>
+        </div>
 
-      <div className="right-column">
-        <div className="playlist-window">
-          <div className="playlist-titlebar">
-            <span>GUESSES</span>
-            <span>🗙</span>
-          </div>
-          <div className="playlist-content">
-            {guesses.map((g, i) => (
-              <div key={i} className={`playlist-entry ${g.status}`}>
-                <span>{i + 1}. {g.trackName}</span>
-                <span>{g.artistName}</span>
-              </div>
-            ))}
-            {[...Array(Math.max(0, 6 - guesses.length))].map((_, i) => (
-              <div key={i + guesses.length} className="playlist-entry">
-                <span>{i + guesses.length + 1}. ------------------</span>
-              </div>
-            ))}
-          </div>
-          <div className="playlist-footer">
-             <span>{guesses.length}/6 GUESSES</span>
-             <div style={{ display: 'flex', gap: '4px' }}>
-                <span>ADD</span><span>REM</span><span>SEL</span><span>MISC</span>
-             </div>
-          </div>
-        </div>
-        
-        <div className="controls-window">
-          {gameState === 'playing' ? (
-            <>
-              <Search onSelect={handleGuess} />
-              <button className="winamp-btn" onClick={handleSkip} style={{ width: '100%', marginTop: '4px' }}>
-                SKIP (+{DURATION_MAP[guesses.length] || 1}s)
-              </button>
-            </>
-          ) : (
-            <div style={{ textAlign: 'center', color: '#00ff00' }}>
-              <div>{gameState === 'won' ? '*** YOU WON! ***' : '--- GAME OVER ---'}</div>
-              <div style={{ fontSize: '12px', margin: '4px 0' }}>{targetSong.songTitle} - {targetSong.artistName}</div>
-              <button className="winamp-btn" onClick={() => window.location.reload()} style={{ width: '100%' }}>PLAY AGAIN</button>
+        <div className="right-column">
+          <div className="playlist-window">
+            <div className="playlist-titlebar">
+              <span>GUESSES</span>
+              <span>🗙</span>
             </div>
-          )}
+            <div className="playlist-content">
+              {guesses.map((g, i) => (
+                <div key={i} className={`playlist-entry ${g.status}`}>
+                  <span>{i + 1}. {g.trackName}</span>
+                  <span>{g.artistName}</span>
+                </div>
+              ))}
+              {[...Array(Math.max(0, 6 - guesses.length))].map((_, i) => (
+                <div key={i + guesses.length} className="playlist-entry">
+                  <span>{i + guesses.length + 1}. ------------------</span>
+                </div>
+              ))}
+            </div>
+            <div className="playlist-footer">
+               <span>{guesses.length}/6 GUESSES</span>
+               <div style={{ display: 'flex', gap: '4px' }}>
+                  <span>ADD</span><span>REM</span><span>SEL</span><span>MISC</span>
+               </div>
+            </div>
+          </div>
+          
+          <div className="controls-window">
+            {gameState === 'playing' ? (
+              <>
+                <Search onSelect={handleGuess} />
+                <button className="winamp-btn" onClick={handleSkip} style={{ width: '100%', marginTop: '4px' }}>
+                  SKIP (+{DURATION_MAP[guesses.length] || 1}s)
+                </button>
+              </>
+            ) : (
+              <div style={{ textAlign: 'center', color: '#00ff00' }}>
+                <div>{gameState === 'won' ? '*** YOU WON! ***' : '--- GAME OVER ---'}</div>
+                <div style={{ fontSize: '12px', margin: '4px 0' }}>{targetSong.songTitle} - {targetSong.artistName}</div>
+                <button className="winamp-btn" onClick={() => window.location.reload()} style={{ width: '100%' }}>PLAY AGAIN</button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
