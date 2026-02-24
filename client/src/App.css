@@ -52,8 +52,14 @@ body {
 }
 
 .playlist-titlebar {
-  background: linear-gradient(to right, #000080, #1084d0);
-  color: #fff;
+  background: repeating-linear-gradient(
+    to bottom,
+    #30303A 0px,
+    #30303A 1px,
+    #424250 1px,
+    #424250 2px
+  );
+  color: #ccc;
   height: 14px;
   font-size: 11px;
   font-family: sans-serif;
@@ -62,6 +68,7 @@ body {
   align-items: center;
   padding: 0 5px;
   justify-content: space-between;
+  box-sizing: border-box;
 }
 
 .playlist-content {
@@ -188,4 +195,59 @@ body {
 .search-menu li:hover {
   background-color: #000080;
   color: #fff;
+}
+
+@media (max-width: 600px) {
+  body {
+    align-items: flex-start;
+  }
+  .App {
+    width: 100%;
+  }
+  .dudle-container {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  .left-column {
+    align-items: center;
+    background-color: #000;
+  }
+  .right-column {
+    width: 100%;
+    height: auto;
+    min-height: 232px;
+  }
+  .controls-window {
+    width: 100%;
+  }
+}
+
+/* Replace Webamp main window title with Dudle */
+#webamp-container #main-window #title-bar::before {
+  content: "DUDLE v1.0";
+  position: absolute;
+  top: 0px;
+  left: 10px;
+  right: 48px;
+  bottom: 0px;
+  background: repeating-linear-gradient(
+    to bottom,
+    #30303A 0px,
+    #30303A 1px,
+    #424250 1px,
+    #424250 2px
+  );
+  color: #ccc;
+  font-family: sans-serif;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  z-index: 10;
 }
