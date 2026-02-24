@@ -4,23 +4,32 @@ const Player = ({ audioUrl, offset, duration, onPlayEnd }) => {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [currentTimeDisplay, setCurrentTimeDisplay] = useState("00:00");
 
   useEffect(() => {
-    // Reset progress when duration changes (new turn)
     setProgress(0);
+    setCurrentTimeDisplay("00:00");
   }, [duration]);
 
   const handlePlay = () => {
+    const audio = audioRef.current;
     if (isPlaying) {
-      audioRef.current.pause();
+      audio.pause();
       setIsPlaying(false);
       return;
     }
-
-    const audio = audioRef.current;
     audio.currentTime = offset;
     audio.play();
     setIsPlaying(true);
+  };
+
+  const handleStop = () => {
+    const audio = audioRef.current;
+    audio.pause();
+    audio.currentTime = offset;
+    setIsPlaying(false);
+    setProgress(0);
+    setCurrentTimeDisplay("00:00");
   };
 
   const handleTimeUpdate = () => {
@@ -28,65 +37,71 @@ const Player = ({ audioUrl, offset, duration, onPlayEnd }) => {
     if (!audio) return;
 
     const currentPlayTime = audio.currentTime - offset;
+    const secs = Math.floor(currentPlayTime);
+    const ms = Math.floor((currentPlayTime - secs) * 100);
+    setCurrentTimeDisplay(`0${secs}:${ms.toString().padStart(2, '0')}`);
 
-    // Update progress bar
     const progressPercent = (currentPlayTime / duration) * 100;
     setProgress(Math.min(progressPercent, 100));
 
     if (currentPlayTime >= duration) {
-      audio.pause();
-      audio.currentTime = offset;
-      setIsPlaying(false);
-      setProgress(0);
+      handleStop();
       if (onPlayEnd) onPlayEnd();
     }
   };
 
   return (
-    <div style={{ width: '100%', maxWidth: '600px', margin: '20px auto', textAlign: 'center' }}>
+    <div className="winamp-window" style={{ width: '275px' }}>
       <audio
         ref={audioRef}
         src={audioUrl}
         onTimeUpdate={handleTimeUpdate}
-        onEnded={() => setIsPlaying(false)}
+        onEnded={handleStop}
       />
-
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px' }}>
-        <button
-          onClick={handlePlay}
-          style={{
-            padding: '10px 20px',
-            fontSize: '16px',
-            cursor: 'pointer',
-            backgroundColor: '#1db954', // Spotify green
-            color: 'white',
-            border: 'none',
-            borderRadius: '20px',
-            width: '100px'
-          }}
-        >
-          {isPlaying ? 'Stop' : 'Play'}
-        </button>
+      <div className="winamp-titlebar">
+        <span>WINAMP</span>
+        <div style={{ display: 'flex', gap: '2px' }}>
+          <div className="winamp-titlebar-btn"></div>
+          <div className="winamp-titlebar-btn"></div>
+          <div className="winamp-titlebar-btn"></div>
+        </div>
       </div>
+      
+      <div className="winamp-content player-main">
+        <div className="led-display">
+          {currentTimeDisplay}
+        </div>
+        
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+          <div style={{ fontSize: '10px', color: '#00ff00' }}>
+            128 kbps<br/>44 kHz
+          </div>
+          <div style={{ fontSize: '10px', color: '#00ff00', textAlign: 'right' }}>
+            mono <span style={{ color: '#00ff00', fontWeight: 'bold' }}>stereo</span>
+          </div>
+        </div>
 
-      {/* Progress Bar Container */}
-      <div style={{
-        height: '10px',
-        backgroundColor: '#ddd',
-        borderRadius: '5px',
-        overflow: 'hidden',
-        position: 'relative'
-      }}>
-        {/* Progress Fill */}
-        <div style={{
-          height: '100%',
-          width: `${progress}%`,
-          backgroundColor: '#1db954',
-          transition: 'width 0.1s linear'
-        }} />
-      </div>
-      <div style={{ marginTop: '5px', fontSize: '12px', color: '#666' }}>
-        Playing {duration} second{duration !== 1 ? 's' : ''}
+        <div className="scrolling-title-container">
+          <div className="scrolling-title">
+            1. ????? ????? ????? ????? ????? ????? ????? ?????
+          </div>
+        </div>
+
+        <div className="playback-controls">
+          <div className="winamp-btn-small disabled">|◀◀</div>
+          <div className="winamp-btn-small" onClick={handlePlay}>
+            {isPlaying ? '||' : '▶'}
+          </div>
+          <div className="winamp-btn-small disabled">||</div>
+          <div className="winamp-btn-small" onClick={handleStop}>■</div>
+          <div className="winamp-btn-small disabled">▶▶|</div>
+        </div>
+
+        <div style={{ gridColumn: '1 / span 2' }}>
+           <div className="winamp-progress-bg" style={{ height: '10px' }}>
+             <div className="winamp-progress-fill" style={{ width: `${progress}%` }} />
+           </div>
+        </div>
       </div>
     </div>
   );

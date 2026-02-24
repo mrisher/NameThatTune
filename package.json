@@ -1,12 +1,13 @@
 {
   "name": "namethattune",
   "version": "1.0.0",
-  "description": "Heardle clone",
+  "description": "Dudle",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "heroku-postbuild": "cd client && npm install && npm run build",
-    "gcp-build": "cd client && npm install && npm run build"
+    "gcp-build": "cd client && npm install && npm run build",
+    "deploy": "gcloud app deploy --project=dudle-488408"
   },
   "dependencies": {
     "express": "^4.18.2"

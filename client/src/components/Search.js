@@ -35,65 +35,33 @@ const Search = ({ onSelect, disabled }) => {
   };
 
   return (
-    <div style={{ position: 'relative', width: '100%', maxWidth: '600px', margin: '0 auto' }}>
+    <div style={{ position: 'relative', width: '100%' }}>
       <input
         type="text"
-        placeholder="Search for a song..."
+        placeholder="SEARCH FOR A SONG..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         disabled={disabled}
-        style={{
-          width: '100%',
-          padding: '12px',
-          fontSize: '16px',
-          borderRadius: '4px',
-          border: '1px solid #ccc',
-          boxSizing: 'border-box'
-        }}
+        className="winamp-input"
       />
 
       {results.length > 0 && (
-        <ul style={{
-          position: 'absolute',
-          top: '100%',
-          left: 0,
-          right: 0,
-          backgroundColor: 'white',
-          border: '1px solid #ccc',
-          borderTop: 'none',
-          listStyle: 'none',
-          padding: 0,
-          margin: 0,
-          zIndex: 10,
-          maxHeight: '200px',
-          overflowY: 'auto',
-          boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
-        }}>
+        <ul className="search-menu">
           {results.map((track) => (
             <li
               key={track.trackId}
               onClick={() => handleSelect(track)}
-              style={{
-                padding: '10px',
-                cursor: 'pointer',
-                borderBottom: '1px solid #eee',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between'
-              }}
-              onMouseEnter={(e) => e.target.style.backgroundColor = '#f0f0f0'}
-              onMouseLeave={(e) => e.target.style.backgroundColor = 'white'}
             >
-              <div>
+              <div style={{ fontSize: '14px' }}>
                 <strong>{track.trackName}</strong>
                 <br />
-                <span style={{ fontSize: '12px', color: '#666' }}>{track.artistName}</span>
+                <span style={{ fontSize: '12px', opacity: 0.7 }}>{track.artistName}</span>
               </div>
             </li>
           ))}
         </ul>
       )}
-      {loading && <div style={{ position: 'absolute', right: '10px', top: '12px', color: '#999' }}>Loading...</div>}
+      {loading && <div style={{ position: 'absolute', right: '10px', top: '8px', color: '#00ff00', fontSize: '12px' }}>[LOADING...]</div>}
     </div>
   );
 };
