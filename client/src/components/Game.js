@@ -8,12 +8,23 @@ const DURATION_MAP = {
   0: 1, 1: 2, 2: 3, 3: 4, 4: 5, 5: 5
 };
 
+const getStatusIcon = (status) => {
+  switch (status) {
+    case 'green': return '🟩';
+    case 'yellow': return '🟨';
+    case 'red': return '🟥';
+    case 'skipped': return '⬛';
+    default: return '⬜';
+  }
+};
+
 const Game = () => {
   const [guesses, setGuesses] = useState([]);
   const [gameState, setGameState] = useState('playing'); // playing, won, lost
   const [unlockDuration, setUnlockDuration] = useState(1);
   const [targetSong, setTargetSong] = useState(null);
   const [isDebug, setIsDebug] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
   
   const webampRef = useRef(null);
   const webampContainerRef = useRef(null);
@@ -124,6 +135,18 @@ const Game = () => {
     }
   };
 
+  const handleShare = () => {
+    let resultEmoji = "";
+    guesses.forEach(g => {
+      resultEmoji += getStatusIcon(g.status);
+    });
+
+    const shareText = `I solved today's Dudle in ${guesses.length}: ${resultEmoji} ${window.location.href}`;
+    navigator.clipboard.writeText(shareText).then(() => {
+      setShowShareModal(true);
+    });
+  };
+
   if (!targetSong) return <div style={{ color: '#00ff00' }}>LOADING...</div>;
 
   return (
@@ -143,13 +166,13 @@ const Game = () => {
             <div className="playlist-content">
               {guesses.map((g, i) => (
                 <div key={i} className={`playlist-entry ${g.status}`}>
-                  <span>{i + 1}. {g.trackName}</span>
+                  <span>{i + 1}. {getStatusIcon(g.status)} {g.trackName}</span>
                   <span>{g.artistName}</span>
                 </div>
               ))}
               {[...Array(Math.max(0, 6 - guesses.length))].map((_, i) => (
                 <div key={i + guesses.length} className="playlist-entry">
-                  <span>{i + guesses.length + 1}. ------------------</span>
+                  <span>{i + guesses.length + 1}. ⬜ ------------------</span>
                 </div>
               ))}
             </div>
@@ -173,12 +196,29 @@ const Game = () => {
               <div style={{ textAlign: 'center', color: '#00ff00' }}>
                 <div>{gameState === 'won' ? '*** YOU WON! ***' : '--- GAME OVER ---'}</div>
                 <div style={{ fontSize: '12px', margin: '4px 0' }}>{targetSong.songTitle} - {targetSong.artistName}</div>
+                {gameState === 'won' && (
+                  <button className="winamp-btn" onClick={handleShare} style={{ width: '100%', marginBottom: '4px' }}>SHARE RESULTS</button>
+                )}
                 <button className="winamp-btn" onClick={() => window.location.reload()} style={{ width: '100%' }}>PLAY AGAIN</button>
               </div>
             )}
           </div>
         </div>
       </div>
+
+      {showShareModal && (
+        <div className="share-modal-overlay">
+          <div className="share-modal">
+            <div className="share-modal-titlebar">
+              <span>SHARE RESULTS</span>
+              <span className="close-btn" onClick={() => setShowShareModal(false)}>🗙</span>
+            </div>
+            <div className="share-modal-content">
+              Copied to clipboard!
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

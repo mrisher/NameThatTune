@@ -243,3 +243,71 @@ body {
   }
 }
 
+/* Share Modal */
+.share-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.share-modal {
+  background-color: #2b2b35;
+  border: 2px solid #555;
+  padding: 2px;
+  width: 300px;
+  box-shadow: inset 1px 1px #888, inset -1px -1px #000, 4px 4px 0px rgba(0,0,0,0.5);
+}
+
+.share-modal-titlebar {
+  background: repeating-linear-gradient(
+    to bottom,
+    #30303A 0px,
+    #30303A 1px,
+    #424250 1px,
+    #424250 2px
+  );
+  color: #ccc;
+  height: 18px;
+  font-size: 12px;
+  font-family: sans-serif;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  padding: 0 5px;
+  justify-content: space-between;
+}
+
+.share-modal-titlebar span.close-btn {
+  cursor: pointer;
+  background-color: #c0c0c0;
+  color: #000;
+  padding: 0 4px;
+  border: 1px solid #fff;
+  border-right-color: #888;
+  border-bottom-color: #888;
+}
+
+.share-modal-titlebar span.close-btn:active {
+  border: 1px solid #888;
+  border-right-color: #fff;
+  border-bottom-color: #fff;
+}
+
+.share-modal-content {
+  background-color: #000;
+  color: #00ff00;
+  font-family: 'VT323', monospace;
+  font-size: 18px;
+  padding: 15px;
+  text-align: center;
+  border: 1px inset #555;
+  margin: 2px;
+}
+
