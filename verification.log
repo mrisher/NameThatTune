@@ -1,8 +1,7 @@
-Navigating to app...
-Found title.
-Found Play button.
-Typed 'Bohemian Rhapsody'.
-Found search results.
-Clicked result.
-Found success checkmark.
-Screenshot saved.
+1. Checking default mode (no shuffle)...
+Success: Shuffle button not found in normal mode.
+2. Checking debug mode (with shuffle)...
+Success: Shuffle button found in debug mode.
+Clicked Shuffle.
+3. Checking Share button visibility (mock win)...
+Debug screenshot saved.

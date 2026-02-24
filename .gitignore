@@ -1,1 +1,8 @@
-node_modules/\nclient/node_modules/\nclient/build/\n.DS_Store
+node_modules/
+client/node_modules/
+client/build/
+.DS_Store
+server.log
+verification/
+test_output.txt
+verification.log
