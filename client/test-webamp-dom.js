@@ -32,3 +32,17 @@ webamp.renderWhenReady(document.getElementById("app")).then(() => {
   console.error(err);
   process.exit(1);
 });
+
+webamp.renderWhenReady(document.getElementById("app")).then(() => {
+  try {
+    webamp.store.dispatch({
+      type: 'SET_MEDIA_TAGS',
+      id: 0,
+      title: 'Test',
+      artist: 'Test'
+    });
+    console.log("Dispatch success");
+  } catch(e) {
+    console.log("Dispatch error", e);
+  }
+}).catch(e => console.log(e));

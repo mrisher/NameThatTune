@@ -25,6 +25,7 @@ const Game = () => {
   const [targetSong, setTargetSong] = useState(null);
   const [isDebug, setIsDebug] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
+  const [shareText, setShareText] = useState("");
   
   const webampRef = useRef(null);
   const webampContainerRef = useRef(null);
@@ -33,7 +34,17 @@ const Game = () => {
     const params = new URLSearchParams(window.location.search);
     setIsDebug(params.get('debug') === '1');
 
-    const today = new Date().toISOString().split('T')[0];
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'Europe/Paris',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    }).formatToParts(new Date());
+    const year = parts.find(p => p.type === 'year').value;
+    const month = parts.find(p => p.type === 'month').value;
+    const day = parts.find(p => p.type === 'day').value;
+    const today = `${year}-${month}-${day}`;
+
     const todaysSong = songs.find(s => s.day === today) || songs[0];
     setTargetSong(todaysSong);
   }, []);
@@ -98,15 +109,6 @@ const Game = () => {
     let status = 'red';
     if (isTitleCorrect && isArtistCorrect) {
       status = 'green';
-      setGameState('won');
-      setUnlockDuration(15);
-      // Reveal song in Webamp
-      webampRef.current?.store.dispatch({
-        type: 'SET_MEDIA_TAGS',
-        id: 0,
-        title: targetSong.songTitle,
-        artist: targetSong.artistName
-      });
     } else if (isArtistCorrect) {
       status = 'yellow';
     }
@@ -114,7 +116,21 @@ const Game = () => {
     const newGuesses = [...guesses, { ...selectedTrack, status }];
     setGuesses(newGuesses);
 
-    if (status !== 'green') {
+    if (status === 'green') {
+      setGameState('won');
+      setUnlockDuration(15);
+      // Reveal song in Webamp
+      try {
+        webampRef.current?.store.dispatch({
+          type: 'SET_MEDIA_TAGS',
+          id: 0,
+          title: targetSong.songTitle,
+          artist: targetSong.artistName
+        });
+      } catch (e) {
+        console.error("Failed to set media tags:", e);
+      }
+    } else {
       if (newGuesses.length >= 6) {
         setGameState('lost');
         setUnlockDuration(15);
@@ -141,8 +157,9 @@ const Game = () => {
       resultEmoji += getStatusIcon(g.status);
     });
 
-    const shareText = `I solved today's Dudle in ${guesses.length}: ${resultEmoji} ${window.location.href}`;
-    navigator.clipboard.writeText(shareText).then(() => {
+    const textToShare = `I solved today's Dudle in ${guesses.length}: ${resultEmoji} ${window.location.href}`;
+    navigator.clipboard.writeText(textToShare).then(() => {
+      setShareText(textToShare);
       setShowShareModal(true);
     });
   };
@@ -214,7 +231,10 @@ const Game = () => {
               <span className="close-btn" onClick={() => setShowShareModal(false)}>🗙</span>
             </div>
             <div className="share-modal-content">
-              Copied to clipboard!
+              <div>Copied to clipboard!</div>
+              <div style={{ marginTop: '12px', padding: '8px', background: '#000', border: '1px solid #00ff00', whiteSpace: 'pre-wrap', wordBreak: 'break-word', fontSize: '12px' }}>
+                {shareText}
+              </div>
             </div>
           </div>
         </div>
