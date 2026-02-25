@@ -3,7 +3,7 @@
   "name": "Dudle",
   "icons": [
     {
-      "src": "favicon.png",
+      "src": "dudle.png",
       "sizes": "256x256",
       "type": "image/png"
     },
