@@ -26,9 +26,24 @@ const Game = () => {
   const [isDebug, setIsDebug] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const [shareText, setShareText] = useState("");
+  const [scale, setScale] = useState(1);
   
   const webampRef = useRef(null);
   const webampContainerRef = useRef(null);
+
+  useEffect(() => {
+    const handleResize = () => {
+      let currentScale = 1;
+      if (window.innerWidth <= 600) {
+        currentScale = window.innerWidth / 275;
+      }
+      setScale(currentScale);
+      document.documentElement.style.setProperty('--webamp-scale', currentScale);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -59,11 +74,11 @@ const Game = () => {
             title: '?????'
           }
         }],
-        windowLayout: {
-          main: { position: { top: 0, left: 0 } },
-          playlist: { position: { top: 0, left: 0 }, closed: true },
-          equalizer: { position: { top: 116, left: 0 }, closed: false },
-          milkdrop: { position: { top: 0, left: 0 }, closed: true }
+        __initialWindowLayout: {
+          main: { position: { x: 0, y: 0 } },
+          playlist: { position: { x: 0, y: 0 }, closed: true },
+          equalizer: { position: { x: 0, y: 116 }, closed: false },
+          milkdrop: { position: { x: 0, y: 0 }, closed: true }
         }
       });
 
@@ -171,7 +186,13 @@ const Game = () => {
       <h1 className="dudle-header">DUDLE</h1>
       <div className="dudle-container">
         <div className="left-column">
-          <div id="webamp-container" ref={webampContainerRef}></div>
+          <div 
+            id="webamp-container" 
+            ref={webampContainerRef}
+            style={{ 
+              marginBottom: scale !== 1 ? `${232 * (scale - 1)}px` : '0px'
+            }}
+          ></div>
         </div>
 
         <div className="right-column">

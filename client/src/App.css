@@ -215,23 +215,55 @@ body {
   .dudle-header {
     font-size: 48px;
     letter-spacing: 5px;
+    margin: 10px 0;
+    width: 100%;
   }
   body {
-    align-items: flex-start;
+    display: block;
+    background-color: #2b2b35;
+    margin: 0;
+    padding: 0;
   }
   .App {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
   }
   .dudle-container {
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
     width: 100%;
     padding: 0;
+    margin: 0;
     box-sizing: border-box;
   }
   .left-column {
     align-items: center;
-    background-color: #000;
+    width: 100%;
+  }
+  #webamp-container {
+    width: 275px;
+    height: 232px;
+    position: relative;
+    overflow: visible;
+  }
+  #webamp {
+    position: absolute !important;
+    top: 0 !important;
+    left: 50% !important;
+    right: auto !important;
+    margin: 0 0 0 -137.5px !important;
+    width: 275px !important;
+    transform-origin: top center !important;
+    transform: scale(var(--webamp-scale, 1)) !important;
+  }
+  #webamp div:has(> #main-window) {
+    transform: translate(0px, 0px) !important;
+  }
+  #webamp div:has(> #equalizer-window) {
+    transform: translate(0px, 116px) !important;
   }
   .right-column {
     width: 100%;
