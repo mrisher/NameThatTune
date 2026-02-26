@@ -79,6 +79,12 @@ const Game = () => {
           playlist: { position: { x: 0, y: 0 }, closed: true },
           equalizer: { position: { x: 0, y: 116 }, closed: false },
           milkdrop: { position: { x: 0, y: 0 }, closed: true }
+        },
+        windowLayout: {
+          main: { position: { left: 0, top: 0 } },
+          playlist: { position: { left: 0, top: 0 }, closed: true },
+          equalizer: { position: { left: 0, top: 116 } },
+          milkdrop: { position: { left: 0, top: 0 }, closed: true }
         }
       });
 
