@@ -52,13 +52,7 @@ body {
 }
 
 .playlist-titlebar {
-  background: repeating-linear-gradient(
-    to bottom,
-    #30303A 0px,
-    #30303A 1px,
-    #424250 1px,
-    #424250 2px
-  ) !important;
+  background: #2b2b35;
   color: #ccc !important;
   height: 14px;
   font-size: 11px;
@@ -67,8 +61,24 @@ body {
   display: flex;
   align-items: center;
   padding: 0 5px;
-  justify-content: space-between;
+  justify-content: center;
+  position: relative;
   box-sizing: border-box;
+  gap: 4px;
+}
+
+.playlist-titlebar::before,
+.playlist-titlebar::after {
+  content: '';
+  flex: 1;
+  height: 6px;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 1px,
+    #7b6e2e 1px,
+    #7b6e2e 2px
+  );
 }
 
 .playlist-content {

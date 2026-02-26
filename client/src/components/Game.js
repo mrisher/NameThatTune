@@ -202,7 +202,6 @@ const Game = () => {
           <div className="playlist-window">
             <div className="playlist-titlebar">
               <span>GUESSES</span>
-              <span>🗙</span>
             </div>
             <div className="playlist-content">
               {guesses.map((g, i) => (
