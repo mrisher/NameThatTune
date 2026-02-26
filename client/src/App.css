@@ -246,7 +246,7 @@ body {
   }
   #webamp-container {
     width: 275px;
-    height: calc(232px * var(--webamp-scale, 1));
+    height: calc(232px * var(--webamp-scale, 1) - 60px);
     position: relative;
     overflow: visible;
   }
