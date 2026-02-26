@@ -246,13 +246,13 @@ body {
   }
   #webamp-container {
     width: 275px;
-    height: calc(232px * var(--webamp-scale, 1) - 60px);
+    height: calc(232px * var(--webamp-scale, 1) + 18px);
     position: relative;
     overflow: visible;
   }
   #webamp {
     position: absolute !important;
-    top: 0 !important;
+    top: 78px !important;
     left: 50% !important;
     right: auto !important;
     margin: 0 0 0 -137.5px !important;
