@@ -189,9 +189,6 @@ const Game = () => {
           <div 
             id="webamp-container" 
             ref={webampContainerRef}
-            style={{ 
-              marginBottom: scale !== 1 ? `${232 * (scale - 1)}px` : '0px'
-            }}
           ></div>
         </div>
 
