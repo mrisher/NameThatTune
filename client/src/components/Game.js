@@ -211,7 +211,8 @@ const Game = () => {
             resultEmoji += getStatusIcon(g.status);
         });
 
-        const textToShare = `I solved today's Dudle in ${guesses.length}: ${resultEmoji} ${window.location.href}`;
+        const score = gameState === "won" ? guesses.length : "X";
+        const textToShare = `I played today's Dudle ${score}/6: ${resultEmoji} ${window.location.href}`;
         navigator.clipboard.writeText(textToShare).then(() => {
             setShareText(textToShare);
             setShowShareModal(true);
@@ -304,7 +305,7 @@ const Game = () => {
                                     {targetSong.songTitle} -{" "}
                                     {targetSong.artistName}
                                 </div>
-                                {gameState === "won" && (
+                                {(gameState === "won" || gameState === "lost") && (
                                     <button
                                         className="winamp-btn"
                                         onClick={handleShare}
