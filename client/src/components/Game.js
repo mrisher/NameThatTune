@@ -159,19 +159,50 @@ const Game = () => {
     const handleGuess = (selectedTrack) => {
         if (!targetSong) return;
 
-        const options = { includeScore: true, threshold: 0.4 };
-        const artistFuse = new Fuse([targetSong.artistName], options);
-        const titleFuse = new Fuse([targetSong.songTitle], options);
+        const normalizeFuzzy = (str) =>
+            str
+                .toLowerCase()
+                .replace(/\([^)]*\)/g, "")
+                .replace(/\[[^\]]*\]/g, "")
+                .replace(/[^\w\s]/g, "")
+                .trim();
 
-        const isArtistCorrect =
-            artistFuse.search(selectedTrack.artistName || "").length > 0;
-        const isTitleCorrect =
-            titleFuse.search(selectedTrack.trackName || "").length > 0;
+        const normalizeExact = (str) => str.toLowerCase().trim();
+
+        const targetArtistFuzzy = normalizeFuzzy(targetSong.artistName);
+        const targetTitleFuzzy = normalizeFuzzy(targetSong.songTitle);
+        const guessArtistFuzzy = normalizeFuzzy(selectedTrack.artistName || "");
+        const guessTitleFuzzy = normalizeFuzzy(selectedTrack.trackName || "");
+
+        const targetArtistExact = normalizeExact(targetSong.artistName);
+        const targetTitleExact = normalizeExact(targetSong.songTitle);
+        const guessArtistExact = normalizeExact(selectedTrack.artistName || "");
+        const guessTitleExact = normalizeExact(selectedTrack.trackName || "");
+
+        const options = { includeScore: true, threshold: 0.4 };
+
+        const artistFuse = new Fuse([targetArtistFuzzy], options);
+        const titleFuse = new Fuse([targetTitleFuzzy], options);
+
+        const isArtistFuzzy =
+            targetArtistFuzzy === guessArtistFuzzy ||
+            targetArtistFuzzy.includes(guessArtistFuzzy) ||
+            guessArtistFuzzy.includes(targetArtistFuzzy) ||
+            artistFuse.search(guessArtistFuzzy).length > 0;
+
+        const isTitleFuzzy =
+            targetTitleFuzzy === guessTitleFuzzy ||
+            targetTitleFuzzy.includes(guessTitleFuzzy) ||
+            guessTitleFuzzy.includes(targetTitleFuzzy) ||
+            titleFuse.search(guessTitleFuzzy).length > 0;
+
+        const isArtistExact = targetArtistExact === guessArtistExact;
+        const isTitleExact = targetTitleExact === guessTitleExact;
 
         let status = "red";
-        if (isTitleCorrect && isArtistCorrect) {
+        if (isTitleExact && isArtistExact) {
             status = "green";
-        } else if (isArtistCorrect) {
+        } else if (isArtistFuzzy || isTitleFuzzy) {
             status = "yellow";
         }
 
