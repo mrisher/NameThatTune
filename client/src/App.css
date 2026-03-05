@@ -1,0 +1,363 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'VT323', monospace;
+  background-color: #2b2b35; /* Classic Winamp background color */
+  color: #00ff00;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Container for the docked windows */
+.dudle-container {
+  display: flex;
+  gap: 0;
+  padding: 10px;
+  background-color: #2b2b35;
+}
+
+/* Left column for Player and EQ */
+.left-column {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Right column for Guesses (Playlist) */
+.right-column {
+  width: 275px;
+  height: 232px; /* Height of two windows */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Mocking the Winamp Playlist Window for Guesses */
+.playlist-window {
+  background-color: #2b2b35;
+  border: 1px solid #111;
+  box-shadow: inset 1px 1px #555, inset -1px -1px #000;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 2px;
+}
+
+.playlist-titlebar {
+  background: #2b2b35;
+  color: #ccc !important;
+  height: 14px;
+  font-size: 11px;
+  font-family: sans-serif !important;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  padding: 0 5px;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+  gap: 4px;
+}
+
+.playlist-titlebar::before,
+.playlist-titlebar::after {
+  content: '';
+  flex: 1;
+  height: 6px;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 1px,
+    #7b6e2e 1px,
+    #7b6e2e 2px
+  );
+}
+
+.playlist-content {
+  flex-grow: 1;
+  background-color: #000;
+  padding: 2px;
+  overflow-y: auto;
+  font-family: 'VT323', monospace;
+  font-size: 16px;
+  color: #00ff00;
+  border: 1px inset #555;
+}
+
+.playlist-entry {
+  display: flex;
+  justify-content: space-between;
+  padding: 1px 4px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.playlist-entry.selected {
+  background-color: #000080;
+  color: #fff;
+}
+
+.playlist-entry.green { color: #00ff00; }
+.playlist-entry.yellow { color: #ffff00; }
+.playlist-entry.red { color: #ff0000; }
+.playlist-entry.skipped { color: #888; }
+
+.playlist-footer {
+  height: 14px;
+  background: #2b2b35;
+  border-top: 1px solid #111;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 5px;
+  font-size: 10px;
+  color: #ccc;
+}
+
+/* Disable unwanted Webamp buttons */
+#webamp-container .previous,
+#webamp-container .next,
+#webamp-container .pause,
+#webamp-container .stop,
+#webamp-container .eject,
+#webamp-container .shuffle,
+#webamp-container .repeat,
+#webamp-container .playlist-toggle,
+#webamp-container .eq-toggle {
+  pointer-events: none !important;
+  opacity: 0.3 !important;
+  filter: grayscale(100%) !important;
+}
+
+/* Ensure Webamp container fits our layout */
+#webamp-container {
+  position: relative;
+  width: 275px;
+  height: 232px;
+}
+
+
+/* Search and Controls below the Player */
+.controls-window {
+  width: 275px;
+  background-color: #2b2b35;
+  border: 1px solid #111;
+  box-shadow: inset 1px 1px #555, inset -1px -1px #000;
+  margin-top: 0;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.winamp-input {
+  background-color: #000;
+  color: #00ff00;
+  border: 1px inset #555;
+  padding: 4px;
+  font-family: 'VT323', monospace;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.winamp-btn {
+  background-color: #3b3b45;
+  border: 1px solid #000;
+  box-shadow: inset 1px 1px #666;
+  color: #ccc;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-family: 'VT323', monospace;
+  font-size: 14px;
+}
+
+.winamp-btn:active {
+  box-shadow: inset -1px -1px #666;
+  transform: translate(1px, 1px);
+}
+
+/* Search results styled like a menu */
+.search-menu {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  background-color: #000;
+  border: 1px solid #00ff00;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  z-index: 1000;
+}
+
+.search-menu li {
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.search-menu li:hover {
+  background-color: #000080;
+  color: #fff;
+}
+
+/* Stylized Dudle Header */
+.dudle-header {
+  font-family: 'VT323', monospace;
+  font-size: 64px;
+  color: #00ff00;
+  text-shadow: 
+    3px 3px 0px #000,
+    6px 6px 0px #424250;
+  margin: 0 0 10px 0;
+  letter-spacing: 10px;
+  text-align: center;
+  user-select: none;
+}
+
+@media (max-width: 600px) {
+  .dudle-header {
+    font-size: 48px;
+    letter-spacing: 5px;
+    margin: 10px 0;
+    width: 100%;
+  }
+  body {
+    display: block;
+    background-color: #2b2b35;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+  }
+  .App {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+  }
+  .dudle-container {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    flex: 1;
+    min-height: 0;
+  }
+  .left-column {
+    align-items: center;
+    width: 100%;
+  }
+  #webamp-container {
+    width: 275px;
+    height: calc(232px * var(--webamp-scale, 1) + 18px);
+    position: relative;
+    overflow: visible;
+  }
+  #webamp {
+    position: absolute !important;
+    top: 78px !important;
+    left: 50% !important;
+    right: auto !important;
+    margin: 0 0 0 -137.5px !important;
+    width: 275px !important;
+    transform-origin: top center !important;
+    transform: scale(var(--webamp-scale, 1)) !important;
+  }
+  #webamp div:has(> #main-window) {
+    transform: translate(0px, 0px) !important;
+  }
+  #webamp div:has(> #equalizer-window) {
+    transform: translate(0px, 116px) !important;
+  }
+  .right-column {
+    width: 100%;
+    height: auto;
+    flex: 1;
+    min-height: 0;
+  }
+  .controls-window {
+    width: 100%;
+  }
+}
+
+/* Share Modal */
+.share-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.share-modal {
+  background-color: #2b2b35;
+  border: 2px solid #555;
+  padding: 2px;
+  width: 300px;
+  box-shadow: inset 1px 1px #888, inset -1px -1px #000, 4px 4px 0px rgba(0,0,0,0.5);
+}
+
+.share-modal-titlebar {
+  background: repeating-linear-gradient(
+    to bottom,
+    #30303A 0px,
+    #30303A 1px,
+    #424250 1px,
+    #424250 2px
+  );
+  color: #ccc;
+  height: 18px;
+  font-size: 12px;
+  font-family: sans-serif;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  padding: 0 5px;
+  justify-content: space-between;
+}
+
+.share-modal-titlebar span.close-btn {
+  cursor: pointer;
+  background-color: #c0c0c0;
+  color: #000;
+  padding: 0 4px;
+  border: 1px solid #fff;
+  border-right-color: #888;
+  border-bottom-color: #888;
+}
+
+.share-modal-titlebar span.close-btn:active {
+  border: 1px solid #888;
+  border-right-color: #fff;
+  border-bottom-color: #fff;
+}
+
+.share-modal-content {
+  background-color: #000;
+  color: #00ff00;
+  font-family: 'VT323', monospace;
+  font-size: 18px;
+  padding: 15px;
+  text-align: center;
+  border: 1px inset #555;
+  margin: 2px;
+}
+

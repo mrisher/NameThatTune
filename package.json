@@ -1,0 +1,25 @@
+{
+  "name": "namethattune",
+  "version": "1.0.0",
+  "description": "Dudle",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "run-p dev:server dev:client",
+    "dev:server": "nodemon server.js",
+    "dev:client": "cd client && npm start",
+    "heroku-postbuild": "cd client && npm install && npm run build",
+    "gcp-build": "cd client && npm install && npm run build",
+    "deploy": "CLOUDSDK_ACTIVE_CONFIG_NAME=dudle gcloud app deploy --project=dudle-488408"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14",
+    "npm-run-all": "^4.1.5"
+  }
+}
