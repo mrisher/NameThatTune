@@ -71,205 +71,205 @@ export const songs = [
   },
   {
     "day": "2026-03-06",
-    "songTitle": "Thinking Out Loud",
-    "artistName": "Ed Sheeran",
-    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/20/09/4b/20094ba6-6b50-3c62-1539-2748f216e983/mzaf_15958908847184776502.plus.aac.p.m4a",
+    "songTitle": "Midnight City",
+    "artistName": "M83",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/71/5c/80/715c80fc-ebe4-e713-487c-5bdefee6c6f3/mzaf_3698387428135478316.plus.aac.p.m4a",
     "offset": 0
   },
   {
     "day": "2026-03-07",
-    "songTitle": "Perfect",
-    "artistName": "Ed Sheeran",
-    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/c7/ba/bc/c7babc66-f598-aaa6-bcf6-307281795817/mzaf_16337361235117168274.plus.aac.p.m4a",
+    "songTitle": "Head Like a Hole",
+    "artistName": "Nine Inch Nails",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/b1/a6/bc/b1a6bc72-2337-6ace-2ae1-d209e87f90be/mzaf_17869559044140579720.plus.aac.p.m4a",
     "offset": 0
   },
   {
     "day": "2026-03-08",
-    "songTitle": "Havana (feat. Young Thug)",
-    "artistName": "Camila Cabello",
-    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/7d/42/fe/7d42fe40-78b9-c546-861e-bda5788bba4e/mzaf_7434858341023410545.plus.aac.p.m4a",
+    "songTitle": "Scenario (Edit)",
+    "artistName": "A Tribe Called Quest",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/92/a6/14/92a6145d-5891-2415-89b3-05cd50d650be/mzaf_12264987532861015556.plus.aac.p.m4a",
     "offset": 0
   },
   {
     "day": "2026-03-09",
-    "songTitle": "rockstar (feat. 21 Savage)",
-    "artistName": "Post Malone",
-    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/22/37/94/223794d5-e415-e646-a1c6-a52f178f9c82/mzaf_4256851832513251175.plus.aac.p.m4a",
+    "songTitle": "Fell In Love With a Girl",
+    "artistName": "The White Stripes",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/c1/2e/43/c12e437f-8968-d689-ee93-9e8bb4216d60/mzaf_15521926024924695715.plus.aac.p.m4a",
     "offset": 0
   },
   {
     "day": "2026-03-10",
-    "songTitle": "Closer (feat. Halsey)",
-    "artistName": "The Chainsmokers",
-    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/bd/ae/7a/bdae7a7e-8bd9-7f53-bc76-bd16200dbb13/mzaf_5529021207016445829.plus.aac.p.m4a",
+    "songTitle": "Let Me Ride",
+    "artistName": "Dr. Dre",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/f4/be/ef/f4beefc7-43d0-4bde-b3f9-e7bf6fe3e13f/mzaf_4349494921468822333.plus.aac.p.m4a",
     "offset": 0
   },
   {
     "day": "2026-03-11",
-    "songTitle": "One Dance (feat. Wizkid & Kyla)",
-    "artistName": "Drake",
-    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/a8/bd/68/a8bd68a2-dcd2-9024-3859-3a9fd6d53576/mzaf_16864609147187531487.plus.aac.p.m4a",
+    "songTitle": "Everlong",
+    "artistName": "Foo Fighters",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/d0/77/17/d07717cb-9977-1cbb-6634-3e598d0c4da6/mzaf_15769952961470333318.plus.aac.p.m4a",
     "offset": 0
   },
   {
     "day": "2026-03-12",
-    "songTitle": "Someone You Loved",
-    "artistName": "Lewis Capaldi",
-    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e5/c8/17/e5c817e2-7830-091f-8686-d6276d5beaeb/mzaf_5586826958480073790.plus.aac.p.m4a",
+    "songTitle": "Common People",
+    "artistName": "Pulp",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/74/69/18/7469188f-7b9e-a200-dae8-8710da15b5f4/mzaf_1292802368291136038.plus.aac.p.m4a",
     "offset": 0
   },
   {
     "day": "2026-03-13",
-    "songTitle": "Old Town Road",
-    "artistName": "Lil Nas X",
-    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/9b/1f/b9/9b1fb99c-9111-91da-9296-5ab8d82028ee/mzaf_11237315064991720435.plus.aac.p.m4a",
+    "songTitle": "Tiny Dancer",
+    "artistName": "Elton John",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/87/c7/4b/87c74b44-17ff-023a-2984-19a0cc6ef56d/mzaf_4130028763967500566.plus.aac.p.m4a",
     "offset": 0
   },
   {
     "day": "2026-03-14",
-    "songTitle": "bad guy",
-    "artistName": "Billie Eilish",
-    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c3/87/1f/c3871f7e-3260-d615-1c66-5fdca2c3a48f/mzaf_10721331211699880949.plus.aac.p.m4a",
+    "songTitle": "They Reminisce Over You (T.R.O.Y.)",
+    "artistName": "C.L. Smooth & Pete Rock",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/6c/1b/12/6c1b124b-db26-75d2-5cb1-f7a8ced528cd/mzaf_8895577076773702627.plus.aac.p.m4a",
     "offset": 0
   },
   {
     "day": "2026-03-15",
-    "songTitle": "Señorita",
-    "artistName": "Shawn Mendes & Camila Cabello",
-    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/cf/06/d6/cf06d6fd-f7a0-2898-8363-67688df6c14f/mzaf_8234301186390421644.plus.aac.p.m4a",
+    "songTitle": "Boyz-n-the Hood",
+    "artistName": "Eazy-E",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e7/db/d4/e7dbd416-f2c3-1bc1-00db-4637c3a45432/mzaf_4202134312868985044.plus.aac.p.m4a",
     "offset": 0
   },
   {
     "day": "2026-03-16",
-    "songTitle": "Sunflower (Spider-Man: Into the Spider-Verse)",
-    "artistName": "Post Malone & Swae Lee",
-    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/9f/db/b1/9fdbb10d-2d33-3cd4-48e9-7f745521cfdf/mzaf_15956051401758554866.plus.aac.p.m4a",
+    "songTitle": "Bizarre Love Triangle",
+    "artistName": "New Order",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/dc/e7/a6/dce7a612-2672-34e1-e735-a44218403ed2/mzaf_11026710952020512417.plus.aac.p.m4a",
     "offset": 0
   },
   {
     "day": "2026-03-17",
-    "songTitle": "Watermelon Sugar",
-    "artistName": "Harry Styles",
-    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/16/86/f5/1686f50d-8b77-7e32-85f7-5f0e804d68fe/mzaf_14195633304344507287.plus.aac.p.m4a",
+    "songTitle": "Express Yourself",
+    "artistName": "N.W.A",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/c6/d9/67/c6d96705-db12-498b-1352-901e48fc5807/mzaf_14959111065086430688.plus.aac.p.m4a",
     "offset": 0
   },
   {
     "day": "2026-03-18",
-    "songTitle": "drivers license",
-    "artistName": "Olivia Rodrigo",
-    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/36/62/61/366261be-0996-d73d-de6f-03417867c800/mzaf_8201528327761821135.plus.aac.p.m4a",
+    "songTitle": "Where It's At",
+    "artistName": "Beck",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/0c/64/14/0c64147c-5188-8ac6-5089-e9b520507f28/mzaf_15152162840102890646.plus.aac.p.m4a",
     "offset": 0
   },
   {
     "day": "2026-03-19",
-    "songTitle": "good 4 u",
-    "artistName": "Olivia Rodrigo",
-    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/9f/bd/f1/9fbdf1ce-12d9-7440-1c1c-3fed40567619/mzaf_7303839465958373073.plus.aac.p.m4a",
+    "songTitle": "93 'Til Infinity",
+    "artistName": "Souls of Mischief",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/94/06/67/94066752-e99f-dc82-ae10-38d596955de7/mzaf_17811817848882057179.plus.aac.p.m4a",
     "offset": 0
   },
   {
     "day": "2026-03-20",
-    "songTitle": "Levitating",
-    "artistName": "Dua Lipa",
-    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/59/dc/4d/59dc4dda-93ff-8f1c-c536-f005f6ea6af5/mzaf_3066686759813252385.plus.aac.p.m4a",
+    "songTitle": "Rebel Without a Pause",
+    "artistName": "Public Enemy",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/41/c0/cb/41c0cbc8-82b4-b3ac-24de-2fec13b4c358/mzaf_11380517908457526088.plus.aac.p.m4a",
     "offset": 0
   },
   {
     "day": "2026-03-21",
-    "songTitle": "Butter",
-    "artistName": "BTS",
-    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/f4/80/70/f48070d2-3802-520b-c724-c367125ef2a5/mzaf_16052369757637658622.plus.aac.p.m4a",
+    "songTitle": "Ayo Technology (feat. Justin Timberlake)",
+    "artistName": "50 Cent",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/50/03/da/5003da5c-18ca-fb98-ac71-dbcb9cf7f959/mzaf_470150107164941002.plus.aac.p.m4a",
     "offset": 0
   },
   {
     "day": "2026-03-22",
-    "songTitle": "STAY",
-    "artistName": "The Kid LAROI & Justin Bieber",
-    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/d7/4a/84/d74a84d5-9afa-761e-b632-baab55c2a23b/mzaf_11865500880477235553.plus.aac.p.m4a",
+    "songTitle": "Take Me Out",
+    "artistName": "Franz Ferdinand",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/39/0b/12/390b12af-41bf-8587-3bbf-d54ad7c69f63/mzaf_6391656788554881067.plus.aac.p.m4a",
     "offset": 0
   },
   {
     "day": "2026-03-23",
-    "songTitle": "Heat Waves",
-    "artistName": "Glass Animals",
-    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/a3/4c/b9/a34cb911-40fc-5f0c-e862-14bd171a77aa/mzaf_384792072030970151.plus.aac.p.m4a",
+    "songTitle": "Once In a Lifetime",
+    "artistName": "Talking Heads",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ae/ce/27/aece2737-6bd8-845f-2c16-e25fd959d36a/mzaf_15083503224598525112.plus.aac.p.m4a",
     "offset": 0
   },
   {
     "day": "2026-03-24",
-    "songTitle": "As It Was",
-    "artistName": "Harry Styles",
-    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/67/10/16/67101606-3869-ca44-6c03-e13d6322cb51/mzaf_1135399237022217274.plus.aac.p.m4a",
+    "songTitle": "Age of Consent",
+    "artistName": "New Order",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/2a/eb/23/2aeb23fc-7c67-0612-efef-cace5649fc7a/mzaf_3920263434050581191.plus.aac.p.m4a",
     "offset": 0
   },
   {
     "day": "2026-03-25",
-    "songTitle": "First Class",
-    "artistName": "Jack Harlow",
-    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ea/97/61/ea97619d-0c0c-53e7-ad1f-47be0dded164/mzaf_10036427914607242610.plus.aac.p.m4a",
+    "songTitle": "Maps",
+    "artistName": "Yeah Yeah Yeahs",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/fa/6d/b6/fa6db6f5-328d-418d-d65f-e91477b40160/mzaf_13143394283385603955.plus.aac.p.m4a",
     "offset": 0
   },
   {
     "day": "2026-03-26",
-    "songTitle": "Anti-Hero",
-    "artistName": "Taylor Swift",
-    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/1d/56/2a/1d562a07-dc5f-a9c0-1f36-2051a8c14eb7/mzaf_7214829135431340590.plus.aac.p.m4a",
+    "songTitle": "How Soon Is Now? (12\" Version)",
+    "artistName": "The Smiths",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/b2/15/59/b215593a-6e9a-343d-9dc7-8efa34b1844b/mzaf_6329898282866509920.plus.aac.p.m4a",
     "offset": 0
   },
   {
     "day": "2026-03-27",
-    "songTitle": "Flowers",
-    "artistName": "Miley Cyrus",
-    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/68/9e/f7/689ef7fe-14fe-a846-c87f-7d3b2d6344b1/mzaf_4167137058064023087.plus.aac.p.m4a",
+    "songTitle": "Blue Monday",
+    "artistName": "New Order",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/0f/43/1c/0f431c1a-119c-6614-2736-3fbc4c8a597c/mzaf_3646998447648845325.plus.aac.p.m4a",
     "offset": 0
   },
   {
     "day": "2026-03-28",
-    "songTitle": "Cruel Summer",
-    "artistName": "Taylor Swift",
-    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/44/af/81/44af8168-9609-1b85-5048-ada08dceacf3/mzaf_1341699644335558812.plus.aac.p.m4a",
+    "songTitle": "Reptilia",
+    "artistName": "The Strokes",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/dc/fd/e4/dcfde43f-2c21-0778-f32a-f4380293f74f/mzaf_10139901306940368873.plus.aac.p.m4a",
     "offset": 0
   },
   {
     "day": "2026-03-29",
-    "songTitle": "vampire",
-    "artistName": "Olivia Rodrigo",
-    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/83/09/5e/83095ea1-83bf-ecdc-3b75-358c350fca51/mzaf_15560849688086702972.plus.aac.p.m4a",
+    "songTitle": "Today",
+    "artistName": "The Smashing Pumpkins",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/07/91/ef/0791ef55-40c7-47e0-f94e-7a309cb7967e/mzaf_13853768609724405792.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-03-29",
+    "songTitle": "Enjoy the Silence",
+    "artistName": "Depeche Mode",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/2f/ed/58/2fed5854-1c88-31ec-0e98-66b9706dd42d/mzaf_11845437215964282853.plus.aac.p.m4a",
     "offset": 0
   },
   {
     "day": "2026-03-30",
-    "songTitle": "Paint the Town Red (Sped Up) - Mm, She the Devil",
-    "artistName": "Hiko",
-    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/a7/db/42/a7db4227-4452-b6ed-2df1-d354c442fb7b/mzaf_18272346921885441779.plus.aac.p.m4a",
+    "songTitle": "Shook Ones, Pt. II (Instrumental)",
+    "artistName": "Mobb Deep",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/1c/e5/a7/1ce5a7c8-c2c8-37a6-2b05-2d698c7d72f2/mzaf_13579522246491547588.plus.aac.p.m4a",
     "offset": 0
   },
   {
     "day": "2026-03-31",
-    "songTitle": "Kill Bill",
-    "artistName": "SZA",
-    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/45/2b/ea/452bead6-c7f5-82d4-f5f7-ec876014b4cc/mzaf_2905911853279084717.plus.aac.p.m4a",
+    "songTitle": "Passin' Me By",
+    "artistName": "The Pharcyde",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/27/a2/85/27a28522-3541-6c02-e81f-d71deee46050/mzaf_9276244445478524858.plus.aac.p.m4a",
     "offset": 0
   },
   {
     "day": "2026-04-01",
-    "songTitle": "Last Night",
-    "artistName": "Morgan Wallen",
-    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/87/0e/ef/870eef82-decb-8804-d0af-2f174f111e9b/mzaf_5505022907758473489.plus.aac.p.m4a",
+    "songTitle": "Straight Outta Compton",
+    "artistName": "N.W.A",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/45/c3/6e/45c36e06-c594-1b45-bc4d-4fa94ae6230c/mzaf_9922128183683368203.plus.aac.p.m4a",
     "offset": 0
   },
   {
     "day": "2026-04-02",
-    "songTitle": "Rich Men North of Richmond",
-    "artistName": "Oliver Anthony Music",
-    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/8d/13/ac/8d13ac21-7a16-0518-be4e-7f239c53fe9f/mzaf_17815375206010909577.plus.aac.p.m4a",
-    "offset": 0
-  },
-  {
-    "day": "2026-04-03",
-    "songTitle": "Fast Car",
-    "artistName": "Luke Combs",
-    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d2/e0/2f/d2e02f8b-b0f2-3224-04c6-92c8efe25753/mzaf_3384374692260019992.plus.aac.p.m4a",
+    "songTitle": "Juicy",
+    "artistName": "The Notorious B.I.G.",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/5b/81/21/5b8121d4-1b2b-511a-1f38-0ef4346909b0/mzaf_4190278176982078552.plus.aac.p.m4a",
     "offset": 0
   }
 ];
