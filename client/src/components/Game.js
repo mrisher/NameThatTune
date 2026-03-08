@@ -311,7 +311,19 @@ const Game = () => {
         }
 
         const friendlyDate = getFriendlyParisDate();
-        const textToShare = `I played today's Dudle (${friendlyDate}) ${score}/6: ${resultEmoji} ${window.location.href}${statsText}`;
+
+        let verb = "played";
+        if (gameState === "won") {
+            if (score === 1) verb = "crushed";
+            else if (score <= 3) verb = "won";
+            else if (score === 4) verb = "eeked by";
+            else if (score === 5) verb = "barely made it on";
+            else if (score === 6) verb = "narrowly escaped defeat on";
+        } else {
+            verb = "whiffed on";
+        }
+
+        const textToShare = `I ${verb} today's Dudle (${friendlyDate}) ${score}/6: ${resultEmoji} ${window.location.href}${statsText}`;
         navigator.clipboard.writeText(textToShare).then(() => {
             setShareText(textToShare);
             setShowShareModal(true);
