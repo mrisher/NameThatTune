@@ -29,6 +29,7 @@ jobs:
         with:
           project_id: 'dudle-488408'
           workload_identity_provider: 'projects/1032401386938/locations/global/workloadIdentityPools/github/providers/name-that-tune'
+          service_account: 'github-actions-deployer@dudle-488408.iam.gserviceaccount.com'
 
       - name: Deploy to App Engine
         id: deploy
