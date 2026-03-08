@@ -3,6 +3,16 @@ import Webamp from "webamp";
 import Search from "./Search";
 import { songs } from "../config";
 import Fuse from "fuse.js";
+import {
+    getParisDateString,
+    getFriendlyParisDate,
+    calculateDaysBetween,
+    getAverage,
+    getMedian,
+    getMode,
+    getStdDev,
+    getCoV
+} from "../utils/stats";
 
 const DURATION_MAP = {
     0: 1,
@@ -62,6 +72,44 @@ const Game = () => {
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, []);
+
+    useEffect(() => {
+        if (gameState === "won" || gameState === "lost") {
+            const today = getParisDateString();
+            const storedData = localStorage.getItem("dudle_stats");
+            let statsData = storedData ? JSON.parse(storedData) : {
+                lastPlayedDate: null,
+                streak: 0,
+                scores: []
+            };
+
+            // Only record if we haven't recorded for today already
+            if (statsData.lastPlayedDate !== today) {
+                const score = gameState === "won" ? guesses.length : 7;
+
+                // Determine streak
+                if (gameState === "won") {
+                    if (statsData.lastPlayedDate) {
+                        const daysDiff = calculateDaysBetween(statsData.lastPlayedDate, today);
+                        if (daysDiff === 1) {
+                            statsData.streak += 1; // Continue streak
+                        } else if (daysDiff > 1) {
+                            statsData.streak = 1; // Reset streak
+                        }
+                    } else {
+                        statsData.streak = 1; // First win
+                    }
+                } else {
+                    statsData.streak = 0; // Lost breaks the streak
+                }
+
+                statsData.lastPlayedDate = today;
+                statsData.scores.push(score);
+
+                localStorage.setItem("dudle_stats", JSON.stringify(statsData));
+            }
+        }
+    }, [gameState]);
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
@@ -243,7 +291,27 @@ const Game = () => {
         });
 
         const score = gameState === "won" ? guesses.length : "X";
-        const textToShare = `I played today's Dudle ${score}/6: ${resultEmoji} ${window.location.href}`;
+
+        let statsText = "";
+        const storedData = localStorage.getItem("dudle_stats");
+        if (storedData) {
+            const statsData = JSON.parse(storedData);
+            const { streak, scores } = statsData;
+            if (scores && scores.length > 0) {
+                const last7 = scores.slice(-7);
+                const avg7 = getAverage(last7).toFixed(1);
+
+                const median = getMedian(scores);
+                const mode = getMode(scores);
+                const stdDev = getStdDev(scores).toFixed(2);
+                const cov = getCoV(scores).toFixed(2);
+
+                statsText = `\nWin Streak: ${streak}\n7-Day Avg: ${avg7}\nMed: ${median}\nMo: ${mode}\nσ: ${stdDev}\nCoV: ${cov}`;
+            }
+        }
+
+        const friendlyDate = getFriendlyParisDate();
+        const textToShare = `I played today's Dudle (${friendlyDate}) ${score}/6: ${resultEmoji} ${window.location.href}${statsText}`;
         navigator.clipboard.writeText(textToShare).then(() => {
             setShareText(textToShare);
             setShowShareModal(true);
