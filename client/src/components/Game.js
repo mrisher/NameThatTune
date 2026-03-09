@@ -315,7 +315,7 @@ const Game = () => {
         const getRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
         let verb = "played";
         if (gameState === "won") {
-            if (score === 1) verb = getRandom(["crushed", "demolished", "destroyed", "aced", "nailed", "obliterated"]);
+            if (score === 1) verb = getRandom(["crushed", "demolished", "destroyed", "aced", "nailed", "obliterated", "dominated", "totally qwerted"]);
             else if (score <= 3) verb = getRandom(["won", "beat", "conquered", "solved", "bested", "triumphed over"]);
             else if (score === 4) verb = getRandom(["eeked by on", "squeaked by on", "scraped by on", "managed to beat"]);
             else if (score === 5) verb = getRandom(["barely made it on", "survived", "just about got", "limped past"]);
