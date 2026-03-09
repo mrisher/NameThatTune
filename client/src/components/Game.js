@@ -312,15 +312,16 @@ const Game = () => {
 
         const friendlyDate = getFriendlyParisDate();
 
+        const getRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
         let verb = "played";
         if (gameState === "won") {
-            if (score === 1) verb = "crushed";
-            else if (score <= 3) verb = "won";
-            else if (score === 4) verb = "eeked by";
-            else if (score === 5) verb = "barely made it on";
-            else if (score === 6) verb = "narrowly escaped defeat on";
+            if (score === 1) verb = getRandom(["crushed", "demolished", "destroyed", "aced", "nailed", "obliterated"]);
+            else if (score <= 3) verb = getRandom(["won", "beat", "conquered", "solved", "bested", "triumphed over"]);
+            else if (score === 4) verb = getRandom(["eeked by on", "squeaked by on", "scraped by on", "managed to beat"]);
+            else if (score === 5) verb = getRandom(["barely made it on", "survived", "just about got", "limped past"]);
+            else if (score === 6) verb = getRandom(["narrowly escaped defeat on", "pulled off a miracle on", "escaped by the skin of my teeth on", "clutched up on"]);
         } else {
-            verb = "whiffed on";
+            verb = getRandom(["whiffed on", "got housed by", "screwed the pooch on", "did a Jeter on", "bombed", "got completely stumped by", "took an L on"]);
         }
 
         const textToShare = `I ${verb} today's Dudle (${friendlyDate}) ${score}/6: ${resultEmoji} ${window.location.href}${statsText}`;
