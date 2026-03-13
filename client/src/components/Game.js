@@ -47,6 +47,7 @@ const Game = () => {
     const [showShareModal, setShowShareModal] = useState(false);
     const [shareText, setShareText] = useState("");
     const [scale, setScale] = useState(1);
+    const [yesterdayStats, setYesterdayStats] = useState(null);
 
     const webampRef = useRef(null);
     const webampContainerRef = useRef(null);
@@ -57,6 +58,14 @@ const Game = () => {
     }, [unlockDuration]);
 
     useEffect(() => {
+        // Ensure UUID exists
+        if (!localStorage.getItem("dudle_uuid")) {
+            const uuid = typeof crypto !== 'undefined' && crypto.randomUUID
+                ? crypto.randomUUID()
+                : 'test-uuid-' + Math.random().toString(36).substring(2, 15);
+            localStorage.setItem("dudle_uuid", uuid);
+        }
+
         const handleResize = () => {
             let currentScale = 1;
             if (window.innerWidth <= 600) {
@@ -107,9 +116,26 @@ const Game = () => {
                 statsData.scores.push(score);
 
                 localStorage.setItem("dudle_stats", JSON.stringify(statsData));
+
+                // Send to backend
+                const wrongGuesses = guesses
+                    .filter(g => g.status !== "green" && g.status !== "skipped")
+                    .map(g => `${g.artistName} - ${g.trackName}`);
+
+                fetch('/api/stats', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        date: today,
+                        score: gameState === "won" ? guesses.length : "X",
+                        wrongGuesses,
+                        uuid: localStorage.getItem("dudle_uuid"),
+                        name: localStorage.getItem("dudle_name") || "Anonymous"
+                    })
+                }).catch(err => console.error("Error saving game stats:", err));
             }
         }
-    }, [gameState]);
+    }, [gameState]); // guesses is stable when gameState changes to won/lost in this app's flow
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
@@ -128,6 +154,20 @@ const Game = () => {
 
         const todaysSong = songs.find((s) => s.day === today) || songs[0];
         setTargetSong(todaysSong);
+
+        // Fetch yesterday's stats
+        const yesterdayDate = new Date();
+        yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+        const yesterdayStr = getParisDateString(yesterdayDate);
+        fetch(`/api/stats?date=${yesterdayStr}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data && (Object.keys(data.scores || {}).length > 0 || data.mostCommonWrongGuess)) {
+                    setYesterdayStats(data);
+                }
+            })
+            .catch(err => console.error("Error fetching yesterday's stats:", err));
+
     }, []);
 
     useEffect(() => {
@@ -436,6 +476,30 @@ const Game = () => {
                                 >
                                     PLAY AGAIN
                                 </button>
+                                {yesterdayStats && (
+                                    <div style={{ marginTop: "16px", textAlign: "left", fontSize: "11px", color: "#00ff00", borderTop: "1px dotted #00ff00", paddingTop: "8px" }}>
+                                        <div style={{ textAlign: "center", marginBottom: "8px" }}>--- YESTERDAY'S STATS ---</div>
+                                        {yesterdayStats.scores && Object.keys(yesterdayStats.scores).length > 0 && (
+                                            <div style={{ marginBottom: "8px" }}>
+                                                Scores: {" "}
+                                                {["1", "2", "3", "4", "5", "6", "X"].map(s => (
+                                                    <span key={s} style={{ marginRight: "4px" }}>
+                                                        {s}: {yesterdayStats.scores[s] || 0}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        )}
+                                        {yesterdayStats.mostCommonWrongGuess && (
+                                            <div>
+                                                Most common wrong guess:<br/>
+                                                <span style={{ color: "#fff" }}>
+                                                    {yesterdayStats.mostCommonWrongGuess.guess}
+                                                </span>
+                                                {" "}({yesterdayStats.mostCommonWrongGuess.count} times)
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>
