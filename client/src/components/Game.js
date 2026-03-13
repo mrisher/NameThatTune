@@ -48,6 +48,8 @@ const Game = () => {
     const [shareText, setShareText] = useState("");
     const [scale, setScale] = useState(1);
     const [yesterdayStats, setYesterdayStats] = useState(null);
+    const [userName, setUserName] = useState(localStorage.getItem("dudle_name") || "");
+    const [isSavingName, setIsSavingName] = useState(false);
 
     const webampRef = useRef(null);
     const webampContainerRef = useRef(null);
@@ -136,6 +138,24 @@ const Game = () => {
             }
         }
     }, [gameState]); // guesses is stable when gameState changes to won/lost in this app's flow
+
+    const handleSaveName = async () => {
+        setIsSavingName(true);
+        localStorage.setItem("dudle_name", userName);
+        const uuid = localStorage.getItem("dudle_uuid");
+
+        try {
+            await fetch('/api/user', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ uuid, name: userName })
+            });
+        } catch (err) {
+            console.error("Error updating user name:", err);
+        } finally {
+            setIsSavingName(false);
+        }
+    };
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
@@ -476,6 +496,27 @@ const Game = () => {
                                 >
                                     PLAY AGAIN
                                 </button>
+                                {(!localStorage.getItem("dudle_name") || localStorage.getItem("dudle_name") === "Anonymous") && (
+                                    <div style={{ marginTop: "8px", textAlign: "left", fontSize: "11px", color: "#00ff00" }}>
+                                        <div style={{ marginBottom: "4px" }}>ENTER NAME FOR LEADERBOARD:</div>
+                                        <div style={{ display: "flex", gap: "4px" }}>
+                                            <input
+                                                type="text"
+                                                value={userName}
+                                                onChange={(e) => setUserName(e.target.value)}
+                                                style={{ flex: 1, background: "#000", color: "#00ff00", border: "1px solid #00ff00", fontFamily: "inherit", padding: "2px 4px" }}
+                                                maxLength={20}
+                                            />
+                                            <button
+                                                className="winamp-btn"
+                                                onClick={handleSaveName}
+                                                disabled={isSavingName || !userName.trim()}
+                                            >
+                                                {isSavingName ? "..." : "SAVE"}
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
                                 {yesterdayStats && (
                                     <div style={{ marginTop: "16px", textAlign: "left", fontSize: "11px", color: "#00ff00", borderTop: "1px dotted #00ff00", paddingTop: "8px" }}>
                                         <div style={{ textAlign: "center", marginBottom: "8px" }}>--- YESTERDAY'S STATS ---</div>
@@ -490,12 +531,21 @@ const Game = () => {
                                             </div>
                                         )}
                                         {yesterdayStats.mostCommonWrongGuess && (
-                                            <div>
+                                            <div style={{ marginBottom: "8px" }}>
                                                 Most common wrong guess:<br/>
                                                 <span style={{ color: "#fff" }}>
                                                     {yesterdayStats.mostCommonWrongGuess.guess}
                                                 </span>
                                                 {" "}({yesterdayStats.mostCommonWrongGuess.count} times)
+                                            </div>
+                                        )}
+                                        {yesterdayStats.fastestWin && (
+                                            <div>
+                                                Best win:<br/>
+                                                <span style={{ color: "#fff" }}>
+                                                    {yesterdayStats.fastestWin.name}
+                                                </span>
+                                                {" "}({yesterdayStats.fastestWin.score}/6)
                                             </div>
                                         )}
                                     </div>

@@ -155,7 +155,8 @@ Emitted 'error' event on Server instance at:
 
 Node.js v22.22.1
 [31m[nodemon] app crashed - waiting for file changes before starting...[39m
-[32m[nodemon] starting `node server.js`[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
 node:events:497
       throw er; // Unhandled 'error' event
       ^
@@ -165,7 +166,7 @@ Error: listen EADDRINUSE: address already in use :::8080
     at listenInCluster (node:net:1997:12)
     at Server.listen (node:net:2102:7)
     at Function.listen (/app/node_modules/express/lib/application.js:635:24)
-    at Object.<anonymous> (/app/server.js:150:5)
+    at Object.<anonymous> (/app/server.js:151:5)
     at Module._compile (node:internal/modules/cjs/loader:1705:14)
     at Object..js (node:internal/modules/cjs/loader:1838:10)
     at Module.load (node:internal/modules/cjs/loader:1441:32)
@@ -212,3 +213,901 @@ Emitted 'error' event on Server instance at:
 
 Node.js v22.22.1
 [31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+node:events:497
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::8080
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/app/node_modules/express/lib/application.js:635:24)
+    at Object.<anonymous> (/app/server.js:151:5)
+    at Module._compile (node:internal/modules/cjs/loader:1705:14)
+    at Object..js (node:internal/modules/cjs/loader:1838:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 8080
+}
+
+Node.js v22.22.1
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+node:events:497
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::8080
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/app/node_modules/express/lib/application.js:635:24)
+    at Object.<anonymous> (/app/server.js:151:5)
+    at Module._compile (node:internal/modules/cjs/loader:1705:14)
+    at Object..js (node:internal/modules/cjs/loader:1838:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 8080
+}
+
+Node.js v22.22.1
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+node:events:497
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::8080
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/app/node_modules/express/lib/application.js:635:24)
+    at Object.<anonymous> (/app/server.js:151:5)
+    at Module._compile (node:internal/modules/cjs/loader:1705:14)
+    at Object..js (node:internal/modules/cjs/loader:1838:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 8080
+}
+
+Node.js v22.22.1
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+Server listening on port 8080
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+node:events:497
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::8080
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/app/node_modules/express/lib/application.js:635:24)
+    at Object.<anonymous> (/app/server.js:168:5)
+    at Module._compile (node:internal/modules/cjs/loader:1705:14)
+    at Object..js (node:internal/modules/cjs/loader:1838:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 8080
+}
+
+Node.js v22.22.1
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+Server listening on port 8080
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+node:events:497
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::8080
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/app/node_modules/express/lib/application.js:635:24)
+    at Object.<anonymous> (/app/server.js:185:5)
+    at Module._compile (node:internal/modules/cjs/loader:1705:14)
+    at Object..js (node:internal/modules/cjs/loader:1838:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 8080
+}
+
+Node.js v22.22.1
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+node:events:497
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::8080
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/app/node_modules/express/lib/application.js:635:24)
+    at Object.<anonymous> (/app/server.js:202:5)
+    at Module._compile (node:internal/modules/cjs/loader:1705:14)
+    at Object..js (node:internal/modules/cjs/loader:1838:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 8080
+}
+
+Node.js v22.22.1
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+Server listening on port 8080
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+node:events:497
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::8080
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/app/node_modules/express/lib/application.js:635:24)
+    at Object.<anonymous> (/app/server.js:203:5)
+    at Module._compile (node:internal/modules/cjs/loader:1705:14)
+    at Object..js (node:internal/modules/cjs/loader:1838:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 8080
+}
+
+Node.js v22.22.1
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+node:events:497
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::8080
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/app/node_modules/express/lib/application.js:635:24)
+    at Object.<anonymous> (/app/server.js:203:5)
+    at Module._compile (node:internal/modules/cjs/loader:1705:14)
+    at Object..js (node:internal/modules/cjs/loader:1838:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 8080
+}
+
+Node.js v22.22.1
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+Server listening on port 8080
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+node:events:497
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::8080
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/app/node_modules/express/lib/application.js:635:24)
+    at Object.<anonymous> (/app/server.js:203:5)
+    at Module._compile (node:internal/modules/cjs/loader:1705:14)
+    at Object..js (node:internal/modules/cjs/loader:1838:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 8080
+}
+
+Node.js v22.22.1
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+node:events:497
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::8080
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/app/node_modules/express/lib/application.js:635:24)
+    at Object.<anonymous> (/app/server.js:203:5)
+    at Module._compile (node:internal/modules/cjs/loader:1705:14)
+    at Object..js (node:internal/modules/cjs/loader:1838:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 8080
+}
+
+Node.js v22.22.1
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+node:events:497
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::8080
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/app/node_modules/express/lib/application.js:635:24)
+    at Object.<anonymous> (/app/server.js:203:5)
+    at Module._compile (node:internal/modules/cjs/loader:1705:14)
+    at Object..js (node:internal/modules/cjs/loader:1838:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 8080
+}
+
+Node.js v22.22.1
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+node:events:497
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::8080
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/app/node_modules/express/lib/application.js:635:24)
+    at Object.<anonymous> (/app/server.js:203:5)
+    at Module._compile (node:internal/modules/cjs/loader:1705:14)
+    at Object..js (node:internal/modules/cjs/loader:1838:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 8080
+}
+
+Node.js v22.22.1
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+node:events:497
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::8080
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/app/node_modules/express/lib/application.js:635:24)
+    at Object.<anonymous> (/app/server.js:203:5)
+    at Module._compile (node:internal/modules/cjs/loader:1705:14)
+    at Object..js (node:internal/modules/cjs/loader:1838:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 8080
+}
+
+Node.js v22.22.1
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+ics_channel:328:14)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 8080
+}
+
+Node.js v22.22.1
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+Compiled with warnings.
+
+[eslint]
+src/components/Game.js
+  Line 46:12:   'isDebug' is assigned a value but never used                                                                                  no-unused-vars
+  Line 49:12:   'scale' is assigned a value but never used                                                                                    no-unused-vars
+  Line 52:12:   'playTime' is assigned a value but never used                                                                                 no-unused-vars
+  Line 53:22:   'setUserName' is assigned a value but never used                                                                              no-unused-vars
+  Line 54:12:   'isSavingName' is assigned a value but never used                                                                             no-unused-vars
+  Line 143:8:   React Hook useEffect has missing dependencies: 'guesses' and 'startTime'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  Line 145:11:  'handleSaveName' is assigned a value but never used                                                                           no-unused-vars
+  Line 251:8:   React Hook useEffect has a missing dependency: 'gameState'. Either include it or remove the dependency array                  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint]
+src/components/Game.js
+  Line 46:12:   'isDebug' is assigned a value but never used                                                                                  no-unused-vars
+  Line 49:12:   'scale' is assigned a value but never used                                                                                    no-unused-vars
+  Line 52:12:   'playTime' is assigned a value but never used                                                                                 no-unused-vars
+  Line 53:22:   'setUserName' is assigned a value but never used                                                                              no-unused-vars
+  Line 54:12:   'isSavingName' is assigned a value but never used                                                                             no-unused-vars
+  Line 143:8:   React Hook useEffect has missing dependencies: 'guesses' and 'startTime'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  Line 145:11:  'handleSaveName' is assigned a value but never used                                                                           no-unused-vars
+  Line 251:8:   React Hook useEffect has a missing dependency: 'gameState'. Either include it or remove the dependency array                  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+node:events:497
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::8080
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/app/node_modules/express/lib/application.js:635:24)
+    at Object.<anonymous> (/app/server.js:168:5)
+    at Module._compile (node:internal/modules/cjs/loader:1705:14)
+    at Object..js (node:internal/modules/cjs/loader:1838:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 8080
+}
+
+Node.js v22.22.1
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+node:events:497
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::8080
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/app/node_modules/express/lib/application.js:635:24)
+    at Object.<anonymous> (/app/server.js:168:5)
+    at Module._compile (node:internal/modules/cjs/loader:1705:14)
+    at Object..js (node:internal/modules/cjs/loader:1838:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 8080
+}
+
+Node.js v22.22.1
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+node:events:497
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::8080
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/app/node_modules/express/lib/application.js:635:24)
+    at Object.<anonymous> (/app/server.js:185:5)
+    at Module._compile (node:internal/modules/cjs/loader:1705:14)
+    at Object..js (node:internal/modules/cjs/loader:1838:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 8080
+}
+
+Node.js v22.22.1
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+node:events:497
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::8080
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/app/node_modules/express/lib/application.js:635:24)
+    at Object.<anonymous> (/app/server.js:202:5)
+    at Module._compile (node:internal/modules/cjs/loader:1705:14)
+    at Object..js (node:internal/modules/cjs/loader:1838:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 8080
+}
+
+Node.js v22.22.1
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+node:events:497
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::8080
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/app/node_modules/express/lib/application.js:635:24)
+    at Object.<anonymous> (/app/server.js:204:5)
+    at Module._compile (node:internal/modules/cjs/loader:1705:14)
+    at Object..js (node:internal/modules/cjs/loader:1838:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 8080
+}
+
+Node.js v22.22.1
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+node:events:497
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::8080
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/app/node_modules/express/lib/application.js:635:24)
+    at Object.<anonymous> (/app/server.js:203:5)
+    at Module._compile (node:internal/modules/cjs/loader:1705:14)
+    at Object..js (node:internal/modules/cjs/loader:1838:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 8080
+}
+
+Node.js v22.22.1
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+Compiling...
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+Server listening on port 8080
+Failed to compile.
+
+[eslint]
+src/components/Game.js
+  Line 136:49:  'startTime' is not defined     no-undef
+  Line 178:9:   'setStartTime' is not defined  no-undef
+  Line 325:13:  'setPlayTime' is not defined   no-undef
+  Line 325:38:  'startTime' is not defined     no-undef
+  Line 345:13:  'setPlayTime' is not defined   no-undef
+  Line 345:38:  'startTime' is not defined     no-undef
+
+Search for the keywords to learn more about each error.
+WARNING in [eslint]
+src/components/Game.js
+  Line 46:12:   'isDebug' is assigned a value but never used                                                                  no-unused-vars
+  Line 49:12:   'scale' is assigned a value but never used                                                                    no-unused-vars
+  Line 51:22:   'setUserName' is assigned a value but never used                                                              no-unused-vars
+  Line 52:12:   'isSavingName' is assigned a value but never used                                                             no-unused-vars
+  Line 141:8:   React Hook useEffect has a missing dependency: 'guesses'. Either include it or remove the dependency array    react-hooks/exhaustive-deps
+  Line 143:11:  'handleSaveName' is assigned a value but never used                                                           no-unused-vars
+  Line 249:8:   React Hook useEffect has a missing dependency: 'gameState'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+ERROR in [eslint]
+src/components/Game.js
+  Line 136:49:  'startTime' is not defined     no-undef
+  Line 178:9:   'setStartTime' is not defined  no-undef
+  Line 325:13:  'setPlayTime' is not defined   no-undef
+  Line 325:38:  'startTime' is not defined     no-undef
+  Line 345:13:  'setPlayTime' is not defined   no-undef
+  Line 345:38:  'startTime' is not defined     no-undef
+
+Search for the keywords to learn more about each error.
+
+webpack compiled with 1 error and 1 warning
+Compiling...
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+node:events:497
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::8080
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/app/node_modules/express/lib/application.js:635:24)
+    at Object.<anonymous> (/app/server.js:203:5)
+    at Module._compile (node:internal/modules/cjs/loader:1705:14)
+    at Object..js (node:internal/modules/cjs/loader:1838:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 8080
+}
+
+Node.js v22.22.1
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+Failed to compile.
+
+[eslint]
+src/components/Game.js
+  Line 136:49:  'startTime' is not defined    no-undef
+  Line 324:13:  'setPlayTime' is not defined  no-undef
+  Line 324:38:  'startTime' is not defined    no-undef
+  Line 344:13:  'setPlayTime' is not defined  no-undef
+  Line 344:38:  'startTime' is not defined    no-undef
+
+Search for the keywords to learn more about each error.
+WARNING in [eslint]
+src/components/Game.js
+  Line 46:12:   'isDebug' is assigned a value but never used                                                                  no-unused-vars
+  Line 49:12:   'scale' is assigned a value but never used                                                                    no-unused-vars
+  Line 51:22:   'setUserName' is assigned a value but never used                                                              no-unused-vars
+  Line 52:12:   'isSavingName' is assigned a value but never used                                                             no-unused-vars
+  Line 141:8:   React Hook useEffect has a missing dependency: 'guesses'. Either include it or remove the dependency array    react-hooks/exhaustive-deps
+  Line 143:11:  'handleSaveName' is assigned a value but never used                                                           no-unused-vars
+  Line 248:8:   React Hook useEffect has a missing dependency: 'gameState'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+ERROR in [eslint]
+src/components/Game.js
+  Line 136:49:  'startTime' is not defined    no-undef
+  Line 324:13:  'setPlayTime' is not defined  no-undef
+  Line 324:38:  'startTime' is not defined    no-undef
+  Line 344:13:  'setPlayTime' is not defined  no-undef
+  Line 344:38:  'startTime' is not defined    no-undef
+
+Search for the keywords to learn more about each error.
+
+webpack compiled with 1 error and 1 warning
+Compiling...
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+Server listening on port 8080
+Failed to compile.
+
+[eslint]
+src/components/Game.js
+  Line 323:13:  'setPlayTime' is not defined  no-undef
+  Line 323:38:  'startTime' is not defined    no-undef
+  Line 343:13:  'setPlayTime' is not defined  no-undef
+  Line 343:38:  'startTime' is not defined    no-undef
+
+Search for the keywords to learn more about each error.
+WARNING in [eslint]
+src/components/Game.js
+  Line 46:12:   'isDebug' is assigned a value but never used                                                                  no-unused-vars
+  Line 49:12:   'scale' is assigned a value but never used                                                                    no-unused-vars
+  Line 51:22:   'setUserName' is assigned a value but never used                                                              no-unused-vars
+  Line 52:12:   'isSavingName' is assigned a value but never used                                                             no-unused-vars
+  Line 140:8:   React Hook useEffect has a missing dependency: 'guesses'. Either include it or remove the dependency array    react-hooks/exhaustive-deps
+  Line 142:11:  'handleSaveName' is assigned a value but never used                                                           no-unused-vars
+  Line 247:8:   React Hook useEffect has a missing dependency: 'gameState'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+ERROR in [eslint]
+src/components/Game.js
+  Line 323:13:  'setPlayTime' is not defined  no-undef
+  Line 323:38:  'startTime' is not defined    no-undef
+  Line 343:13:  'setPlayTime' is not defined  no-undef
+  Line 343:38:  'startTime' is not defined    no-undef
+
+Search for the keywords to learn more about each error.
+
+webpack compiled with 1 error and 1 warning
+Compiling...
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+Server listening on port 8080
+Failed to compile.
+
+[eslint]
+src/components/Game.js
+  Line 342:13:  'setPlayTime' is not defined  no-undef
+  Line 342:38:  'startTime' is not defined    no-undef
+
+Search for the keywords to learn more about each error.
+WARNING in [eslint]
+src/components/Game.js
+  Line 46:12:   'isDebug' is assigned a value but never used                                                                  no-unused-vars
+  Line 49:12:   'scale' is assigned a value but never used                                                                    no-unused-vars
+  Line 51:22:   'setUserName' is assigned a value but never used                                                              no-unused-vars
+  Line 52:12:   'isSavingName' is assigned a value but never used                                                             no-unused-vars
+  Line 140:8:   React Hook useEffect has a missing dependency: 'guesses'. Either include it or remove the dependency array    react-hooks/exhaustive-deps
+  Line 142:11:  'handleSaveName' is assigned a value but never used                                                           no-unused-vars
+  Line 247:8:   React Hook useEffect has a missing dependency: 'gameState'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+ERROR in [eslint]
+src/components/Game.js
+  Line 342:13:  'setPlayTime' is not defined  no-undef
+  Line 342:38:  'startTime' is not defined    no-undef
+
+Search for the keywords to learn more about each error.
+
+webpack compiled with 1 error and 1 warning
+[32m[nodemon] restarting due to changes...[39m
+Compiling...
+[32m[nodemon] starting `node server.js`[39m
+node:events:497
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::8080
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/app/node_modules/express/lib/application.js:635:24)
+    at Object.<anonymous> (/app/server.js:203:5)
+    at Module._compile (node:internal/modules/cjs/loader:1705:14)
+    at Object..js (node:internal/modules/cjs/loader:1838:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 8080
+}
+
+Node.js v22.22.1
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+Compiled with warnings.
+
+[eslint]
+src/components/Game.js
+  Line 46:12:   'isDebug' is assigned a value but never used                                                                  no-unused-vars
+  Line 49:12:   'scale' is assigned a value but never used                                                                    no-unused-vars
+  Line 51:22:   'setUserName' is assigned a value but never used                                                              no-unused-vars
+  Line 52:12:   'isSavingName' is assigned a value but never used                                                             no-unused-vars
+  Line 140:8:   React Hook useEffect has a missing dependency: 'guesses'. Either include it or remove the dependency array    react-hooks/exhaustive-deps
+  Line 142:11:  'handleSaveName' is assigned a value but never used                                                           no-unused-vars
+  Line 247:8:   React Hook useEffect has a missing dependency: 'gameState'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint]
+src/components/Game.js
+  Line 46:12:   'isDebug' is assigned a value but never used                                                                  no-unused-vars
+  Line 49:12:   'scale' is assigned a value but never used                                                                    no-unused-vars
+  Line 51:22:   'setUserName' is assigned a value but never used                                                              no-unused-vars
+  Line 52:12:   'isSavingName' is assigned a value but never used                                                             no-unused-vars
+  Line 140:8:   React Hook useEffect has a missing dependency: 'guesses'. Either include it or remove the dependency array    react-hooks/exhaustive-deps
+  Line 142:11:  'handleSaveName' is assigned a value but never used                                                           no-unused-vars
+  Line 247:8:   React Hook useEffect has a missing dependency: 'gameState'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+Compiling...
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+Compiled with warnings.
+
+[eslint]
+src/components/Game.js
+  Line 46:12:  'isDebug' is assigned a value but never used                                                                  no-unused-vars
+  Line 49:12:  'scale' is assigned a value but never used                                                                    no-unused-vars
+  Line 140:8:  React Hook useEffect has a missing dependency: 'guesses'. Either include it or remove the dependency array    react-hooks/exhaustive-deps
+  Line 247:8:  React Hook useEffect has a missing dependency: 'gameState'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint]
+src/components/Game.js
+  Line 46:12:  'isDebug' is assigned a value but never used                                                                  no-unused-vars
+  Line 49:12:  'scale' is assigned a value but never used                                                                    no-unused-vars
+  Line 140:8:  React Hook useEffect has a missing dependency: 'guesses'. Either include it or remove the dependency array    react-hooks/exhaustive-deps
+  Line 247:8:  React Hook useEffect has a missing dependency: 'gameState'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+node:events:497
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::8080
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/app/node_modules/express/lib/application.js:635:24)
+    at Object.<anonymous> (/app/server.js:203:5)
+    at Module._compile (node:internal/modules/cjs/loader:1705:14)
+    at Object..js (node:internal/modules/cjs/loader:1838:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 8080
+}
+
+Node.js v22.22.1
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+Compiling...
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+Server listening on port 8080
+Compiled with warnings.
+
+[eslint]
+src/components/Game.js
+  Line 46:12:  'isDebug' is assigned a value but never used                                                                  no-unused-vars
+  Line 49:12:  'scale' is assigned a value but never used                                                                    no-unused-vars
+  Line 140:8:  React Hook useEffect has a missing dependency: 'guesses'. Either include it or remove the dependency array    react-hooks/exhaustive-deps
+  Line 247:8:  React Hook useEffect has a missing dependency: 'gameState'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint]
+src/components/Game.js
+  Line 46:12:  'isDebug' is assigned a value but never used                                                                  no-unused-vars
+  Line 49:12:  'scale' is assigned a value but never used                                                                    no-unused-vars
+  Line 140:8:  React Hook useEffect has a missing dependency: 'guesses'. Either include it or remove the dependency array    react-hooks/exhaustive-deps
+  Line 247:8:  React Hook useEffect has a missing dependency: 'gameState'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
