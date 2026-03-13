@@ -50,6 +50,7 @@ const Game = () => {
     const [yesterdayStats, setYesterdayStats] = useState(null);
     const [userName, setUserName] = useState(localStorage.getItem("dudle_name") || "");
     const [isSavingName, setIsSavingName] = useState(false);
+    const [showNameModal, setShowNameModal] = useState(false);
 
     const webampRef = useRef(null);
     const webampContainerRef = useRef(null);
@@ -135,6 +136,10 @@ const Game = () => {
                         name: localStorage.getItem("dudle_name") || "Anonymous"
                     })
                 }).catch(err => console.error("Error saving game stats:", err));
+
+                if (!localStorage.getItem("dudle_name") || localStorage.getItem("dudle_name") === "Anonymous") {
+                    setShowNameModal(true);
+                }
             }
         }
     }, [gameState]); // guesses is stable when gameState changes to won/lost in this app's flow
@@ -154,6 +159,7 @@ const Game = () => {
             console.error("Error updating user name:", err);
         } finally {
             setIsSavingName(false);
+            setShowNameModal(false);
         }
     };
 
@@ -481,6 +487,7 @@ const Game = () => {
                                     <button
                                         className="winamp-btn"
                                         onClick={handleShare}
+                                        disabled={showNameModal || !localStorage.getItem("dudle_name") || localStorage.getItem("dudle_name") === "Anonymous"}
                                         style={{
                                             width: "100%",
                                             marginBottom: "4px",
@@ -496,27 +503,6 @@ const Game = () => {
                                 >
                                     PLAY AGAIN
                                 </button>
-                                {(!localStorage.getItem("dudle_name") || localStorage.getItem("dudle_name") === "Anonymous") && (
-                                    <div style={{ marginTop: "8px", textAlign: "left", fontSize: "11px", color: "#00ff00" }}>
-                                        <div style={{ marginBottom: "4px" }}>ENTER NAME FOR LEADERBOARD:</div>
-                                        <div style={{ display: "flex", gap: "4px" }}>
-                                            <input
-                                                type="text"
-                                                value={userName}
-                                                onChange={(e) => setUserName(e.target.value)}
-                                                style={{ flex: 1, background: "#000", color: "#00ff00", border: "1px solid #00ff00", fontFamily: "inherit", padding: "2px 4px" }}
-                                                maxLength={20}
-                                            />
-                                            <button
-                                                className="winamp-btn"
-                                                onClick={handleSaveName}
-                                                disabled={isSavingName || !userName.trim()}
-                                            >
-                                                {isSavingName ? "..." : "SAVE"}
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
                                 {yesterdayStats && (
                                     <div style={{ marginTop: "16px", textAlign: "left", fontSize: "11px", color: "#00ff00", borderTop: "1px dotted #00ff00", paddingTop: "8px" }}>
                                         <div style={{ textAlign: "center", marginBottom: "8px" }}>--- YESTERDAY'S STATS ---</div>
@@ -555,6 +541,44 @@ const Game = () => {
                     </div>
                 </div>
             </div>
+
+            {showNameModal && (
+                <div className="share-modal-overlay">
+                    <div className="share-modal">
+                        <div className="share-modal-titlebar">
+                            <span>ENTER NAME</span>
+                            <span
+                                className="close-btn"
+                                onClick={() => setShowNameModal(false)}
+                            >
+                                🗙
+                            </span>
+                        </div>
+                        <div className="share-modal-content">
+                            <div style={{ marginBottom: "12px", fontSize: "12px" }}>
+                                Enter a name for the leaderboard!
+                            </div>
+                            <div style={{ display: "flex", gap: "8px" }}>
+                                <input
+                                    type="text"
+                                    value={userName}
+                                    onChange={(e) => setUserName(e.target.value)}
+                                    style={{ flex: 1, background: "#000", color: "#00ff00", border: "1px solid #00ff00", fontFamily: "inherit", padding: "4px 8px" }}
+                                    maxLength={20}
+                                    autoFocus
+                                />
+                                <button
+                                    className="winamp-btn"
+                                    onClick={handleSaveName}
+                                    disabled={isSavingName || !userName.trim()}
+                                >
+                                    {isSavingName ? "..." : "SAVE"}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {showShareModal && (
                 <div className="share-modal-overlay">
