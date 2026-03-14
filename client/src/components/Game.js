@@ -390,7 +390,25 @@ const Game = () => {
             verb = getRandom(["whiffed on", "got housed by", "screwed the pooch on", "did a Jeter on", "bombed", "got completely stumped by", "took an L on"]);
         }
 
-        const textToShare = `I ${verb} today's Dudle (${friendlyDate}) ${score}/6: ${resultEmoji} ${window.location.href}${statsText}`;
+        let yesterdayText = "";
+        if (yesterdayStats) {
+            yesterdayText += "\n\n--- Yesterday's Stats ---\n";
+            if (yesterdayStats.scores && Object.keys(yesterdayStats.scores).length > 0) {
+                const parts = [];
+                ["1", "2", "3", "4", "5", "6", "X"].forEach(s => {
+                    parts.push(`${s}: ${yesterdayStats.scores[s] || 0}`);
+                });
+                yesterdayText += parts.join(" | ") + "\n";
+            }
+            if (yesterdayStats.mostCommonWrongGuess) {
+                yesterdayText += `Most common wrong guess: ${yesterdayStats.mostCommonWrongGuess.guess}\n`;
+            }
+            if (yesterdayStats.fastestWin) {
+                yesterdayText += `Best win: ${yesterdayStats.fastestWin.name} (${yesterdayStats.fastestWin.score}/6)\n`;
+            }
+        }
+
+        const textToShare = `I ${verb} today's Dudle (${friendlyDate}) ${score}/6: ${resultEmoji} ${window.location.href}${statsText}${yesterdayText}`;
         navigator.clipboard.writeText(textToShare).then(() => {
             setShareText(textToShare);
             setShowShareModal(true);

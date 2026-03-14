@@ -576,3 +576,6 @@ Node.js v22.22.1
 [32m[nodemon] restarting due to changes...[39m
 [32m[nodemon] starting `node server.js`[39m
 Server listening on port 8080
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node server.js`[39m
+Server listening on port 8080
