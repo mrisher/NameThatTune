@@ -9,7 +9,8 @@ app.use(express.json());
 const PORT = process.env.PORT || 8080;
 
 const firestore = new Firestore({
-  ignoreUndefinedProperties: true
+  ignoreUndefinedProperties: true,
+  databaseId: 'dudle'
 });
 
 // Serve static files from the React app, but don't serve index.html statically
@@ -91,6 +92,10 @@ app.get('/api/stats', async (req, res) => {
     res.json(stats);
   } catch (err) {
     console.error("Error fetching stats:", err);
+    // If it's a GCP Auth/Project ID error (common in local dev without credentials), return empty stats gracefully
+    if (err.message && err.message.includes("Unable to detect a Project Id")) {
+       return res.json({ scores: {} });
+    }
     res.status(500).json({ error: "Failed to fetch stats" });
   }
 });
@@ -171,6 +176,9 @@ app.post('/api/stats', async (req, res) => {
     res.json({ success: true });
   } catch (err) {
     console.error("Error saving stats:", err);
+    if (err.message && err.message.includes("Unable to detect a Project Id")) {
+       return res.json({ success: true, warning: "Local dev mock: stats not saved" });
+    }
     res.status(500).json({ error: "Failed to save stats" });
   }
 });
@@ -187,6 +195,9 @@ app.put('/api/user', async (req, res) => {
     res.json({ success: true });
   } catch (err) {
     console.error("Error updating user:", err);
+    if (err.message && err.message.includes("Unable to detect a Project Id")) {
+       return res.json({ success: true, warning: "Local dev mock: user not updated" });
+    }
     res.status(500).json({ error: "Failed to update user" });
   }
 });
