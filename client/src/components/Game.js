@@ -411,10 +411,14 @@ const Game = () => {
         }
 
         const textToShare = `I ${verb} today's Dudle (${friendlyDate}) ${score}/6: ${resultEmoji} ${window.location.href}${statsText}${yesterdayText}`;
-        navigator.clipboard.writeText(textToShare).then(() => {
-            setShareText(textToShare);
-            setShowShareModal(true);
-        });
+        setShareText(textToShare);
+        setShowShareModal(true);
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(textToShare).catch(err => {
+                console.warn("Could not copy to clipboard", err);
+            });
+        }
     };
 
     if (!targetSong) return <div style={{ color: "#00ff00" }}>LOADING...</div>;
