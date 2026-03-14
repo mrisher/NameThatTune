@@ -198,6 +198,8 @@ const Game = () => {
 
     useEffect(() => {
         if (targetSong && !webampRef.current && webampContainerRef.current) {
+            const isMobile = window.innerWidth <= 600;
+
             const webamp = new Webamp({
                 initialTracks: [
                     {
@@ -211,13 +213,13 @@ const Game = () => {
                 __initialWindowLayout: {
                     main: { position: { x: 0, y: 0 } },
                     playlist: { position: { x: 0, y: 0 }, closed: true },
-                    equalizer: { position: { x: 0, y: 116 }, closed: false },
+                    equalizer: { position: { x: 0, y: 116 }, closed: isMobile },
                     milkdrop: { position: { x: 0, y: 0 }, closed: true },
                 },
                 windowLayout: {
                     main: { position: { left: 0, top: 0 } },
                     playlist: { position: { left: 0, top: 0 }, closed: true },
-                    equalizer: { position: { left: 0, top: 116 } },
+                    equalizer: { position: { left: 0, top: 116 }, closed: isMobile },
                     milkdrop: { position: { left: 0, top: 0 }, closed: true },
                 },
             });
@@ -581,6 +583,11 @@ const Game = () => {
                                     type="text"
                                     value={userName}
                                     onChange={(e) => setUserName(e.target.value)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter' && !isSavingName && userName.trim()) {
+                                            handleSaveName();
+                                        }
+                                    }}
                                     style={{ flex: 1, background: "#000", color: "#00ff00", border: "1px solid #00ff00", fontFamily: "inherit", padding: "4px 8px" }}
                                     maxLength={20}
                                     autoFocus

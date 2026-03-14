@@ -262,7 +262,7 @@ body {
   }
   #webamp-container {
     width: 275px;
-    height: calc(232px * var(--webamp-scale, 1) + 18px);
+    height: calc(116px * var(--webamp-scale, 1) + 18px);
     position: relative;
     overflow: visible;
   }
