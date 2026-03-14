@@ -1,0 +1,12 @@
+
+> client@0.1.0 test
+> react-scripts test
+
+PASS src/App.test.js
+  ✓ renders heardle clone (92 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
+Snapshots:   0 total
+Time:        3.152 s
+Ran all test suites.
