@@ -33,6 +33,10 @@ const getStatusIcon = (status) => {
             return "🟥";
         case "skipped":
             return "⬛";
+        case "jumped":
+            return "🟡";
+        case "jump_penalty":
+            return "⬛";
         default:
             return "⬜";
     }
@@ -43,6 +47,9 @@ const Game = () => {
     const [gameState, setGameState] = useState("playing"); // playing, won, lost
     const [unlockDuration, setUnlockDuration] = useState(1);
     const [targetSong, setTargetSong] = useState(null);
+    const [hasJumped, setHasJumped] = useState(false);
+    const [jumpOffset, setJumpOffset] = useState(0);
+    const [songDuration, setSongDuration] = useState(0);
     const [isDebug, setIsDebug] = useState(false);
     const [showShareModal, setShowShareModal] = useState(false);
     const [shareText, setShareText] = useState("");
@@ -55,10 +62,15 @@ const Game = () => {
     const webampRef = useRef(null);
     const webampContainerRef = useRef(null);
     const unlockDurationRef = useRef(unlockDuration);
+    const jumpOffsetRef = useRef(jumpOffset);
 
     useEffect(() => {
         unlockDurationRef.current = unlockDuration;
     }, [unlockDuration]);
+
+    useEffect(() => {
+        jumpOffsetRef.current = jumpOffset;
+    }, [jumpOffset]);
 
     useEffect(() => {
         // Ensure UUID exists
@@ -230,20 +242,23 @@ const Game = () => {
             // Subscribe to state changes to handle playback duration
             const unsubscribe = webamp.store.subscribe(() => {
                 const state = webamp.store.getState();
+                if (state.media.length && state.media.length > 0) {
+                    setSongDuration(state.media.length);
+                }
                 // Webamp stores time in seconds
                 if (state.media.status === "PLAYING") {
                     const elapsedSinceOffset =
-                        state.media.timeElapsed - (targetSong.offset || 0);
+                        state.media.timeElapsed - (targetSong.offset || 0) - jumpOffsetRef.current;
                     if (elapsedSinceOffset >= unlockDurationRef.current) {
                         webamp.stop();
-                        webamp.seekToTime(targetSong.offset || 0);
+                        webamp.seekToTime((targetSong.offset || 0) + jumpOffsetRef.current);
                     }
                 }
             });
 
             // Initial seek to offset
             webamp.skinIsLoaded().then(() => {
-                webamp.seekToTime(targetSong.offset || 0);
+                webamp.seekToTime((targetSong.offset || 0) + jumpOffsetRef.current);
             });
 
             return () => {
@@ -349,6 +364,27 @@ const Game = () => {
             setUnlockDuration(15);
         } else {
             setUnlockDuration(DURATION_MAP[newGuesses.length] || 5);
+        }
+    };
+
+    const handleJump = () => {
+        setHasJumped(true);
+        setJumpOffset(15);
+        jumpOffsetRef.current = 15; // Update ref synchronously
+        const newGuesses = [
+            ...guesses,
+            { trackName: "Jumped +15s", artistName: "-", status: "jumped" },
+            { trackName: "Penalty", artistName: "-", status: "jump_penalty" },
+        ];
+        setGuesses(newGuesses);
+        if (newGuesses.length >= 6) {
+            setGameState("lost");
+            setUnlockDuration(15);
+        }
+        // Do NOT update unlockDuration if not lost, keep it the same as before the jump penalty
+
+        if (webampRef.current) {
+            webampRef.current.seekToTime((targetSong.offset || 0) + 15);
         }
     };
 
@@ -484,6 +520,14 @@ const Game = () => {
                                     style={{ width: "100%", marginTop: "4px" }}
                                 >
                                     SKIP (+{DURATION_MAP[guesses.length] || 1}s)
+                                </button>
+                                <button
+                                    className="winamp-btn"
+                                    onClick={handleJump}
+                                    disabled={hasJumped || guesses.length > 4 || (songDuration > 0 && (targetSong.offset || 0) + 15 >= songDuration)}
+                                    style={{ width: "100%", marginTop: "4px" }}
+                                >
+                                    JUMP +15s
                                 </button>
                             </>
                         ) : (
