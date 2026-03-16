@@ -32,7 +32,7 @@ const getStatusIcon = (status) => {
         case "red":
             return "🟥";
         case "skipped":
-            return "⬛";
+            return "⏩";
         case "jumped":
             return "🟡";
         case "jump_penalty":
@@ -63,6 +63,11 @@ const Game = () => {
     const webampContainerRef = useRef(null);
     const unlockDurationRef = useRef(unlockDuration);
     const jumpOffsetRef = useRef(jumpOffset);
+    const gameStateRef = useRef(gameState);
+
+    useEffect(() => {
+        gameStateRef.current = gameState;
+    }, [gameState]);
 
     useEffect(() => {
         unlockDurationRef.current = unlockDuration;
@@ -172,6 +177,7 @@ const Game = () => {
         } finally {
             setIsSavingName(false);
             setShowNameModal(false);
+            handleShare();
         }
     };
 
@@ -239,6 +245,8 @@ const Game = () => {
             webamp.renderWhenReady(webampContainerRef.current);
             webampRef.current = webamp;
 
+            let lastSeekTime = 0;
+
             // Subscribe to state changes to handle playback duration
             const unsubscribe = webamp.store.subscribe(() => {
                 const state = webamp.store.getState();
@@ -247,17 +255,24 @@ const Game = () => {
                 }
                 // Webamp stores time in seconds
                 if (state.media.status === "PLAYING") {
-                    const expectedStart = (targetSong.offset || 0) + jumpOffsetRef.current;
+                    if (gameStateRef.current === "won" || gameStateRef.current === "lost") {
+                        return;
+                    }
 
-                    // Add a small epsilon (0.1s) to prevent infinite loop of seeking
-                    if (state.media.timeElapsed < expectedStart - 0.1 && state.media.length > 0) {
-                        webamp.seekToTime(expectedStart);
-                    } else if (state.media.timeElapsed >= expectedStart) {
-                        const elapsedSinceOffset = state.media.timeElapsed - expectedStart;
-                        if (elapsedSinceOffset >= unlockDurationRef.current) {
-                            webamp.stop();
+                    const expectedStart = (targetSong.offset || 0) + jumpOffsetRef.current;
+                    const expectedEnd = expectedStart + unlockDurationRef.current;
+                    const now = Date.now();
+
+                    // If we are before the expected start by a significant amount, seek to start
+                    if (state.media.timeElapsed < expectedStart - 0.2) {
+                        // Debounce seek to avoid spamming the Redux store while audio loads
+                        if (now - lastSeekTime > 800) {
+                            lastSeekTime = now;
                             webamp.seekToTime(expectedStart);
                         }
+                    } else if (state.media.timeElapsed >= expectedEnd) {
+                        webamp.pause();
+                        webamp.seekToTime(expectedStart);
                     }
                 }
             });
@@ -375,8 +390,9 @@ const Game = () => {
 
     const handleJump = () => {
         setHasJumped(true);
-        setJumpOffset(15);
-        jumpOffsetRef.current = 15; // Update ref synchronously
+        const newOffset = 15 + guesses.length;
+        setJumpOffset(newOffset);
+        jumpOffsetRef.current = newOffset; // Update ref synchronously
         const newGuesses = [
             ...guesses,
             { trackName: "Jumped +15s", artistName: "-", status: "jumped" },
@@ -390,7 +406,7 @@ const Game = () => {
         }
 
         if (webampRef.current) {
-            webampRef.current.seekToTime((targetSong.offset || 0) + 15);
+            webampRef.current.seekToTime((targetSong.offset || 0) + newOffset);
         }
     };
 
@@ -525,7 +541,7 @@ const Game = () => {
                                     onClick={handleSkip}
                                     style={{ width: "100%", marginTop: "4px" }}
                                 >
-                                    SKIP (+{DURATION_MAP[guesses.length] || 1}s)
+                                    SKIP (+1s)
                                 </button>
                                 <button
                                     className="winamp-btn"
