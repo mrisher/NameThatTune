@@ -179,7 +179,14 @@ body {
   font-size: 14px;
 }
 
-.winamp-btn:active {
+.winamp-btn:disabled {
+  background-color: #2b2b30;
+  color: #666;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.winamp-btn:active:not(:disabled) {
   box-shadow: inset -1px -1px #666;
   transform: translate(1px, 1px);
 }
