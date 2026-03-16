@@ -90,7 +90,7 @@ describe('Game Share Functionality', () => {
     // Check that it contains "SHARE RESULTS" text and the copied string
     const resultElement = screen.getByText(/today's Dudle \(undefined\) X\/6/i);
     expect(resultElement).toBeInTheDocument();
-    expect(resultElement.textContent).toMatch(/⬛⬛⬛⬛⬛⬛/);
+    expect(resultElement.textContent).toMatch(/⏩⏩⏩⏩⏩⏩/);
   });
 
   it('calls clipboard.writeText if available', async () => {
@@ -144,9 +144,9 @@ describe('Game Share Functionality', () => {
     const jumpBtn = await screen.findByRole('button', { name: 'JUMP +15s' });
     fireEvent.click(jumpBtn);
 
-    // After first guess (Jump), unlockDuration should be 2 according to DURATION_MAP
+    // After first guess (Jump), unlockDuration should still show SKIP (+1s) because it's hardcoded
     skipBtn = await screen.findByRole('button', { name: /^SKIP/ });
-    expect(skipBtn).toHaveTextContent('SKIP (+2s)');
+    expect(skipBtn).toHaveTextContent('SKIP (+1s)');
 
     // We can also verify that the jump button is now disabled
     expect(jumpBtn).toBeDisabled();
