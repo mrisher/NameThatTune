@@ -255,7 +255,7 @@ const Game = () => {
                     } else if (state.media.timeElapsed >= expectedStart) {
                         const elapsedSinceOffset = state.media.timeElapsed - expectedStart;
                         if (elapsedSinceOffset >= unlockDurationRef.current) {
-                            webamp.stop();
+                            webamp.pause();
                             webamp.seekToTime(expectedStart);
                         }
                     }
