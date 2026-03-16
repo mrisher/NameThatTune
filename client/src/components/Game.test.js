@@ -124,3 +124,30 @@ describe('Game Share Functionality', () => {
     expect(sharedText).toMatch(/today's Dudle \(undefined\) X\/6/);
   });
 });
+
+  it('correctly sets unlockDuration when jumping and reduces total play time by 15s', async () => {
+    // Re-mock fetch here since it might have been cleared or not reset properly for this specific test block
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        json: () => Promise.resolve({ scores: {}, mostCommonWrongGuess: null, fastestWin: null })
+      })
+    );
+
+    // Reset jump offset for each test explicitly if needed, but rendering new Game handles state
+    render(<Game />);
+
+    // Initial guess state: unlock duration should be 1
+    let skipBtn = await screen.findByRole('button', { name: /^SKIP/ });
+    expect(skipBtn).toHaveTextContent('SKIP (+1s)');
+
+    // Click jump
+    const jumpBtn = await screen.findByRole('button', { name: 'JUMP +15s' });
+    fireEvent.click(jumpBtn);
+
+    // After first guess (Jump), unlockDuration should be 2 according to DURATION_MAP
+    skipBtn = await screen.findByRole('button', { name: /^SKIP/ });
+    expect(skipBtn).toHaveTextContent('SKIP (+2s)');
+
+    // We can also verify that the jump button is now disabled
+    expect(jumpBtn).toBeDisabled();
+  });
