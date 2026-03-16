@@ -247,11 +247,17 @@ const Game = () => {
                 }
                 // Webamp stores time in seconds
                 if (state.media.status === "PLAYING") {
-                    const elapsedSinceOffset =
-                        state.media.timeElapsed - (targetSong.offset || 0) - jumpOffsetRef.current;
-                    if (elapsedSinceOffset >= unlockDurationRef.current) {
-                        webamp.stop();
-                        webamp.seekToTime((targetSong.offset || 0) + jumpOffsetRef.current);
+                    const expectedStart = (targetSong.offset || 0) + jumpOffsetRef.current;
+
+                    // Add a small epsilon (0.1s) to prevent infinite loop of seeking
+                    if (state.media.timeElapsed < expectedStart - 0.1 && state.media.length > 0) {
+                        webamp.seekToTime(expectedStart);
+                    } else if (state.media.timeElapsed >= expectedStart) {
+                        const elapsedSinceOffset = state.media.timeElapsed - expectedStart;
+                        if (elapsedSinceOffset >= unlockDurationRef.current) {
+                            webamp.stop();
+                            webamp.seekToTime(expectedStart);
+                        }
                     }
                 }
             });
@@ -379,8 +385,9 @@ const Game = () => {
         if (newGuesses.length >= 6) {
             setGameState("lost");
             setUnlockDuration(15);
+        } else {
+            setUnlockDuration(DURATION_MAP[newGuesses.length] || 5);
         }
-        // Do NOT update unlockDuration if not lost, keep it the same as before the jump penalty
 
         if (webampRef.current) {
             webampRef.current.seekToTime((targetSong.offset || 0) + 15);
