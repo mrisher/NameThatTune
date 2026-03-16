@@ -374,7 +374,6 @@ const Game = () => {
         const newGuesses = [
             ...guesses,
             { trackName: "Jumped +15s", artistName: "-", status: "jumped" },
-            { trackName: "Penalty", artistName: "-", status: "jump_penalty" },
         ];
         setGuesses(newGuesses);
         if (newGuesses.length >= 6) {
@@ -524,7 +523,7 @@ const Game = () => {
                                 <button
                                     className="winamp-btn"
                                     onClick={handleJump}
-                                    disabled={hasJumped || guesses.length > 4 || (songDuration > 0 && (targetSong.offset || 0) + 15 >= songDuration)}
+                                    disabled={hasJumped || guesses.length >= 6 || (songDuration > 0 && (targetSong.offset || 0) + 15 >= songDuration)}
                                     style={{ width: "100%", marginTop: "4px" }}
                                 >
                                     JUMP +15s
