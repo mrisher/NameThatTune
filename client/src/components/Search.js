@@ -38,7 +38,7 @@ const Search = ({ onSelect, disabled }) => {
     <div style={{ position: 'relative', width: '100%' }}>
       <input
         type="text"
-        placeholder="SEARCH FOR A SONG..."
+        placeholder="Guess the song..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         disabled={disabled}
