@@ -414,14 +414,25 @@ const Game = () => {
         if (artistForHint.toLowerCase().startsWith("a ")) artistForHint = artistForHint.substring(2);
         const artistFirstLetter = artistForHint.charAt(0).toUpperCase();
 
+        // Word count hint
+        const countWords = (str) => str.replace(/\([^)]*\)/g, "").replace(/\[[^\]]*\]/g, "").trim().split(/\s+/).filter(w => w.length > 0).length;
+        const useArtistWordCount = Math.random() < 0.5;
+        const wordCountHint = useArtistWordCount
+            ? `Artist has ${countWords(targetSong.artistName)} word(s)`
+            : `Title has ${countWords(targetSong.songTitle)} word(s)`;
+
         // Choose hint
         let hintText = "";
         const canUseTitleWord = randomTitleWord !== null;
 
-        if (canUseTitleWord && Math.random() < 0.5) {
+        const randChoice = Math.random();
+
+        if (canUseTitleWord && randChoice < 0.33) {
             hintText = `Title word: ${randomTitleWord}`;
-        } else {
+        } else if (randChoice < 0.66) {
             hintText = `Artist starts with: ${artistFirstLetter}`;
+        } else {
+            hintText = wordCountHint;
         }
 
         setCurrentHint(hintText);
@@ -429,7 +440,7 @@ const Game = () => {
 
         const newGuesses = [
             ...guesses,
-            { trackName: "Hint used", artistName: "-", status: "hint" },
+            { trackName: hintText, artistName: "-", status: "hint" },
         ];
         setGuesses(newGuesses);
         if (newGuesses.length >= 6) {
