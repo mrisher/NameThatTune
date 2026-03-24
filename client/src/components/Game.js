@@ -14,6 +14,21 @@ import {
     getCoV
 } from "../utils/stats";
 
+
+// Simple seeded PRNG (Mulberry32)
+const getSeededRandom = (seedStr) => {
+    let h = 1779033703 ^ seedStr.length;
+    for(let i = 0; i < seedStr.length; i++) {
+        h = Math.imul(h ^ seedStr.charCodeAt(i), 3432918353);
+        h = (h << 13) | (h >>> 19);
+    }
+    return function() {
+        h = Math.imul(h ^ (h >>> 16), 2246822507);
+        h = Math.imul(h ^ (h >>> 13), 3266489909);
+        return (((h ^= h >>> 16) >>> 0) / 4294967296);
+    }
+};
+
 const DURATION_MAP = {
     0: 1,
     1: 2,
@@ -398,15 +413,11 @@ const Game = () => {
         // Hint logic
         const stopwords = ["the", "a", "an", "and", "or", "of", "in", "to", "for", "with", "on", "at", "by", "from", "is", "it", "that", "this", "but", "not"];
 
-        // Title hint
+        // Title words
         const titleWords = targetSong.songTitle
             .replace(/[^\w\s]/g, "")
             .split(/\s+/)
             .filter(word => word.length > 0 && !stopwords.includes(word.toLowerCase()));
-
-        const randomTitleWord = titleWords.length > 0
-            ? titleWords[Math.floor(Math.random() * titleWords.length)]
-            : null;
 
         // Artist hint
         let artistForHint = targetSong.artistName;
@@ -414,25 +425,33 @@ const Game = () => {
         if (artistForHint.toLowerCase().startsWith("a ")) artistForHint = artistForHint.substring(2);
         const artistFirstLetter = artistForHint.charAt(0).toUpperCase();
 
-        // Word count hint
+        // Word counts
         const countWords = (str) => str.replace(/\([^)]*\)/g, "").replace(/\[[^\]]*\]/g, "").trim().split(/\s+/).filter(w => w.length > 0).length;
-        const useArtistWordCount = Math.random() < 0.5;
-        const wordCountHint = useArtistWordCount
-            ? `Artist has ${countWords(targetSong.artistName)} word(s)`
-            : `Title has ${countWords(targetSong.songTitle)} word(s)`;
 
-        // Choose hint
-        let hintText = "";
-        const canUseTitleWord = randomTitleWord !== null;
+        const possibleHints = [
+            `Artist starts with: ${artistFirstLetter}`,
+            `Artist has ${countWords(targetSong.artistName)} word(s)`,
+            `Title has ${countWords(targetSong.songTitle)} word(s)`,
+            ...titleWords.map(w => `Title word: ${w}`)
+        ];
 
-        const randChoice = Math.random();
+        // Deduplicate
+        const uniqueHints = Array.from(new Set(possibleHints));
 
-        if (canUseTitleWord && randChoice < 0.33) {
-            hintText = `Title word: ${randomTitleWord}`;
-        } else if (randChoice < 0.66) {
-            hintText = `Artist starts with: ${artistFirstLetter}`;
-        } else {
-            hintText = wordCountHint;
+        // Seeded shuffle so everyone gets the same hints in the same order
+        const seedStr = targetSong.songTitle + targetSong.artistName;
+        const rng = getSeededRandom(seedStr);
+
+        for (let i = uniqueHints.length - 1; i > 0; i--) {
+            const j = Math.floor(rng() * (i + 1));
+            [uniqueHints[i], uniqueHints[j]] = [uniqueHints[j], uniqueHints[i]];
+        }
+
+        const previousHints = guesses.filter(g => g.status === "hint").length;
+
+        let hintText = "No more hints available";
+        if (previousHints < uniqueHints.length) {
+            hintText = uniqueHints[previousHints];
         }
 
         setCurrentHint(hintText);
