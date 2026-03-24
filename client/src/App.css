@@ -109,6 +109,7 @@ body {
 .playlist-entry.yellow { color: #ffff00; }
 .playlist-entry.red { color: #ff0000; }
 .playlist-entry.skipped { color: #888; }
+.playlist-entry.hint { color: #00ffff; }
 
 .playlist-footer {
   height: 14px;

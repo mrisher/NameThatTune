@@ -37,6 +37,8 @@ const getStatusIcon = (status) => {
             return "🟡";
         case "jump_penalty":
             return "⬛";
+        case "hint":
+            return "❓";
         default:
             return "⬜";
     }
@@ -58,6 +60,8 @@ const Game = () => {
     const [userName, setUserName] = useState(localStorage.getItem("dudle_name") || "");
     const [isSavingName, setIsSavingName] = useState(false);
     const [showNameModal, setShowNameModal] = useState(false);
+    const [showHintModal, setShowHintModal] = useState(false);
+    const [currentHint, setCurrentHint] = useState("");
 
     const webampRef = useRef(null);
     const webampContainerRef = useRef(null);
@@ -388,6 +392,54 @@ const Game = () => {
         }
     };
 
+    const handleHint = () => {
+        if (!targetSong) return;
+
+        // Hint logic
+        const stopwords = ["the", "a", "an", "and", "or", "of", "in", "to", "for", "with", "on", "at", "by", "from", "is", "it", "that", "this", "but", "not"];
+
+        // Title hint
+        const titleWords = targetSong.songTitle
+            .replace(/[^\w\s]/g, "")
+            .split(/\s+/)
+            .filter(word => word.length > 0 && !stopwords.includes(word.toLowerCase()));
+
+        const randomTitleWord = titleWords.length > 0
+            ? titleWords[Math.floor(Math.random() * titleWords.length)]
+            : null;
+
+        // Artist hint
+        let artistForHint = targetSong.artistName;
+        if (artistForHint.toLowerCase().startsWith("the ")) artistForHint = artistForHint.substring(4);
+        if (artistForHint.toLowerCase().startsWith("a ")) artistForHint = artistForHint.substring(2);
+        const artistFirstLetter = artistForHint.charAt(0).toUpperCase();
+
+        // Choose hint
+        let hintText = "";
+        const canUseTitleWord = randomTitleWord !== null;
+
+        if (canUseTitleWord && Math.random() < 0.5) {
+            hintText = `Title word: ${randomTitleWord}`;
+        } else {
+            hintText = `Artist starts with: ${artistFirstLetter}`;
+        }
+
+        setCurrentHint(hintText);
+        setShowHintModal(true);
+
+        const newGuesses = [
+            ...guesses,
+            { trackName: "Hint used", artistName: "-", status: "hint" },
+        ];
+        setGuesses(newGuesses);
+        if (newGuesses.length >= 6) {
+            setGameState("lost");
+            setUnlockDuration(15);
+        } else {
+            setUnlockDuration(DURATION_MAP[newGuesses.length] || 5);
+        }
+    };
+
     const handleJump = () => {
         setHasJumped(true);
         const newOffset = 15 + guesses.length;
@@ -551,6 +603,14 @@ const Game = () => {
                                 >
                                     JUMP +15s
                                 </button>
+                                <button
+                                    className="winamp-btn"
+                                    onClick={handleHint}
+                                    disabled={guesses.length >= 6}
+                                    style={{ width: "100%", marginTop: "4px" }}
+                                >
+                                    HINT
+                                </button>
                             </>
                         ) : (
                             <div
@@ -702,6 +762,32 @@ const Game = () => {
                             >
                                 {shareText}
                             </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {showHintModal && (
+                <div className="share-modal-overlay">
+                    <div className="share-modal">
+                        <div className="share-modal-titlebar">
+                            <span>HINT</span>
+                            <span
+                                className="close-btn"
+                                onClick={() => setShowHintModal(false)}
+                            >
+                                🗙
+                            </span>
+                        </div>
+                        <div className="share-modal-content">
+                            <div>{currentHint}</div>
+                            <button
+                                className="winamp-btn"
+                                onClick={() => setShowHintModal(false)}
+                                style={{ marginTop: "12px", width: "100%" }}
+                            >
+                                CLOSE
+                            </button>
                         </div>
                     </div>
                 </div>
