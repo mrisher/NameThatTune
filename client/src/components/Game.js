@@ -77,6 +77,7 @@ const Game = () => {
     const [showNameModal, setShowNameModal] = useState(false);
     const [showHintModal, setShowHintModal] = useState(false);
     const [currentHint, setCurrentHint] = useState("");
+    const [currentDay, setCurrentDay] = useState(null);
 
     const webampRef = useRef(null);
     const webampContainerRef = useRef(null);
@@ -214,6 +215,25 @@ const Game = () => {
         const month = parts.find((p) => p.type === "month").value;
         const day = parts.find((p) => p.type === "day").value;
         const today = `${year}-${month}-${day}`;
+        setCurrentDay(today);
+
+        const savedStateJson = localStorage.getItem("dudle_saved_state");
+        if (savedStateJson) {
+            try {
+                const savedState = JSON.parse(savedStateJson);
+                if (savedState.date === today) {
+                    setGuesses(savedState.guesses);
+                    setGameState(savedState.gameState);
+                    setHasJumped(savedState.hasJumped);
+                    setJumpOffset(savedState.jumpOffset);
+                    setUnlockDuration(savedState.unlockDuration);
+                } else {
+                    localStorage.removeItem("dudle_saved_state");
+                }
+            } catch (e) {
+                console.error("Error parsing saved state", e);
+            }
+        }
 
         const todaysSong = songs.find((s) => s.day === today) || songs[0];
         setTargetSong(todaysSong);
@@ -232,6 +252,20 @@ const Game = () => {
             .catch(err => console.error("Error fetching yesterday's stats:", err));
 
     }, []);
+
+    useEffect(() => {
+        if (currentDay) {
+            const stateToSave = {
+                date: currentDay,
+                guesses,
+                gameState,
+                hasJumped,
+                jumpOffset,
+                unlockDuration,
+            };
+            localStorage.setItem("dudle_saved_state", JSON.stringify(stateToSave));
+        }
+    }, [currentDay, guesses, gameState, hasJumped, jumpOffset, unlockDuration]);
 
     useEffect(() => {
         if (targetSong && !webampRef.current && webampContainerRef.current) {

@@ -11,6 +11,7 @@ export default function ConnecTunes() {
   const [gameState, setGameState] = useState("playing"); // playing, won, lost
   const [showShareModal, setShowShareModal] = useState(false);
   const [shareText, setShareText] = useState("");
+  const [currentDay, setCurrentDay] = useState(null);
 
   const audioRef = useRef(null);
   const timerRef = useRef(null);
@@ -27,6 +28,25 @@ export default function ConnecTunes() {
     const month = parts.find((p) => p.type === "month").value;
     const day = parts.find((p) => p.type === "day").value;
     const today = `${year}-${month}-${day}`;
+    setCurrentDay(today);
+
+    const savedStateJson = localStorage.getItem("connectunes_saved_state");
+    if (savedStateJson) {
+      try {
+        const savedState = JSON.parse(savedStateJson);
+        if (savedState.date === today) {
+          setSelected(savedState.selected);
+          setGameState(savedState.gameState);
+          if (savedState.playCounts) {
+            playCountsRef.current = savedState.playCounts;
+          }
+        } else {
+          localStorage.removeItem("connectunes_saved_state");
+        }
+      } catch (e) {
+        console.error("Error parsing saved state", e);
+      }
+    }
 
     const todaysConfig = connectunesSongs.find((s) => s.day === today) || connectunesSongs[0];
     setTargetDay(todaysConfig);
@@ -41,8 +61,29 @@ export default function ConnecTunes() {
     };
   }, []);
 
+  useEffect(() => {
+    if (currentDay) {
+      const stateToSave = {
+        date: currentDay,
+        selected,
+        gameState,
+        playCounts: playCountsRef.current,
+      };
+      localStorage.setItem("connectunes_saved_state", JSON.stringify(stateToSave));
+    }
+  }, [currentDay, selected, gameState]);
+
   const handlePlay = (index) => {
     playCountsRef.current[index] += 1;
+    if (currentDay) {
+      const stateToSave = {
+        date: currentDay,
+        selected,
+        gameState,
+        playCounts: playCountsRef.current,
+      };
+      localStorage.setItem("connectunes_saved_state", JSON.stringify(stateToSave));
+    }
     
     if (audioRef.current) {
       audioRef.current.pause();
