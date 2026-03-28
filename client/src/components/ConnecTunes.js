@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { chordleSongs } from "../chordleConfig";
+import { connectunesSongs } from "../connectunesConfig";
 import { getFriendlyParisDate } from "../utils/stats";
 
 const SAMPLE_LENGTH_MS = 2500;
 
-export default function Chordle() {
+export default function ConnecTunes() {
   const [targetDay, setTargetDay] = useState(null);
   const [selected, setSelected] = useState([]);
   const [playingIndex, setPlayingIndex] = useState(null);
@@ -17,7 +17,7 @@ export default function Chordle() {
   const playCountsRef = useRef([0, 0, 0, 0]);
 
   useEffect(() => {
-    document.title = "Chordle";
+    document.title = "ConnecTunes";
     return () => {
       document.title = "Dudle";
     };
@@ -35,7 +35,7 @@ export default function Chordle() {
     const day = parts.find((p) => p.type === "day").value;
     const today = `${year}-${month}-${day}`;
 
-    const todaysConfig = chordleSongs.find((s) => s.day === today) || chordleSongs[0];
+    const todaysConfig = connectunesSongs.find((s) => s.day === today) || connectunesSongs[0];
     setTargetDay(todaysConfig);
 
     return () => {
@@ -154,7 +154,7 @@ export default function Chordle() {
     const extraPlays = playCountsRef.current.reduce((acc, count) => acc + Math.max(0, count - 1), 0);
     const yellows = "🟨".repeat(extraPlays);
 
-    const textToShare = `I ${verb} today's Chordle (${friendlyDate}):\n${yellows}${resultEmoji}\n${window.location.origin}/chordle`;
+    const textToShare = `I ${verb} today's ConnecTunes (${friendlyDate}):\n${yellows}${resultEmoji}\n${window.location.origin}/connectunes`;
     setShareText(textToShare);
     setShowShareModal(true);
 
@@ -165,24 +165,24 @@ export default function Chordle() {
     }
   };
 
-  if (!targetDay) return <div style={{ color: "#00ff00" }}>LOADING CHORDLE...</div>;
+  if (!targetDay) return <div style={{ color: "#00ff00" }}>LOADING CONNECTUNES...</div>;
 
   return (
     <>
-      <h1 className="dudle-header">CHORDLE</h1>
+      <h1 className="dudle-header">CONNECTUNES</h1>
       <div className="dudle-container" style={{ flexDirection: 'column', alignItems: 'center' }}>
 
         <div style={{ marginBottom: "16px", color: "#ccc", textAlign: "center", maxWidth: "300px" }}>
           Find the 2 songs that share a word in their title!
         </div>
 
-        <div className="chordle-grid">
+        <div className="connectunes-grid">
           {targetDay.songs.map((song, i) => {
             const label = ["A", "B", "C", "D"][i];
             const isSelected = selected.includes(i);
             const isPlaying = playingIndex === i;
 
-            let btnClass = "chordle-btn";
+            let btnClass = "connectunes-btn";
             if (gameState !== "playing") {
               if (isSelected) {
                 btnClass += gameState === "won" ? " correct" : " incorrect";
@@ -207,7 +207,7 @@ export default function Chordle() {
                   </button>
                   {gameState === "playing" && (
                     <div
-                      className="chordle-select-box"
+                      className="connectunes-select-box"
                       onClick={(e) => {
                         e.stopPropagation(); // prevent play
                         handleSelect(i);
@@ -218,7 +218,7 @@ export default function Chordle() {
                   )}
                 </div>
                 {gameState !== "playing" && (
-                  <div className="chordle-song-info">
+                  <div className="connectunes-song-info">
                     <div style={{fontWeight: "bold"}}>{song.songTitle}</div>
                     <div style={{fontSize: "12px", color: "#888"}}>{song.artistName}</div>
                   </div>

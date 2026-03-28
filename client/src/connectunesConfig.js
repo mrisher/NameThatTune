@@ -1,4 +1,4 @@
-const rawChordleSongs = [
+const rawConnectunesSongs = [
   {
     "day": "2026-03-28",
     "songs": [
@@ -376,7 +376,7 @@ const rawChordleSongs = [
   }
 ];
 
-export const chordleSongs = rawChordleSongs.map(day => ({
+export const connectunesSongs = rawConnectunesSongs.map(day => ({
   ...day,
   songs: day.songs.map(song => ({
     ...song,
