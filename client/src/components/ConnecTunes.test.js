@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import Chordle from './Chordle';
+import ConnecTunes from './ConnecTunes';
 
 // Mock Audio
 const mockPlay = jest.fn().mockImplementation(() => Promise.resolve());
@@ -20,13 +20,13 @@ class MockAudio {
 
 window.Audio = MockAudio;
 
-describe('Chordle Component', () => {
+describe('ConnecTunes Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   test('calls handlePlay when buttons are clicked', async () => {
-    render(<Chordle />);
+    render(<ConnecTunes />);
     
     const buttons = ['A', 'B', 'C', 'D'];
     for (const label of buttons) {
@@ -39,9 +39,9 @@ describe('Chordle Component', () => {
   });
 
   test('calls handleSelect when select boxes are clicked', async () => {
-    render(<Chordle />);
+    render(<ConnecTunes />);
     
-    const selectBoxes = screen.getAllByText('', { selector: '.chordle-select-box' });
+    const selectBoxes = screen.getAllByText('', { selector: '.connectunes-select-box' });
     expect(selectBoxes.length).toBe(4);
     
     fireEvent.click(selectBoxes[0]);

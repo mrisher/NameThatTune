@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Game from './components/Game';
-import Chordle from './components/Chordle';
+import ConnecTunes from './components/ConnecTunes';
 import './App.css';
 
 function App() {
@@ -10,7 +10,7 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<Game />} />
-          <Route path="/chordle" element={<Chordle />} />
+          <Route path="/connectunes" element={<ConnecTunes />} />
         </Routes>
       </div>
     </BrowserRouter>

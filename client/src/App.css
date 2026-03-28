@@ -374,15 +374,15 @@ body {
 }
 
 
-/* Chordle Styles */
-.chordle-grid {
+/* ConnecTunes Styles */
+.connectunes-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
   margin-top: 10px;
 }
 
-.chordle-btn {
+.connectunes-btn {
   width: 120px;
   height: 120px;
   background-color: #3b3b45;
@@ -399,29 +399,29 @@ body {
   align-items: center;
 }
 
-.chordle-btn:hover:not(:disabled) {
+.connectunes-btn:hover:not(:disabled) {
   background-color: #4b4b55;
 }
 
-.chordle-btn.selected {
+.connectunes-btn.selected {
   background-color: #000080;
   border-color: #00ff00;
   color: #fff;
 }
 
-.chordle-btn.correct {
+.connectunes-btn.correct {
   background-color: #008000;
   border-color: #00ff00;
   color: #fff;
 }
 
-.chordle-btn.incorrect {
+.connectunes-btn.incorrect {
   background-color: #800000;
   border-color: #ff0000;
   color: #fff;
 }
 
-.chordle-btn.unselected {
+.connectunes-btn.unselected {
   opacity: 0.5;
   filter: grayscale(100%);
 }
@@ -433,7 +433,7 @@ body {
   font-size: 16px;
 }
 
-.chordle-song-info {
+.connectunes-song-info {
   text-align: center;
   margin-top: 4px;
   max-width: 120px;
@@ -443,7 +443,7 @@ body {
   word-wrap: break-word;
 }
 
-.chordle-select-box {
+.connectunes-select-box {
   position: absolute;
   top: 5px;
   right: 5px;
@@ -460,7 +460,7 @@ body {
   z-index: 2;
 }
 
-.chordle-select-box:hover {
+.connectunes-select-box:hover {
   background-color: #3b3b45;
 }
 
