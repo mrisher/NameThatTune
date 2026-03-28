@@ -442,3 +442,32 @@ body {
   color: #00ff00;
   word-wrap: break-word;
 }
+
+.chordle-select-box {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 24px;
+  height: 24px;
+  border: 2px solid #ccc;
+  background-color: #2b2b35;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  color: #00ff00;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.chordle-select-box:hover {
+  background-color: #3b3b45;
+}
+
+.playing-indicator {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  font-size: 16px;
+  right: auto;
+}

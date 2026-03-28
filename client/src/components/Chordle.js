@@ -48,13 +48,21 @@ export default function Chordle() {
     setPlayingIndex(null);
 
     const song = targetDay.songs[index];
-    const audio = new Audio(song.audioUrl);
-    audioRef.current = audio;
 
-    audio.play().then(() => {
+    // Instead of instantiating a new Audio each time which might be blocked by browsers,
+    // we manage a single Audio object.
+    if (!audioRef.current) {
+      audioRef.current = new Audio();
+    }
+    audioRef.current.src = song.audioUrl;
+    audioRef.current.currentTime = 0;
+
+    audioRef.current.play().then(() => {
       setPlayingIndex(index);
       timerRef.current = setTimeout(() => {
-        audio.pause();
+        if (audioRef.current) {
+          audioRef.current.pause();
+        }
         setPlayingIndex(null);
       }, 3000);
     }).catch(err => {
@@ -174,11 +182,21 @@ export default function Chordle() {
                   className={btnClass}
                   onClick={() => {
                     handlePlay(i);
-                    handleSelect(i);
                   }}
                 >
                   {label}
                   {isPlaying && <div className="playing-indicator">🔊</div>}
+                  {gameState === "playing" && (
+                    <div
+                      className="chordle-select-box"
+                      onClick={(e) => {
+                        e.stopPropagation(); // prevent play
+                        handleSelect(i);
+                      }}
+                    >
+                      {isSelected ? "✔" : ""}
+                    </div>
+                  )}
                 </button>
                 {gameState !== "playing" && (
                   <div className="chordle-song-info">
