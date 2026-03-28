@@ -49,15 +49,27 @@ export default function Chordle() {
 
     const song = targetDay.songs[index];
 
-    // Instead of instantiating a new Audio each time which might be blocked by browsers,
-    // we manage a single Audio object.
     if (!audioRef.current) {
       audioRef.current = new Audio();
     }
     audioRef.current.src = song.audioUrl;
     audioRef.current.currentTime = 0;
 
-    audioRef.current.play().then(() => {
+    const playPromise = audioRef.current.play();
+
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        setPlayingIndex(index);
+        timerRef.current = setTimeout(() => {
+          if (audioRef.current) {
+            audioRef.current.pause();
+          }
+          setPlayingIndex(null);
+        }, 3000);
+      }).catch(err => {
+        console.error("Audio play failed:", err);
+      });
+    } else {
       setPlayingIndex(index);
       timerRef.current = setTimeout(() => {
         if (audioRef.current) {
@@ -65,9 +77,7 @@ export default function Chordle() {
         }
         setPlayingIndex(null);
       }, 3000);
-    }).catch(err => {
-      console.error("Audio play failed:", err);
-    });
+    }
   };
 
   const handleSelect = (index) => {
@@ -178,14 +188,16 @@ export default function Chordle() {
 
             return (
               <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px" }}>
-                <button
-                  className={btnClass}
-                  onClick={() => {
-                    handlePlay(i);
-                  }}
-                >
-                  {label}
-                  {isPlaying && <div className="playing-indicator">🔊</div>}
+                <div style={{ position: "relative" }}>
+                  <button
+                    className={btnClass}
+                    onClick={() => {
+                      handlePlay(i);
+                    }}
+                  >
+                    {label}
+                    {isPlaying && <div className="playing-indicator">🔊</div>}
+                  </button>
                   {gameState === "playing" && (
                     <div
                       className="chordle-select-box"
@@ -197,7 +209,7 @@ export default function Chordle() {
                       {isSelected ? "✔" : ""}
                     </div>
                   )}
-                </button>
+                </div>
                 {gameState !== "playing" && (
                   <div className="chordle-song-info">
                     <div style={{fontWeight: "bold"}}>{song.songTitle}</div>

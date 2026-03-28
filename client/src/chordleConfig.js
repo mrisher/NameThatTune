@@ -5,17 +5,17 @@ const rawChordleSongs = [
       {
         "songTitle": "SSBXaWxsIEFsd2F5cyBMb3ZlIFlvdQ==",
         "artistName": "V2hpdG5leSBIb3VzdG9u",
-        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/a4/0c/b2/a40cb2eb-b26a-60ce-0335-5b8cf6152a5c/mzaf_7852362635393220551.plus.aac.p.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/03/d2/1a/03d21aca-c69e-09af-03ef-118004e68ab5/mzaf_17408932698913708736.plus.aac.p.m4a"
       },
       {
         "songTitle": "Q3JhenkgSW4gTG92ZQ==",
         "artistName": "QmV5b25jZQ==",
-        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/65/d6/35/65d635f7-6330-745a-c600-e79e60a36e6d/mzaf_1863584888364887752.plus.aac.p.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/b5/2a/4f/b52a4fcd-0628-cb38-c8ab-a697c11a9175/mzaf_1541321636664021445.plus.aac.p.m4a"
       },
       {
         "songTitle": "VGhyaWxsZXI=",
         "artistName": "TWljaGFlbCBKYWNrc29u",
-        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/dc/bc/8a/dcbc8a3e-4ce1-c00d-cc02-eda2212053c7/mzaf_8347559338388601510.plus.aac.p.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/58/8c/cb/588ccb9a-ab79-4a38-43b5-d4c24ea42859/mzaf_2083607504726567992.plus.aac.p.m4a"
       },
       {
         "songTitle": "VXB0b3duIEZ1bms=",
