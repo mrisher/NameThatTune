@@ -151,10 +151,19 @@ export default function ConnecTunes() {
         ]);
       }
     } else {
-      verb = getRandom([
-        "whiffed on", "did a Jeter on", "bombed", "got Aaron Judge'd by",
-        "struck out looking against Gerrit Cole on", "got Giancarlo Stanton'd by"
-      ]);
+      if (extraPlays === 0) {
+        verb = getRandom([
+          "whiffed on", "blindly guessed and failed at", "rushed and bombed", "struck out on three pitches against"
+        ]);
+      } else if (extraPlays <= 2) {
+        verb = getRandom([
+          "struck out looking on", "couldn't figure out", "got bested by", "swung and missed on", "did a Jeter on"
+        ]);
+      } else {
+        verb = getRandom([
+          "agonized over and still failed", "overthought and bombed", "struggled mightily with", "got tortured by", "got Giancarlo Stanton'd by"
+        ]);
+      }
     }
 
     const resultEmoji = gameState === "won" ? "🟩" : "🟥";
