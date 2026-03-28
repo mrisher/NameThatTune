@@ -1,26 +1,26 @@
 const rawChordleSongs = [
   {
-    "day": "2026-02-24",
+    "day": "2026-03-28",
     "songs": [
       {
-        "songTitle": "SSBXaWxsIEFsd2F5cyBMb3ZlIFlvdQ==",
-        "artistName": "V2hpdG5leSBIb3VzdG9u",
-        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/03/d2/1a/03d21aca-c69e-09af-03ef-118004e68ab5/mzaf_17408932698913708736.plus.aac.p.m4a"
+        "songTitle": "Q2FsaWZvcm5pYSBHdXJscw==",
+        "artistName": "S2F0eSBQZXJyeQ==",
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b7/77/8b/b7778baa-6756-e378-ce53-936af6d6a39e/mzaf_13732224797596299990.plus.aac.p.m4a"
       },
       {
-        "songTitle": "Q3JhenkgSW4gTG92ZQ==",
-        "artistName": "QmV5b25jZQ==",
-        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/b5/2a/4f/b52a4fcd-0628-cb38-c8ab-a697c11a9175/mzaf_1541321636664021445.plus.aac.p.m4a"
+        "songTitle": "SG90ZWwgQ2FsaWZvcm5pYQ==",
+        "artistName": "RWFnbGVz",
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/a7/1b/f0/a71bf07d-f498-05c9-2c8a-d12af7d019d8/mzaf_11402952498213508559.plus.aac.p.m4a"
       },
       {
-        "songTitle": "VGhyaWxsZXI=",
-        "artistName": "TWljaGFlbCBKYWNrc29u",
-        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/58/8c/cb/588ccb9a-ab79-4a38-43b5-d4c24ea42859/mzaf_2083607504726567992.plus.aac.p.m4a"
+        "songTitle": "QmFkIFJvbWFuY2U=",
+        "artistName": "TGFkeSBHYWdh",
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/e7/a4/24/e7a424e8-d38a-9903-a981-fd6985764d8a/mzaf_2758786402489249578.plus.aac.p.m4a"
       },
       {
-        "songTitle": "VXB0b3duIEZ1bms=",
-        "artistName": "TWFyayBSb25zb24=",
-        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/62/e1/98/62e19826-cd13-6eff-390e-dbca502bb7b5/mzaf_8006535252627949661.plus.aac.p.m4a"
+        "songTitle": "SGFwcHk=",
+        "artistName": "UGhhcnJlbGwgV2lsbGlhbXM=",
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/4c/ba/89/4cba89f1-1a8a-3f33-b3ac-d88bcad8b996/mzaf_17135561476274403451.plus.aac.p.m4a"
       }
     ]
   },
