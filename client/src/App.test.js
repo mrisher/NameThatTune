@@ -22,6 +22,7 @@ jest.mock('webamp', () => {
 });
 
 test('renders winamp playlist', () => {
+  // Use a mock route environment or just test App mounts since it handles its own routing
   render(<App />);
   const linkElements = screen.getAllByText(/GUESSES/i);
   expect(linkElements.length).toBeGreaterThan(0);
