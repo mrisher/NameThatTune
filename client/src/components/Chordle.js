@@ -65,7 +65,7 @@ export default function Chordle() {
             audioRef.current.pause();
           }
           setPlayingIndex(null);
-        }, 3000);
+        }, 2000);
       }).catch(err => {
         console.error("Audio play failed:", err);
       });
@@ -76,7 +76,7 @@ export default function Chordle() {
           audioRef.current.pause();
         }
         setPlayingIndex(null);
-      }, 3000);
+      }, 2000);
     }
   };
 
