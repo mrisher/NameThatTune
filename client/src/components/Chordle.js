@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { chordleSongs } from "../chordleConfig";
 import { getFriendlyParisDate } from "../utils/stats";
 
+const SAMPLE_LENGTH_MS = 2500;
+
 export default function Chordle() {
   const [targetDay, setTargetDay] = useState(null);
   const [selected, setSelected] = useState([]);
@@ -65,7 +67,7 @@ export default function Chordle() {
             audioRef.current.pause();
           }
           setPlayingIndex(null);
-        }, 2000);
+        }, SAMPLE_LENGTH_MS);
       }).catch(err => {
         console.error("Audio play failed:", err);
       });
@@ -76,7 +78,7 @@ export default function Chordle() {
           audioRef.current.pause();
         }
         setPlayingIndex(null);
-      }, 2000);
+      }, SAMPLE_LENGTH_MS);
     }
   };
 
