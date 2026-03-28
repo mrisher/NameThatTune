@@ -95,7 +95,8 @@ export default function Chordle() {
   };
 
   const getWords = (str) => {
-    return str.toLowerCase().replace(/[^\w\s]/g, "").split(/\s+/).filter(w => w.length > 0);
+    const stopWords = ['a', 'an', 'the', 'and', 'or', 'but', 'is', 'are', 'in', 'on', 'at', 'to', 'for', 'with', 'of', 'me', 'my', 'you', 'your', 'it', 'i'];
+    return str.toLowerCase().replace(/[^\w\s]/g, "").split(/\s+/).filter(w => w.length > 0 && !stopWords.includes(w));
   };
 
   const checkWin = (idx1, idx2) => {
