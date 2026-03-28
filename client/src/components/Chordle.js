@@ -137,17 +137,9 @@ export default function Chordle() {
       ]);
     }
 
-    const labels = ["A", "B", "C", "D"];
-    const emojiGrid = [0, 1, 2, 3].map(i => {
-      if (selected.includes(i)) {
-        return gameState === "won" ? "🟩" : "🟥";
-      }
-      return "⬜";
-    });
+    const resultEmoji = gameState === "won" ? "🟩" : "🟥";
 
-    const gridStr = emojiGrid.slice(0,2).join("") + "\n" + emojiGrid.slice(2,4).join("");
-
-    const textToShare = `I ${verb} today's Chordle (${friendlyDate}):\n${gridStr}\n${window.location.origin}/chordle`;
+    const textToShare = `I ${verb} today's Chordle (${friendlyDate}):\n${resultEmoji}\n${window.location.origin}/chordle`;
     setShareText(textToShare);
     setShowShareModal(true);
 
