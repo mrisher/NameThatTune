@@ -16,6 +16,13 @@ export default function Chordle() {
   const timerRef = useRef(null);
 
   useEffect(() => {
+    document.title = "Chordle";
+    return () => {
+      document.title = "Dudle";
+    };
+  }, []);
+
+  useEffect(() => {
     const parts = new Intl.DateTimeFormat("en-US", {
       timeZone: "Europe/Paris",
       year: "numeric",
