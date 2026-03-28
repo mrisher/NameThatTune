@@ -14,6 +14,7 @@ export default function Chordle() {
 
   const audioRef = useRef(null);
   const timerRef = useRef(null);
+  const playCountsRef = useRef([0, 0, 0, 0]);
 
   useEffect(() => {
     document.title = "Chordle";
@@ -48,6 +49,8 @@ export default function Chordle() {
   }, []);
 
   const handlePlay = (index) => {
+    playCountsRef.current[index] += 1;
+    
     if (audioRef.current) {
       audioRef.current.pause();
     }
@@ -148,8 +151,10 @@ export default function Chordle() {
     }
 
     const resultEmoji = gameState === "won" ? "🟩" : "🟥";
+    const extraPlays = playCountsRef.current.reduce((acc, count) => acc + Math.max(0, count - 1), 0);
+    const yellows = "🟨".repeat(extraPlays);
 
-    const textToShare = `I ${verb} today's Chordle (${friendlyDate}):\n${resultEmoji}\n${window.location.origin}/chordle`;
+    const textToShare = `I ${verb} today's Chordle (${friendlyDate}):\n${yellows}${resultEmoji}\n${window.location.origin}/chordle`;
     setShareText(textToShare);
     setShowShareModal(true);
 
