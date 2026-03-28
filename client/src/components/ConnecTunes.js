@@ -130,12 +130,26 @@ export default function ConnecTunes() {
 
   const handleShare = () => {
     const friendlyDate = getFriendlyParisDate();
+    const extraPlays = playCountsRef.current.reduce((acc, count) => acc + Math.max(0, count - 1), 0);
+    
     let verb = "";
     if (gameState === "won") {
-      verb = getRandom([
-        "crushed", "aced", "dominated", "totally qwerted", "pulled a Rafael Devers on",
-        "went deep over the Green Monster on", "hit a grand slam on"
-      ]);
+      if (extraPlays === 0) {
+        verb = getRandom([
+          "crushed", "aced", "dominated", "totally qwerted", "pulled a Rafael Devers on",
+          "went deep over the Green Monster on", "hit a grand slam on"
+        ]);
+      } else if (extraPlays <= 2) {
+        verb = getRandom([
+          "solved", "figured out", "managed to beat", "got a solid hit on",
+          "singled on", "doubled on"
+        ]);
+      } else {
+        verb = getRandom([
+          "survived", "barely survived", "squeaked by", "eventually solved",
+          "ground out a win on", "eked out a win on"
+        ]);
+      }
     } else {
       verb = getRandom([
         "whiffed on", "did a Jeter on", "bombed", "got Aaron Judge'd by",
@@ -144,7 +158,6 @@ export default function ConnecTunes() {
     }
 
     const resultEmoji = gameState === "won" ? "🟩" : "🟥";
-    const extraPlays = playCountsRef.current.reduce((acc, count) => acc + Math.max(0, count - 1), 0);
     const yellows = "🟨".repeat(extraPlays);
 
     const textToShare = `I ${verb} today's ConnecTunes (${friendlyDate}):\n${yellows}${resultEmoji}\n${window.location.origin}/connectunes`;
