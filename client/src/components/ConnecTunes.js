@@ -17,13 +17,6 @@ export default function ConnecTunes() {
   const playCountsRef = useRef([0, 0, 0, 0]);
 
   useEffect(() => {
-    document.title = "ConnecTunes";
-    return () => {
-      document.title = "Dudle";
-    };
-  }, []);
-
-  useEffect(() => {
     const parts = new Intl.DateTimeFormat("en-US", {
       timeZone: "Europe/Paris",
       year: "numeric",
