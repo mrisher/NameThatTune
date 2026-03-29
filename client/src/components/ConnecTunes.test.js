@@ -25,17 +25,50 @@ describe('ConnecTunes Component', () => {
     jest.clearAllMocks();
   });
 
-  test('calls handlePlay when buttons are clicked', async () => {
+  test('calls handlePlay and increments count when play resolves', async () => {
     render(<ConnecTunes />);
     
-    const buttons = ['A', 'B', 'C', 'D'];
-    for (const label of buttons) {
-      const button = screen.getByText(label);
-      fireEvent.click(button);
-      
-      expect(mockPlay).toHaveBeenCalled();
-      mockPlay.mockClear();
-    }
+    // Play button A
+    const buttonA = screen.getByText('A');
+    fireEvent.click(buttonA);
+
+    expect(mockPlay).toHaveBeenCalled();
+
+    // Let the promise resolve
+    await waitFor(() => {
+      // the dot indicator should be shown
+      // It renders a div inside the button with absolute positioning
+      const dotContainers = buttonA.querySelectorAll('div[style*="position: absolute"]');
+      expect(dotContainers.length).toBe(1);
+    });
+
+    mockPlay.mockClear();
+  });
+
+  test('calls handlePlay but does not increment count when play rejects', async () => {
+    const originalPlay = mockPlay.getMockImplementation();
+    mockPlay.mockImplementationOnce(() => Promise.reject(new Error('play failed')));
+
+    // Mock console.error to avoid spamming test output
+    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    render(<ConnecTunes />);
+
+    const buttonB = screen.getByText('B');
+    fireEvent.click(buttonB);
+
+    expect(mockPlay).toHaveBeenCalled();
+
+    // Give some time for the catch block to run
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    // no dot should be rendered
+    const dotContainers = buttonB.querySelectorAll('div[style*="position: absolute"]');
+    expect(dotContainers.length).toBe(0);
+
+    mockPlay.mockImplementation(originalPlay);
+    consoleSpy.mockRestore();
+    mockPlay.mockClear();
   });
 
   test('calls handleSelect when select boxes are clicked', async () => {
