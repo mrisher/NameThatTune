@@ -12,10 +12,10 @@ export default function ConnecTunes() {
   const [showShareModal, setShowShareModal] = useState(false);
   const [shareText, setShareText] = useState("");
   const [currentDay, setCurrentDay] = useState(null);
+  const [playCounts, setPlayCounts] = useState([0, 0, 0, 0]);
 
   const audioRef = useRef(null);
   const timerRef = useRef(null);
-  const playCountsRef = useRef([0, 0, 0, 0]);
 
   useEffect(() => {
     const parts = new Intl.DateTimeFormat("en-US", {
@@ -38,7 +38,7 @@ export default function ConnecTunes() {
           setSelected(savedState.selected);
           setGameState(savedState.gameState);
           if (savedState.playCounts) {
-            playCountsRef.current = savedState.playCounts;
+            setPlayCounts(savedState.playCounts);
           }
         } else {
           localStorage.removeItem("connectunes_saved_state");
@@ -67,23 +67,18 @@ export default function ConnecTunes() {
         date: currentDay,
         selected,
         gameState,
-        playCounts: playCountsRef.current,
+        playCounts,
       };
       localStorage.setItem("connectunes_saved_state", JSON.stringify(stateToSave));
     }
-  }, [currentDay, selected, gameState]);
+  }, [currentDay, selected, gameState, playCounts]);
 
   const handlePlay = (index) => {
-    playCountsRef.current[index] += 1;
-    if (currentDay) {
-      const stateToSave = {
-        date: currentDay,
-        selected,
-        gameState,
-        playCounts: playCountsRef.current,
-      };
-      localStorage.setItem("connectunes_saved_state", JSON.stringify(stateToSave));
-    }
+    setPlayCounts(prev => {
+      const newCounts = [...prev];
+      newCounts[index] += 1;
+      return newCounts;
+    });
     
     if (audioRef.current) {
       audioRef.current.pause();
@@ -171,7 +166,7 @@ export default function ConnecTunes() {
 
   const handleShare = () => {
     const friendlyDate = getFriendlyParisDate();
-    const extraPlays = playCountsRef.current.reduce((acc, count) => acc + Math.max(0, count - 1), 0);
+    const extraPlays = playCounts.reduce((acc, count) => acc + Math.max(0, count - 1), 0);
     
     let verb = "";
     if (gameState === "won") {
@@ -260,6 +255,21 @@ export default function ConnecTunes() {
                   >
                     {label}
                     {isPlaying && <div className="playing-indicator">🔊</div>}
+                    {playCounts[i] > 0 && (
+                      <div style={{ position: 'absolute', bottom: '5px', left: '5px', display: 'flex', gap: '4px' }}>
+                        {Array.from({ length: playCounts[i] }).map((_, dotIndex) => (
+                          <div
+                            key={dotIndex}
+                            style={{
+                              width: '6px',
+                              height: '6px',
+                              borderRadius: '50%',
+                              backgroundColor: 'currentColor'
+                            }}
+                          />
+                        ))}
+                      </div>
+                    )}
                   </button>
                   {gameState === "playing" && (
                     <div
