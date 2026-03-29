@@ -123,7 +123,6 @@ describe('Game Share Functionality', () => {
     const sharedText = writeTextMock.mock.calls[0][0];
     expect(sharedText).toMatch(/today's Dudle \(undefined\) X\/6/);
   });
-});
 
   it('correctly sets unlockDuration when jumping and reduces total play time by 15s', async () => {
     // Re-mock fetch here since it might have been cleared or not reset properly for this specific test block
@@ -151,3 +150,4 @@ describe('Game Share Functionality', () => {
     // We can also verify that the jump button is now disabled
     expect(jumpBtn).toBeDisabled();
   });
+});
