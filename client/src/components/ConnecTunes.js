@@ -74,12 +74,6 @@ export default function ConnecTunes() {
   }, [currentDay, selected, gameState, playCounts]);
 
   const handlePlay = (index) => {
-    setPlayCounts(prev => {
-      const newCounts = [...prev];
-      newCounts[index] += 1;
-      return newCounts;
-    });
-    
     if (audioRef.current) {
       audioRef.current.pause();
     }
@@ -100,6 +94,11 @@ export default function ConnecTunes() {
 
     if (playPromise !== undefined) {
       playPromise.then(() => {
+        setPlayCounts(prev => {
+          const newCounts = [...prev];
+          newCounts[index] += 1;
+          return newCounts;
+        });
         setPlayingIndex(index);
         timerRef.current = setTimeout(() => {
           if (audioRef.current) {
@@ -111,6 +110,11 @@ export default function ConnecTunes() {
         console.error("Audio play failed:", err);
       });
     } else {
+      setPlayCounts(prev => {
+        const newCounts = [...prev];
+        newCounts[index] += 1;
+        return newCounts;
+      });
       setPlayingIndex(index);
       timerRef.current = setTimeout(() => {
         if (audioRef.current) {
