@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { connectunesSongs } from "../connectunesConfig";
 import { getFriendlyParisDate } from "../utils/stats";
+import { getSeededRandom } from "../utils/random";
 
 const SAMPLE_LENGTH_MS = 2500;
 
@@ -220,6 +221,17 @@ export default function ConnecTunes() {
     }
   };
 
+  const displayOrder = useMemo(() => {
+    if (!targetDay) return [0, 1, 2, 3];
+    const arr = [0, 1, 2, 3];
+    const rng = getSeededRandom(targetDay.day);
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(rng() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }, [targetDay]);
+
   if (!targetDay) return <div style={{ color: "#00ff00" }}>LOADING CONNECTUNES...</div>;
 
   return (
@@ -232,10 +244,11 @@ export default function ConnecTunes() {
         </div>
 
         <div className="connectunes-grid">
-          {targetDay.songs.map((song, i) => {
+          {displayOrder.map((originalIndex, i) => {
+            const song = targetDay.songs[originalIndex];
             const label = ["A", "B", "C", "D"][i];
-            const isSelected = selected.includes(i);
-            const isPlaying = playingIndex === i;
+            const isSelected = selected.includes(originalIndex);
+            const isPlaying = playingIndex === originalIndex;
 
             let btnClass = "connectunes-btn";
             if (gameState !== "playing") {
@@ -254,14 +267,14 @@ export default function ConnecTunes() {
                   <button
                     className={btnClass}
                     onClick={() => {
-                      handlePlay(i);
+                      handlePlay(originalIndex);
                     }}
                   >
                     {label}
                     {isPlaying && <div className="playing-indicator">🔊</div>}
-                    {playCounts[i] > 0 && (
+                    {playCounts[originalIndex] > 0 && (
                       <div style={{ position: 'absolute', bottom: '5px', left: '5px', display: 'flex', gap: '4px' }}>
-                        {Array.from({ length: playCounts[i] }).map((_, dotIndex) => (
+                        {Array.from({ length: playCounts[originalIndex] }).map((_, dotIndex) => (
                           <div
                             key={dotIndex}
                             style={{
@@ -280,7 +293,7 @@ export default function ConnecTunes() {
                       className="connectunes-select-box"
                       onClick={(e) => {
                         e.stopPropagation(); // prevent play
-                        handleSelect(i);
+                        handleSelect(originalIndex);
                       }}
                     >
                       {isSelected ? "✔" : ""}
