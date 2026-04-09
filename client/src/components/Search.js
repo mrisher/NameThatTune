@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const Search = ({ onSelect, disabled }) => {
+const Search = ({ onSelect, disabled, correctTrack }) => {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -21,6 +21,35 @@ const Search = ({ onSelect, disabled }) => {
           // Clean query for better matching
           const qLower = query.toLowerCase().trim();
           const qWords = qLower.split(/\s+/).filter(w => w.length > 0);
+
+          // Synthetically inject the correct track if it matches the query
+          // This guarantees it shows up even if iTunes fails to return the original version
+          if (correctTrack && correctTrack.songTitle && correctTrack.artistName) {
+            const correctTitleLower = correctTrack.songTitle.toLowerCase();
+            const correctArtistLower = correctTrack.artistName.toLowerCase();
+            
+            // Check if the query matches the title or artist of the correct track
+            const matchesCorrect = qWords.some(w => correctTitleLower.includes(w) || correctArtistLower.includes(w));
+            
+            if (matchesCorrect) {
+              const syntheticTrack = {
+                trackId: `synthetic-${Date.now()}`, // Temporary unique ID
+                trackName: correctTrack.songTitle,
+                artistName: correctTrack.artistName,
+                isSynthetic: true // Mark as synthetic so we don't accidentally dedupe it away
+              };
+              
+              // Only inject if it's not already perfectly returned by iTunes
+              const alreadyExists = fetchedResults.some(t => 
+                t.trackName.toLowerCase() === correctTitleLower && 
+                t.artistName.toLowerCase() === correctArtistLower
+              );
+              
+              if (!alreadyExists) {
+                fetchedResults.push(syntheticTrack);
+              }
+            }
+          }
 
           const getCleanName = (name) => {
             return name
@@ -47,10 +76,13 @@ const Search = ({ onSelect, disabled }) => {
             if (!groups.has(key)) {
               groups.set(key, track);
             } else {
-              // If we find an "original" (no parens/etc) but already have a variant, swap it.
-              // Otherwise, iTunes order usually puts the most popular/relevant first.
               const currentTrack = groups.get(key);
-              if (isVariant(currentTrack.trackName) && !isVariant(track.trackName)) {
+              // Always prioritize the synthetic track (the guaranteed correct answer)
+              if (track.isSynthetic) {
+                  groups.set(key, track);
+              } 
+              // If we find an "original" (no parens/etc) but already have a variant, swap it.
+              else if (!currentTrack.isSynthetic && isVariant(currentTrack.trackName) && !isVariant(track.trackName)) {
                 groups.set(key, track);
               }
             }
