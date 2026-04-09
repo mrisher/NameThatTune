@@ -13,10 +13,42 @@ const Search = ({ onSelect, disabled }) => {
 
     const timer = setTimeout(() => {
       setLoading(true);
-      fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&entity=song&limit=5`)
+      fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&entity=song&limit=50&explicit=yes`)
         .then(res => res.json())
         .then(data => {
-          setResults(data.results || []);
+          let fetchedResults = data.results || [];
+
+          // Deduplicate variants if exact match exists for same artist
+          const filteredResults = fetchedResults.filter(track => {
+            const isExactMatch = track.trackName.toLowerCase() === query.toLowerCase();
+            const hasExactMatchBySameArtist = fetchedResults.some(t =>
+              t.artistName === track.artistName && t.trackName.toLowerCase() === query.toLowerCase()
+            );
+
+            if (hasExactMatchBySameArtist && !isExactMatch) {
+              return false; // skip near match if exact match exists for same artist
+            }
+            return true;
+          });
+
+          // Sort by exact title match, then exact artist match
+          const sortedResults = filteredResults.sort((a, b) => {
+            const aTitleExact = a.trackName.toLowerCase() === query.toLowerCase();
+            const bTitleExact = b.trackName.toLowerCase() === query.toLowerCase();
+
+            if (aTitleExact && !bTitleExact) return -1;
+            if (!aTitleExact && bTitleExact) return 1;
+
+            const aArtistMatch = a.artistName.toLowerCase().includes(query.toLowerCase()) || query.toLowerCase().includes(a.artistName.toLowerCase());
+            const bArtistMatch = b.artistName.toLowerCase().includes(query.toLowerCase()) || query.toLowerCase().includes(b.artistName.toLowerCase());
+
+            if (aArtistMatch && !bArtistMatch) return -1;
+            if (!aArtistMatch && bArtistMatch) return 1;
+
+            return 0;
+          });
+
+          setResults(sortedResults.slice(0, 5));
           setLoading(false);
         })
         .catch(err => {
