@@ -24,14 +24,14 @@ const Search = ({ onSelect, disabled }) => {
 
           const getCleanName = (name) => {
             return name
-              .replace(/\([^)]*\)/g, '')
-              .replace(/\[[^\]]*\]/g, '')
+              .replace(/\s*\(.*(acoustic|live|remix|version|edit|remaster|karaoke|cover|instrumental|tribute).*\)/i, '')
+              .replace(/\s*\[.*(acoustic|live|remix|version|edit|remaster|karaoke|cover|instrumental|tribute).*\]/i, '')
               .split(' - ')[0]
               .split(': ')[0]
               .trim();
           };
 
-          // A track is a variant if its name contains parentheses, brackets, or common separators
+          // A track is a variant if its name was changed by the cleaner
           const isVariant = (name) => {
             const cleanName = getCleanName(name).toLowerCase();
             return name.toLowerCase().trim() !== cleanName;
