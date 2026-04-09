@@ -60,6 +60,11 @@ const Search = ({ onSelect, disabled }) => {
             if (title.includes(qLower)) score += 50;
             if (`${title} ${artist}` === qLower || `${artist} ${title}` === qLower) score += 200;
 
+            const titleWithoutVariant = title.replace(/\([^)]*\)/g, '').replace(/\[[^\]]*\]/g, '').trim();
+            if (`${titleWithoutVariant} ${artist}` === qLower || `${artist} ${titleWithoutVariant}` === qLower) {
+              score += 150;
+            }
+
             let titleMatchWords = 0;
             let artistMatchWords = 0;
 
@@ -73,7 +78,7 @@ const Search = ({ onSelect, disabled }) => {
             score += (titleMatchWords * 10);
             score += (artistMatchWords * 5);
 
-            if (qWords.length > 0 && title === qWords[0]) score += 20;
+            if (qWords.includes(titleWithoutVariant)) score += 20;
 
             return score;
           }
