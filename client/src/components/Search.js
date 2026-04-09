@@ -18,32 +18,78 @@ const Search = ({ onSelect, disabled }) => {
         .then(data => {
           let fetchedResults = data.results || [];
 
-          // Deduplicate variants if exact match exists for same artist
-          const filteredResults = fetchedResults.filter(track => {
-            const isExactMatch = track.trackName.toLowerCase() === query.toLowerCase();
-            const hasExactMatchBySameArtist = fetchedResults.some(t =>
-              t.artistName === track.artistName && t.trackName.toLowerCase() === query.toLowerCase()
-            );
+          // Clean query for better matching
+          const qLower = query.toLowerCase().trim();
+          const qWords = qLower.split(/\s+/).filter(w => w.length > 0);
 
-            if (hasExactMatchBySameArtist && !isExactMatch) {
-              return false; // skip near match if exact match exists for same artist
+          // A track is an "original" if it doesn't have parenthetical variants like (Acoustic), (Live), etc.
+          const isVariant = (name) => {
+            const lowerName = name.toLowerCase();
+            return lowerName.includes('(acoustic)') ||
+                   lowerName.includes('(live)') ||
+                   lowerName.includes('cover') ||
+                   lowerName.includes('remix') ||
+                   lowerName.includes('instrumental') ||
+                   lowerName.includes('karaoke') ||
+                   lowerName.includes('version');
+          };
+
+          // Filter out variants if an original from the same artist exists in the results
+          const filteredResults = fetchedResults.filter(track => {
+            if (isVariant(track.trackName)) {
+              // Check if there is a non-variant version by the SAME artist
+              const hasOriginal = fetchedResults.some(t =>
+                t.artistName === track.artistName &&
+                !isVariant(t.trackName) &&
+                track.trackName.toLowerCase().includes(t.trackName.toLowerCase())
+              );
+              if (hasOriginal) {
+                return false; // exclude variant
+              }
             }
             return true;
           });
 
-          // Sort by exact title match, then exact artist match
+          const getScore = (track) => {
+            const title = track.trackName.toLowerCase();
+            const artist = track.artistName.toLowerCase();
+
+            let score = 0;
+
+            if (title === qLower) score += 100;
+            if (title.includes(qLower)) score += 50;
+            if (`${title} ${artist}` === qLower || `${artist} ${title}` === qLower) score += 200;
+
+            let titleMatchWords = 0;
+            let artistMatchWords = 0;
+
+            for (const w of qWords) {
+              if (title.includes(w)) titleMatchWords++;
+              if (artist.includes(w)) artistMatchWords++;
+            }
+
+            if (titleMatchWords > 0 && artistMatchWords > 0) score += 30;
+
+            score += (titleMatchWords * 10);
+            score += (artistMatchWords * 5);
+
+            if (qWords.length > 0 && title === qWords[0]) score += 20;
+
+            return score;
+          }
+
           const sortedResults = filteredResults.sort((a, b) => {
-            const aTitleExact = a.trackName.toLowerCase() === query.toLowerCase();
-            const bTitleExact = b.trackName.toLowerCase() === query.toLowerCase();
+            const scoreA = getScore(a);
+            const scoreB = getScore(b);
 
-            if (aTitleExact && !bTitleExact) return -1;
-            if (!aTitleExact && bTitleExact) return 1;
+            if (scoreA !== scoreB) {
+              return scoreB - scoreA;
+            }
 
-            const aArtistMatch = a.artistName.toLowerCase().includes(query.toLowerCase()) || query.toLowerCase().includes(a.artistName.toLowerCase());
-            const bArtistMatch = b.artistName.toLowerCase().includes(query.toLowerCase()) || query.toLowerCase().includes(b.artistName.toLowerCase());
-
-            if (aArtistMatch && !bArtistMatch) return -1;
-            if (!aArtistMatch && bArtistMatch) return 1;
+            const aVariant = isVariant(a.trackName);
+            const bVariant = isVariant(b.trackName);
+            if (!aVariant && bVariant) return -1;
+            if (aVariant && !bVariant) return 1;
 
             return 0;
           });
