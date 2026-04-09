@@ -18,32 +18,90 @@ const Search = ({ onSelect, disabled }) => {
         .then(data => {
           let fetchedResults = data.results || [];
 
-          // Deduplicate variants if exact match exists for same artist
-          const filteredResults = fetchedResults.filter(track => {
-            const isExactMatch = track.trackName.toLowerCase() === query.toLowerCase();
-            const hasExactMatchBySameArtist = fetchedResults.some(t =>
-              t.artistName === track.artistName && t.trackName.toLowerCase() === query.toLowerCase()
-            );
+          // Clean query for better matching
+          const qLower = query.toLowerCase().trim();
+          const qWords = qLower.split(/\s+/).filter(w => w.length > 0);
 
-            if (hasExactMatchBySameArtist && !isExactMatch) {
-              return false; // skip near match if exact match exists for same artist
+          const getCleanName = (name) => {
+            return name
+              .replace(/\([^)]*\)/g, '')
+              .replace(/\[[^\]]*\]/g, '')
+              .split(' - ')[0]
+              .split(': ')[0]
+              .trim();
+          };
+
+          // A track is a variant if its name contains parentheses, brackets, or common separators
+          const isVariant = (name) => {
+            const cleanName = getCleanName(name).toLowerCase();
+            return name.toLowerCase().trim() !== cleanName;
+          };
+
+          // Filter out variants if an original from the same artist exists in the results.
+          // We group by artist and clean title to ensure we only keep the best version of each song.
+          const groups = new Map();
+          fetchedResults.forEach(track => {
+            const cleanName = getCleanName(track.trackName).toLowerCase();
+            const key = `${track.artistName.toLowerCase()}|${cleanName}`;
+            
+            if (!groups.has(key)) {
+              groups.set(key, track);
+            } else {
+              // If we find an "original" (no parens/etc) but already have a variant, swap it.
+              // Otherwise, iTunes order usually puts the most popular/relevant first.
+              const currentTrack = groups.get(key);
+              if (isVariant(currentTrack.trackName) && !isVariant(track.trackName)) {
+                groups.set(key, track);
+              }
             }
-            return true;
           });
+          const filteredResults = Array.from(groups.values());
 
-          // Sort by exact title match, then exact artist match
+          const getScore = (track) => {
+            const title = track.trackName.toLowerCase();
+            const artist = track.artistName.toLowerCase();
+            const cleanTitle = getCleanName(track.trackName).toLowerCase();
+
+            let score = 0;
+
+            if (title === qLower) score += 100;
+            if (title.includes(qLower)) score += 50;
+            if (`${title} ${artist}` === qLower || `${artist} ${title}` === qLower) score += 200;
+
+            if (`${cleanTitle} ${artist}` === qLower || `${artist} ${cleanTitle}` === qLower) {
+              score += 150;
+            }
+
+            let titleMatchWords = 0;
+            let artistMatchWords = 0;
+
+            for (const w of qWords) {
+              if (title.includes(w)) titleMatchWords++;
+              if (artist.includes(w)) artistMatchWords++;
+            }
+
+            if (titleMatchWords > 0 && artistMatchWords > 0) score += 30;
+
+            score += (titleMatchWords * 10);
+            score += (artistMatchWords * 5);
+
+            if (qWords.includes(cleanTitle)) score += 20;
+
+            return score;
+          }
+
           const sortedResults = filteredResults.sort((a, b) => {
-            const aTitleExact = a.trackName.toLowerCase() === query.toLowerCase();
-            const bTitleExact = b.trackName.toLowerCase() === query.toLowerCase();
+            const scoreA = getScore(a);
+            const scoreB = getScore(b);
 
-            if (aTitleExact && !bTitleExact) return -1;
-            if (!aTitleExact && bTitleExact) return 1;
+            if (scoreA !== scoreB) {
+              return scoreB - scoreA;
+            }
 
-            const aArtistMatch = a.artistName.toLowerCase().includes(query.toLowerCase()) || query.toLowerCase().includes(a.artistName.toLowerCase());
-            const bArtistMatch = b.artistName.toLowerCase().includes(query.toLowerCase()) || query.toLowerCase().includes(b.artistName.toLowerCase());
-
-            if (aArtistMatch && !bArtistMatch) return -1;
-            if (!aArtistMatch && bArtistMatch) return 1;
+            const aVariant = isVariant(a.trackName);
+            const bVariant = isVariant(b.trackName);
+            if (!aVariant && bVariant) return -1;
+            if (aVariant && !bVariant) return 1;
 
             return 0;
           });
