@@ -638,7 +638,7 @@ const Game = () => {
                     <div className="controls-window">
                         {gameState === "playing" ? (
                             <>
-                                <Search onSelect={handleGuess} />
+                                <Search onSelect={handleGuess} correctTrack={targetSong} />
                                 <button
                                     className="winamp-btn"
                                     onClick={handleSkip}
