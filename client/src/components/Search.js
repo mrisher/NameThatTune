@@ -22,37 +22,45 @@ const Search = ({ onSelect, disabled }) => {
           const qLower = query.toLowerCase().trim();
           const qWords = qLower.split(/\s+/).filter(w => w.length > 0);
 
-          // A track is an "original" if it doesn't have parenthetical variants like (Acoustic), (Live), etc.
-          const isVariant = (name) => {
-            const lowerName = name.toLowerCase();
-            return lowerName.includes('(acoustic)') ||
-                   lowerName.includes('(live)') ||
-                   lowerName.includes('cover') ||
-                   lowerName.includes('remix') ||
-                   lowerName.includes('instrumental') ||
-                   lowerName.includes('karaoke') ||
-                   lowerName.includes('version');
+          const getCleanName = (name) => {
+            return name
+              .replace(/\([^)]*\)/g, '')
+              .replace(/\[[^\]]*\]/g, '')
+              .split(' - ')[0]
+              .split(': ')[0]
+              .trim();
           };
 
-          // Filter out variants if an original from the same artist exists in the results
-          const filteredResults = fetchedResults.filter(track => {
-            if (isVariant(track.trackName)) {
-              // Check if there is a non-variant version by the SAME artist
-              const hasOriginal = fetchedResults.some(t =>
-                t.artistName === track.artistName &&
-                !isVariant(t.trackName) &&
-                track.trackName.toLowerCase().includes(t.trackName.toLowerCase())
-              );
-              if (hasOriginal) {
-                return false; // exclude variant
+          // A track is a variant if its name contains parentheses, brackets, or common separators
+          const isVariant = (name) => {
+            const cleanName = getCleanName(name).toLowerCase();
+            return name.toLowerCase().trim() !== cleanName;
+          };
+
+          // Filter out variants if an original from the same artist exists in the results.
+          // We group by artist and clean title to ensure we only keep the best version of each song.
+          const groups = new Map();
+          fetchedResults.forEach(track => {
+            const cleanName = getCleanName(track.trackName).toLowerCase();
+            const key = `${track.artistName.toLowerCase()}|${cleanName}`;
+            
+            if (!groups.has(key)) {
+              groups.set(key, track);
+            } else {
+              // If we find an "original" (no parens/etc) but already have a variant, swap it.
+              // Otherwise, iTunes order usually puts the most popular/relevant first.
+              const currentTrack = groups.get(key);
+              if (isVariant(currentTrack.trackName) && !isVariant(track.trackName)) {
+                groups.set(key, track);
               }
             }
-            return true;
           });
+          const filteredResults = Array.from(groups.values());
 
           const getScore = (track) => {
             const title = track.trackName.toLowerCase();
             const artist = track.artistName.toLowerCase();
+            const cleanTitle = getCleanName(track.trackName).toLowerCase();
 
             let score = 0;
 
@@ -60,8 +68,7 @@ const Search = ({ onSelect, disabled }) => {
             if (title.includes(qLower)) score += 50;
             if (`${title} ${artist}` === qLower || `${artist} ${title}` === qLower) score += 200;
 
-            const titleWithoutVariant = title.replace(/\([^)]*\)/g, '').replace(/\[[^\]]*\]/g, '').trim();
-            if (`${titleWithoutVariant} ${artist}` === qLower || `${artist} ${titleWithoutVariant}` === qLower) {
+            if (`${cleanTitle} ${artist}` === qLower || `${artist} ${cleanTitle}` === qLower) {
               score += 150;
             }
 
@@ -78,7 +85,7 @@ const Search = ({ onSelect, disabled }) => {
             score += (titleMatchWords * 10);
             score += (artistMatchWords * 5);
 
-            if (qWords.includes(titleWithoutVariant)) score += 20;
+            if (qWords.includes(cleanTitle)) score += 20;
 
             return score;
           }
