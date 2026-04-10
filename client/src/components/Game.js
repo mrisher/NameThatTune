@@ -571,7 +571,7 @@ const Game = () => {
             }
         }
 
-        const textToShare = `I ${verb} today's Dudle (${friendlyDate}) ${score}/6: ${resultEmoji} ${window.location.href}${statsText}${yesterdayText}`;
+        const textToShare = `I ${verb} today's Dudle (${friendlyDate}) ${score}/6:\n\n${resultEmoji}\n\n${window.location.href}${statsText}${yesterdayText}`;
         setShareText(textToShare);
         setShowShareModal(true);
 
