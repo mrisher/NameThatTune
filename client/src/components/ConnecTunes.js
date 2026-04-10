@@ -210,7 +210,7 @@ export default function ConnecTunes() {
     const resultEmoji = gameState === "won" ? "🟩" : "🟥";
     const yellows = "🟨".repeat(extraPlays);
 
-    const textToShare = `I ${verb} today's ConnecTunes (${friendlyDate}):\n${yellows}${resultEmoji}\n${window.location.origin}/connectunes`;
+    const textToShare = `I ${verb} today's ConnecTunes (${friendlyDate}):\n\n${yellows}${resultEmoji}\n\n${window.location.origin}/connectunes`;
     setShareText(textToShare);
     setShowShareModal(true);
 

@@ -37,8 +37,10 @@ const serveIndex = (req, res) => {
     const origin = `${protocol}://${host}`;
     
     // Inject the absolute origin into OpenGraph tags and add a cache-buster
-    let injectedHtml = htmlData.replace(/"\/dudle\.png"/g, `"${origin}/dudle.png?v=1"`);
+    // let injectedHtml = htmlData.replace(/"\/dudle\.png"/g, `"${origin}/dudle.png?v=1"`);
+    let injectedHtml = htmlData;
     
+    /* 
     // Dynamically adjust OpenGraph tags for different routes
     if (req.path.startsWith('/connectunes')) {
       injectedHtml = injectedHtml
@@ -46,6 +48,7 @@ const serveIndex = (req, res) => {
         .replace(/<title>Dudle<\/title>/g, '<title>ConnecTunes</title>')
         .replace(/content="Guess the band, quick as you can"/g, 'content="Find the 2 songs that share a word in their title!"');
     }
+    */
     
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.send(injectedHtml);
