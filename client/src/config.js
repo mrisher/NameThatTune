@@ -1,5 +1,7 @@
 // To add new songs, use btoa("Your String") in your browser console to get the base64 value.
 // Example: btoa("Bohemian Rhapsody") -> "Qm9oZW1pYW4gUmhhcHNvZHk="
+// Note: A test (SongCapacity.test.js) ensures there are always 30 days of songs.
+// If the build fails, add more songs here!
 
 const rawSongs = [
   {
@@ -441,6 +443,741 @@ const rawSongs = [
     "songTitle": "QWxsIFN0YXI=",
     "artistName": "U21hc2ggTW91dGg=",
     "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b0/03/ef/b003ef4c-1a22-6b15-e851-fb106ad96a3b/mzaf_3320656447657988367.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-04-27",
+    "songTitle": "VGFrZSBNZSBIb21lLCBDb3VudHJ5IFJvYWRz",
+    "artistName": "Sm9obiBEZW52ZXI=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/ed/e9/47/ede9473f-3334-29c4-21f5-dcd3aa3c029e/mzaf_8295710681386150675.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-04-28",
+    "songTitle": "R28gWW91ciBPd24gV2F5",
+    "artistName": "RmxlZXR3b29kIE1hYw==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/81/1b/0e/811b0e3a-2693-9934-9994-999499949994/mzaf_1354444444444444444.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-04-29",
+    "songTitle": "RHJlYW1z",
+    "artistName": "RmxlZXR3b29kIE1hYw==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/7e/8e/8e/7e8e8e8e-8e8e-8e8e-8e8e-8e8e8e8e8e8e/mzaf_1354444444444444444.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-04-30",
+    "songTitle": "U3dlZXQgQ2Fyb2xpbmU=",
+    "artistName": "TmVpbCBEaWFtb25k",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/0c/66/66/0c666666-6666-6666-6666-666666666666/mzaf_1354444444444444444.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-05-01",
+    "songTitle": "Um9ja2V0IE1hbg==",
+    "artistName": "RWx0b24gSm9obg==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/09/33/33/09333333-3333-3333-3333-333333333333/mzaf_1354444444444444444.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-05-02",
+    "songTitle": "Q2FsaWZvcm5pYSBMb3Zl",
+    "artistName": "MlBhYw==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/b0/64/82/b06482ec-330d-a785-8ae1-523b4164bac8/mzaf_2268361969300808726.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-05-03",
+    "songTitle": "U3BhY2UgT2RkaXR5",
+    "artistName": "RGF2aWQgQm93aWU=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/c3/54/2d/c3542d12-0852-cfa9-bfbb-721cc3d129c8/mzaf_1775834641806730037.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-05-04",
+    "songTitle": "UHVycGxlIFJhaW4=",
+    "artistName": "UHJpbmNl",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/4a/70/9b/4a709b41-3c29-626a-ca69-44aa907f4705/mzaf_14388295257133509788.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-05-05",
+    "songTitle": "RGFuY2luZyBJbiB0aGUgRGFyaw==",
+    "artistName": "QnJ1Y2UgU3ByaW5nc3RlZW4=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/3c/a8/0a/3ca80ac1-92fe-8d9f-e97c-469bdb4f19f9/mzaf_2843471731886662529.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-05-06",
+    "songTitle": "QmxhY2sgRG9n",
+    "artistName": "TGVkIFplcHBlbGlu",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/05/d9/4d/05d94da2-11d8-dbc0-0080-877ff3a6727d/mzaf_3202083383964343705.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-05-07",
+    "songTitle": "V2lsZCBIdXJzZXM=",
+    "artistName": "VGhlIFJvbGxpbmcgU3RvbmVz",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/2a/06/65/2a06657a-75cf-2487-e1b6-e4b42f4bfee9/mzaf_3872235870977535530.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-05-08",
+    "songTitle": "UGluayBQb255IENsdWI=",
+    "artistName": "Q2hhcHBlbGwgUm9hbg==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/13/25/87/132587f6-b2b2-2caa-7993-378cfc9014cd/mzaf_9232770372342433625.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-05-09",
+    "songTitle": "RHJpZnQgQXdheQ==",
+    "artistName": "RG9iaWUgR3JheQ==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/fc/ae/d9/fcaed9a9-6e9c-3070-0bc1-5ed0dea7df24/mzaf_7625052026903346575.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-05-10",
+    "songTitle": "VGhlIE1vdHRv",
+    "artistName": "VGnDq3N0byAmIEF2YSBNYXg=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview123/v4/0d/ed/ef/0dedef85-d1e0-636c-9456-4142941b8abf/mzaf_11507681080634107077.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-05-11",
+    "songTitle": "U2FudGEgVGVsbCBNZQ==",
+    "artistName": "QXJpYW5hIEdyYW5kZQ==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/45/b1/b0/45b1b0d3-6a1b-885a-2b5b-8cd1d596b3f6/mzaf_538323430594511559.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-05-12",
+    "songTitle": "TGVmdCBhbmQgUmlnaHQ=",
+    "artistName": "Q2hhcmxpZSBQdXRoICYgSnVuZyBLb29r",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview113/v4/8d/9e/9c/8d9e9cd1-4e3e-ef1c-67fa-ed0bf39b7705/mzaf_8226823477234168289.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-05-13",
+    "songTitle": "U2V4eSBhbmQgSSBLbm93IEl0",
+    "artistName": "UG93ZXIgTXVzaWMgV29ya291dA==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/66/de/14/66de1444-0a5c-2256-a2e4-fbcf5eafc63e/mzaf_13842184877428266344.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-05-14",
+    "songTitle": "Q2FsaWZvcm5pYSBMb3Zl",
+    "artistName": "MlBhYw==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/b0/64/82/b06482ec-330d-a785-8ae1-523b4164bac8/mzaf_2268361969300808726.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-05-15",
+    "songTitle": "SG90ZWwgQ2FsaWZvcm5pYQ==",
+    "artistName": "RWFnbGVz",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/a7/1b/f0/a71bf07d-f498-05c9-2c8a-d12af7d019d8/mzaf_11402952498213508559.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-05-16",
+    "songTitle": "U3BhY2UgT2RkaXR5",
+    "artistName": "RGF2aWQgQm93aWU=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/c3/54/2d/c3542d12-0852-cfa9-bfbb-721cc3d129c8/mzaf_1775834641806730037.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-05-17",
+    "songTitle": "U3BhY2UgQ293Ym95",
+    "artistName": "SmFtaXJvcXVhaQ==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/40/3b/57/403b57f6-027a-6e02-c9bc-da66c03db680/mzaf_10485171400557404261.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-05-18",
+    "songTitle": "UHVycGxlIFJhaW4=",
+    "artistName": "UHJpbmNl",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/4a/70/9b/4a709b41-3c29-626a-ca69-44aa907f4705/mzaf_14388295257133509788.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-05-19",
+    "songTitle": "UHVycGxlIEhhemU=",
+    "artistName": "VGhlIEppbWkgSGVuZHJpeCBFeHBlcmllbmNl",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/bf/ba/6a/bfba6aa6-40a8-f2f8-8246-2e51041fb0cf/mzaf_10404999512672940742.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-05-20",
+    "songTitle": "RGFuY2luZyBJbiB0aGUgRGFyaw==",
+    "artistName": "QnJ1Y2UgU3ByaW5nc3RlZW4=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/3c/a8/0a/3ca80ac1-92fe-8d9f-e97c-469bdb4f19f9/mzaf_2843471731886662529.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-05-21",
+    "songTitle": "RGFuY2luZyBRdWVlbg==",
+    "artistName": "QUJCQQ==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/1a/47/93/1a4793fc-1586-87bc-00d2-dc4916a61c7c/mzaf_13920610926910283055.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-05-22",
+    "songTitle": "QmxhY2sgRG9n",
+    "artistName": "TGVkIFplcHBlbGlu",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/05/d9/4d/05d94da2-11d8-dbc0-0080-877ff3a6727d/mzaf_3202083383964343705.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-05-23",
+    "songTitle": "UGFpbnQgSXQsIEJsYWNr",
+    "artistName": "VGhlIFJvbGxpbmcgU3RvbmVz",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/da/f5/ec/daf5ece2-6853-c6a4-d481-389001453f75/mzaf_3869995397273029315.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-05-24",
+    "songTitle": "V2lsZCBIdXJzZXM=",
+    "artistName": "VGhlIFJvbGxpbmcgU3RvbmVz",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/2a/06/65/2a06657a-75cf-2487-e1b6-e4b42f4bfee9/mzaf_3872235870977535530.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-05-25",
+    "songTitle": "V2lsZCBXb3JsZA==",
+    "artistName": "Q2F0IFN0ZXZlbnM=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/13/50/5b/13505b10-e557-eba3-b551-3c8303cb1263/mzaf_16436022031668104756.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-05-26",
+    "songTitle": "U3Rhcm1hbiAoMjAxMiBSZW1hc3Rlcik=",
+    "artistName": "RGF2aWQgQm93aWU=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/78/5d/be/785dbe59-1fe3-cf29-0292-50e9ee944354/mzaf_5639770502612710333.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-05-27",
+    "songTitle": "QWxsIFN0YXI=",
+    "artistName": "U21hc2ggTW91dGg=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b0/03/ef/b003ef4c-1a22-6b15-e851-fb106ad96a3b/mzaf_3320656447657988367.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-05-28",
+    "songTitle": "V2UgRm91bmQgTG92ZSAoZmVhdC4gQ2FsdmluIEhhcnJpcyk=",
+    "artistName": "UmloYW5uYQ==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/81/4e/9f/814e9f54-e7f8-3ab1-d92e-c7869efbd376/mzaf_9149255715038044431.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-05-29",
+    "songTitle": "Um9ja2V0IE1hbg==",
+    "artistName": "RWx0b24gSm9obg==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/09/33/33/09333333-3333-3333-3333-333333333333/mzaf_1354444444444444444.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-05-30",
+    "songTitle": "VGFrZSBNZSBIb21lLCBDb3VudHJ5IFJvYWRz",
+    "artistName": "Sm9obiBEZW52ZXI=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/ed/e9/47/ede9473f-3334-29c4-21f5-dcd3aa3c029e/mzaf_8295710681386150675.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-05-31",
+    "songTitle": "R28gWW91ciBPd24gV2F5",
+    "artistName": "RmxlZXR3b29kIE1hYw==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/81/1b/0e/811b0e3a-2693-9934-9994-999499949994/mzaf_1354444444444444444.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-06-01",
+    "songTitle": "RHJlYW1z",
+    "artistName": "RmxlZXR3b29kIE1hYw==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/7e/8e/8e/7e8e8e8e-8e8e-8e8e-8e8e-8e8e8e8e8e8e/mzaf_1354444444444444444.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-06-02",
+    "songTitle": "U3dlZXQgQ2Fyb2xpbmU=",
+    "artistName": "TmVpbCBEaWFtb25k",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/0c/66/66/0c666666-6666-6666-6666-666666666666/mzaf_1354444444444444444.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-06-03",
+    "songTitle": "Q2FsaWZvcm5pYSBMb3Zl",
+    "artistName": "MlBhYw==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/b0/64/82/b06482ec-330d-a785-8ae1-523b4164bac8/mzaf_2268361969300808726.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-06-04",
+    "songTitle": "SG90ZWwgQ2FsaWZvcm5pYQ==",
+    "artistName": "RWFnbGVz",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/a7/1b/f0/a71bf07d-f498-05c9-2c8a-d12af7d019d8/mzaf_11402952498213508559.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-06-05",
+    "songTitle": "U3BhY2UgT2RkaXR5",
+    "artistName": "RGF2aWQgQm93aWU=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/c3/54/2d/c3542d12-0852-cfa9-bfbb-721cc3d129c8/mzaf_1775834641806730037.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-06-06",
+    "songTitle": "U3BhY2UgQ293Ym95",
+    "artistName": "SmFtaXJvcXVhaQ==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/40/3b/57/403b57f6-027a-6e02-c9bc-da66c03db680/mzaf_10485171400557404261.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-06-07",
+    "songTitle": "UHVycGxlIFJhaW4=",
+    "artistName": "UHJpbmNl",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/4a/70/9b/4a709b41-3c29-626a-ca69-44aa907f4705/mzaf_14388295257133509788.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-06-08",
+    "songTitle": "UHVycGxlIEhhemU=",
+    "artistName": "VGhlIEppbWkgSGVuZHJpeCBFeHBlcmllbmNl",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/bf/ba/6a/bfba6aa6-40a8-f2f8-8246-2e51041fb0cf/mzaf_10404999512672940742.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-06-09",
+    "songTitle": "RGFuY2luZyBJbiB0aGUgRGFyaw==",
+    "artistName": "QnJ1Y2UgU3ByaW5nc3RlZW4=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/3c/a8/0a/3ca80ac1-92fe-8d9f-e97c-469bdb4f19f9/mzaf_2843471731886662529.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-06-10",
+    "songTitle": "RGFuY2luZyBRdWVlbg==",
+    "artistName": "QUJCQQ==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/1a/47/93/1a4793fc-1586-87bc-00d2-dc4916a61c7c/mzaf_13920610926910283055.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-06-11",
+    "songTitle": "TG92ZQ==",
+    "artistName": "S2V5c2hpYSBDb2xl",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/55/0e/76/550e7623-1867-f685-0b5a-d6efd483752c/mzaf_18113724796346152750.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-06-12",
+    "songTitle": "TE9WRS4gKGZlYXQuIFphY2FyaSk=",
+    "artistName": "S2VuZHJpY2sgTGFtYXI=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/72/71/89/72718957-3475-8f6f-3685-aedd470ddc20/mzaf_4044691450436775386.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-06-13",
+    "songTitle": "TG92ZQ==",
+    "artistName": "TXVzaXEgU291bGNoaWxk",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/14/f0/a3/14f0a36d-9b6f-8756-b13d-d5eb2aba2fdf/mzaf_5505089568190602927.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-06-14",
+    "songTitle": "TG92ZSAoZmVhdC4gUGFya2VyIE1jQ29sbHVtKQ==",
+    "artistName": "S29lIFdldHplbA==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/97/7e/78/977e7858-0db9-9b93-5203-2ee3d5f797bd/mzaf_11411866255247862945.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-06-15",
+    "songTitle": "TE9WRQ==",
+    "artistName": "SmhlbsOpIEFpa28=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/fb/2b/5e/fb2b5e68-f068-77f6-514d-c2125af488b9/mzaf_17366238247036802462.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-06-16",
+    "songTitle": "TG92ZQ==",
+    "artistName": "TGFuYSBEZWwgUmV5",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/1d/71/65/1d71652e-392a-71ec-3ff0-71e2663b92e6/mzaf_18084598624687350460.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-06-17",
+    "songTitle": "bG92ZS4=",
+    "artistName": "d2F2ZSB0byBlYXJ0aA==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/43/5c/d5/435cd5a8-5edd-7116-6d1c-7ac2d2184635/mzaf_13298608756858273933.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-06-18",
+    "songTitle": "TG92ZQ==",
+    "artistName": "RGVzdGlueSdzIENoaWxk",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/3c/41/cf/3c41cf01-5a2d-a2ef-d318-271b265078c9/mzaf_10450045921542816739.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-06-19",
+    "songTitle": "TE9WRS4gKEZFQVQuIFpBQ0FSSS4p",
+    "artistName": "S2VuZHJpY2sgTGFtYXI=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/0a/b5/3f/0ab53fc7-32a3-d0fe-bfb0-d3dc298807db/mzaf_7606855658621423387.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-06-20",
+    "songTitle": "TG92ZS4uLiAoSGVyIEZhdWx0KSBbZmVhdC4gQnJ5c29uIFRpbGxlcl0=",
+    "artistName": "V2FsZQ==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/aa/62/23/aa622349-ba8e-4759-f9ca-e574ca2d86ad/mzaf_561560130092266288.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-06-21",
+    "songTitle": "TG92ZQ==",
+    "artistName": "SW1hZ2luZSBEcmFnb25z",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/64/a0/12/64a012c2-449a-af07-f963-cdc41f135257/mzaf_14085435222783907243.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-06-22",
+    "songTitle": "TG92ZQ==",
+    "artistName": "R29kJ3MgUHJvcGVydHkgJiBLaXJrIEZyYW5rbGlu",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/9c/e9/d5/9ce9d5e7-ba07-9045-5a26-b49e5b7ba541/mzaf_10775614256788346901.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-06-23",
+    "songTitle": "TG92ZQ==",
+    "artistName": "TmFuY3kgQWRhbXM=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/77/23/cd/7723cde3-e1ce-cc2e-da2c-31f43d9ce9bd/mzaf_2986081853566225584.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-06-24",
+    "songTitle": "TG92ZQ==",
+    "artistName": "UmVtYQ==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/67/84/d9/6784d9d6-ab76-b98e-4f38-1270bea44f6e/mzaf_18305025342363658808.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-06-25",
+    "songTitle": "TG92ZQ==",
+    "artistName": "QXRsYXMgT2NlYW4=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/54/ab/36/54ab36ec-00a1-289f-bca6-5a3281330f04/mzaf_9417346572065435614.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-06-26",
+    "songTitle": "TG92ZQ==",
+    "artistName": "RGF1Z2h0ZXI=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/f9/bb/ba/f9bbba02-d200-f8e9-f0d3-4f6633983ca4/mzaf_11775605686800011731.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-06-27",
+    "songTitle": "TG92ZSAoZmVhdC4gTGlsIFV6aSBWZXJ0KQ==",
+    "artistName": "RmVsaXggU25vdw==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/a9/64/49/a964494b-64b4-d72c-6951-7f2149e39d7c/mzaf_8125861256770775279.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-06-28",
+    "songTitle": "TG92ZQ==",
+    "artistName": "SmFuYSBLcmFtZXI=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/1e/ce/a7/1ecea7b7-0834-6e39-6620-94bdb135eccb/mzaf_14812900942859845834.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-06-29",
+    "songTitle": "TE9WRQ==",
+    "artistName": "R2lhbmx1Y2EgVmFjY2hpICYgU2ViYXN0acOhbiBZYXRyYQ==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/e6/a9/c8/e6a9c8de-5df7-ceee-7507-2d6f1073495d/mzaf_15309586819017287532.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-06-30",
+    "songTitle": "TG92ZQ==",
+    "artistName": "V2UgQXJlIE1lc3NlbmdlcnM=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/da/08/41/da0841a8-edbc-5617-6e83-db382194374f/mzaf_8477304347975990818.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-07-01",
+    "songTitle": "TG92ZQ==",
+    "artistName": "S2VubnkgTG9nZ2lucw==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/16/20/4b/16204b5b-88b3-c685-600b-c1d4d9097048/mzaf_4050586637626627188.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-07-02",
+    "songTitle": "TG92ZQ==",
+    "artistName": "RmluZGluZyBIb3Bl",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b6/7a/9b/b67a9b41-5325-9fcc-f779-8ff50f214e27/mzaf_4789951306547325983.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-07-03",
+    "songTitle": "TG92ZQ==",
+    "artistName": "Sm9yZGFuIENocmlzdG9mZg==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/40/14/6c/40146c98-53e7-2357-a526-9831c86373cf/mzaf_14884339287670634.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-07-04",
+    "songTitle": "TG92ZSAoU3dlZXQgTG92ZSk=",
+    "artistName": "TGl0dGxlIE1peA==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/83/48/21/8348210b-2d83-3ef6-695c-fe41a8f7dba7/mzaf_16374208356055811720.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-07-05",
+    "songTitle": "TE9WRQ==",
+    "artistName": "WCBMb3ZlcnM=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/d3/43/62/d34362bd-9450-2ac2-dda5-67da0b3b74a4/mzaf_7671799548005916847.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-07-06",
+    "songTitle": "TG92ZSAoUmVtYXN0ZXJlZCAyMDEyKQ==",
+    "artistName": "VGhlIFNtYXNoaW5nIFB1bXBraW5z",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e0/25/19/e02519a6-2faf-9197-9217-7adcc941ffe3/mzaf_11983204399005103554.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-07-07",
+    "songTitle": "TG92ZSAoTGl2ZSk=",
+    "artistName": "S2V5c2hpYSBDb2xl",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/ec/d1/09/ecd109e8-cc26-ac59-fe4a-83bbc5754b54/mzaf_14316012961471210197.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-07-08",
+    "songTitle": "TG92ZQ==",
+    "artistName": "TU9OU1RBIFg=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/eb/aa/22/ebaa2233-e43b-5bcb-1484-8dc259e50c38/mzaf_4381543793783965075.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-07-09",
+    "songTitle": "TG92ZSAoZmVhdC4gQ2hhcmx5IEJsYWNrKQ==",
+    "artistName": "TWFsdW1h",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/64/13/b8/6413b842-73f9-229c-4bce-aee23ef63028/mzaf_12004633796441640132.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-07-10",
+    "songTitle": "QmFkIGF0IExvdmU=",
+    "artistName": "SGFsc2V5",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/3e/d8/06/3ed8065d-1a50-625b-b995-3e653b32701f/mzaf_6014038911874968955.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-07-11",
+    "songTitle": "TG92ZQ==",
+    "artistName": "Wk9F",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/c7/77/43/c77743e1-50da-473b-b95c-b4ca85b22159/mzaf_257398343383793045.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-07-12",
+    "songTitle": "TE9WRS4gKEZFQVQuIFpBQ0FSSSkgW01peGVkXQ==",
+    "artistName": "S2VuZHJpY2sgTGFtYXI=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/87/bd/6f/87bd6f0b-1040-cfb9-ea21-4fe4a8410358/mzaf_5404689163478781558.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-07-13",
+    "songTitle": "TE9WRQ==",
+    "artistName": "U29maWFuZSBQYW1hcnQ=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/a7/61/e6/a761e666-6b62-9e8d-9127-09f1018da954/mzaf_10476255185053719130.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-07-14",
+    "songTitle": "TG92ZQ==",
+    "artistName": "TXVzaXE=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/50/84/5b/50845b33-390d-ab2d-ebdc-267c497a2ffc/mzaf_4367130383190544196.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-07-15",
+    "songTitle": "TE9WRT8gKGZlYXQuIEdSQVkp",
+    "artistName": "RUxPICYgUEVOT01FQ08=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/37/29/a6/3729a6a7-0b34-f718-d654-74203582d056/mzaf_16183631115707561638.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-07-16",
+    "songTitle": "VGltZQ==",
+    "artistName": "UGluayBGbG95ZA==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/8e/b8/69/8eb869c0-a392-95ce-5c93-5e37c59d2d41/mzaf_2460489275691867035.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-07-17",
+    "songTitle": "VGltZQ==",
+    "artistName": "SGFucyBaaW1tZXI=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/94/9c/89/949c8995-41f8-d3c1-90eb-81c10b54133b/mzaf_8252792899119007978.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-07-18",
+    "songTitle": "VGltZQ==",
+    "artistName": "TkY=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/b7/71/69/b77169f4-4431-d70a-5ead-eb931def6b3b/mzaf_17372905056525007884.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-07-19",
+    "songTitle": "VGltZQ==",
+    "artistName": "SG9vdGllICYgVGhlIEJsb3dmaXNo",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/fa/eb/45/faeb45cd-0ae1-3151-14a3-416e233fcbee/mzaf_1940862598594412843.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-07-20",
+    "songTitle": "VGltZQ==",
+    "artistName": "T2xpdmlhIERlYW4=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/61/18/b4/6118b46b-c922-3818-4273-fcfb6c5d70e4/mzaf_7029475382389682376.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-07-21",
+    "songTitle": "VGltZSAoQ2xvY2sgb2YgdGhlIEhlYXJ0KQ==",
+    "artistName": "Q3VsdHVyZSBDbHVi",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/4b/68/29/4b682910-4468-b0c0-a27a-6d98c2da7c28/mzaf_8039350978143331882.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-07-22",
+    "songTitle": "VGltZQ==",
+    "artistName": "U25vaCBBYWxlZ3Jh",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/13/0e/a8/130ea89e-e665-3292-a2b7-0bd5ab314362/mzaf_8833156474941931738.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-07-23",
+    "songTitle": "VGltZSAoSXMp",
+    "artistName": "U29sYW5nZQ==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/fe/47/b0/fe47b056-b21e-8385-695e-aa6a5df09b64/mzaf_7433335367030995380.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-07-24",
+    "songTitle": "VGltZSAoRWRpdCk=",
+    "artistName": "UGluayBGbG95ZA==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/ad/d3/32/add33205-f271-b769-0027-612e5e0f2100/mzaf_14570436363494513081.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-07-25",
+    "songTitle": "VGltZSAoRWRpdCk=",
+    "artistName": "TkY=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/02/22/75/022275e5-d7fe-7c1b-d94c-6e0aedd66bfe/mzaf_18266520238785280611.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-07-26",
+    "songTitle": "VGltZQ==",
+    "artistName": "UG5CIFJvY2s=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/81/cb/53/81cb5348-e2ce-4a33-3fb2-506620c3739e/mzaf_4641043100298976278.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-07-27",
+    "songTitle": "VGltZSAoWW91IGFuZCBJKQ==",
+    "artistName": "S2hydWFuZ2Jpbg==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/dc/42/8b/dc428b5d-1c16-d0b7-2759-af2e1875601e/mzaf_18419284734544287570.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-07-28",
+    "songTitle": "VElNRQ==",
+    "artistName": "QWxlc3Nv",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/07/d2/46/07d2468e-4422-6413-e9ed-43d46ca93e61/mzaf_100908014345525443.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-07-29",
+    "songTitle": "VGltZSAoRnJvbSAiU3RhciIgU2Vhc29uIDIp",
+    "artistName": "U3RhciBDYXN0",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/36/16/dc/3616dc01-1c6b-0c04-8134-42007ccf2e09/mzaf_805925952224875291.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-07-30",
+    "songTitle": "VGltZQ==",
+    "artistName": "QmFja3N0cmVldCBCb3lz",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/51/61/d5/5161d5fc-5233-2fba-bb08-8106ea40f4d9/mzaf_6960358828236314154.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-07-31",
+    "songTitle": "VGltZQ==",
+    "artistName": "SnVuZ2xl",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/85/e4/d3/85e4d392-9ebe-b037-dadd-ef00ad27334c/mzaf_17059843927918395817.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-08-01",
+    "songTitle": "VGltZQ==",
+    "artistName": "QW5nZWxvIERlIEF1Z3VzdGluZQ==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/ca/ba/51/caba510c-2a29-9299-efc2-c640e24030e8/mzaf_6223046006430427497.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-08-02",
+    "songTitle": "VGltZSAoZmVhdC4gUm9kZHkgUmljY2gp",
+    "artistName": "RmFib2xvdXM=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/86/bf/9b/86bf9bfb-2a9a-1957-28a9-f5183ddcbe9f/mzaf_13053416301830201947.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-08-03",
+    "songTitle": "VGltZQ==",
+    "artistName": "Sy4gTWljaGVsbGU=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/b5/4e/87/b54e87e4-cb32-4afa-f408-99ad8835c4de/mzaf_16226940760731049273.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-08-04",
+    "songTitle": "VGltZSAoZmVhdC4gTWVlayBNaWxsKQ==",
+    "artistName": "TGlsIEJhYnk=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/95/c5/65/95c56514-e2a5-5ba3-b0c4-1e2e91ac302b/mzaf_6896480823152001331.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-08-05",
+    "songTitle": "VGltZQ==",
+    "artistName": "TXVzaXEgU291bGNoaWxk",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f6/3b/e3/f63be33c-4dfd-03da-3b9a-0aec5a1b99e6/mzaf_11703187758907371757.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-08-06",
+    "songTitle": "VGltZQ==",
+    "artistName": "TmUtWW8=",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/37/8d/9f/378d9faf-142c-c952-6927-d87f84369d84/mzaf_8577165987730939464.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-08-07",
+    "songTitle": "VGltZSAoTWVkaXRhdGlvbik=",
+    "artistName": "c3RhcnJ5",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/fe/59/59/fe5959dd-6cd7-98b5-b263-33e455f03574/mzaf_10049489389770014213.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-08-08",
+    "songTitle": "VGltZSAoZmVhdC4gT2xhbWlkZSk=",
+    "artistName": "THl0YQ==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/20/73/79/207379ba-a4d7-3019-d7dd-4269d52feea7/mzaf_8494098848974406240.plus.aac.p.m4a",
+    "offset": 0
+  },
+  {
+    "day": "2026-08-09",
+    "songTitle": "VGltZQ==",
+    "artistName": "TWlra3kgRWtrbw==",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/89/a2/23/89a2238c-87e4-d74a-654a-ec4b33e97664/mzaf_8323092017818165165.plus.aac.p.m4a",
     "offset": 0
   }
 ];
