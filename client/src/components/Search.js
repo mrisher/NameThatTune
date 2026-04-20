@@ -53,8 +53,8 @@ const Search = ({ onSelect, disabled, correctTrack }) => {
 
           const getCleanName = (name) => {
             return name
-              .replace(/\s*\(.*(acoustic|live|remix|version|edit|remaster|karaoke|cover|instrumental|tribute).*\)/i, '')
-              .replace(/\s*\[.*(acoustic|live|remix|version|edit|remaster|karaoke|cover|instrumental|tribute).*\]/i, '')
+              .replace(/\s*\([^)]*\)/g, '')
+              .replace(/\s*\[[^]]*\]/g, '')
               .split(' - ')[0]
               .split(': ')[0]
               .trim();
@@ -89,53 +89,77 @@ const Search = ({ onSelect, disabled, correctTrack }) => {
           });
           const filteredResults = Array.from(groups.values());
 
+          const normalizeStr = (str) => {
+            return str
+              .toLowerCase()
+              .replace(/[^a-z0-9\s]/gi, '')
+              .replace(/ing\b/gi, 'in')
+              .replace(/\s+/g, ' ')
+              .trim();
+          };
+
+          const qNorm = normalizeStr(query);
+          const qWordsNorm = qNorm.split(/\s+/).filter(w => w.length > 0);
+
           const getScore = (track) => {
-            const title = track.trackName.toLowerCase();
-            const artist = track.artistName.toLowerCase();
-            const cleanTitle = getCleanName(track.trackName).toLowerCase();
+            const titleNorm = normalizeStr(track.trackName);
+            const artistNorm = normalizeStr(track.artistName);
+            const cleanTitleNorm = normalizeStr(getCleanName(track.trackName));
 
             let score = 0;
 
-            if (title === qLower) score += 100;
-            if (title.includes(qLower)) score += 50;
-            if (`${title} ${artist}` === qLower || `${artist} ${title}` === qLower) score += 200;
+            if (titleNorm === qNorm) score += 100;
+            if (artistNorm === qNorm) score += 100;
+            if (cleanTitleNorm === qNorm && titleNorm !== qNorm) score += 100;
 
-            if (`${cleanTitle} ${artist}` === qLower || `${artist} ${cleanTitle}` === qLower) {
+            if (titleNorm.includes(qNorm)) score += 50;
+            if (artistNorm.includes(qNorm)) score += 50;
+
+            if (`${titleNorm} ${artistNorm}` === qNorm || `${artistNorm} ${titleNorm}` === qNorm) score += 200;
+
+            if (`${cleanTitleNorm} ${artistNorm}` === qNorm || `${artistNorm} ${cleanTitleNorm}` === qNorm) {
               score += 150;
             }
 
             let titleMatchWords = 0;
             let artistMatchWords = 0;
 
-            for (const w of qWords) {
-              if (title.includes(w)) titleMatchWords++;
-              if (artist.includes(w)) artistMatchWords++;
+            for (const w of qWordsNorm) {
+              const regex = new RegExp(`\\b${w}\\b`, 'i');
+              if (regex.test(titleNorm)) titleMatchWords++;
+              if (regex.test(artistNorm)) artistMatchWords++;
             }
 
             if (titleMatchWords > 0 && artistMatchWords > 0) score += 30;
 
             score += (titleMatchWords * 10);
-            score += (artistMatchWords * 5);
+            score += (artistMatchWords * 10);
 
-            if (qWords.includes(cleanTitle)) score += 20;
+            if (qWordsNorm.includes(cleanTitleNorm)) score += 20;
+            if (qWordsNorm.includes(artistNorm) && qWordsNorm.length === 1) score += 20; // Ensure single word exact artist gets same bonus as clean title
 
             return score;
           }
 
+          // Use stable sort to preserve iTunes default ranking (popularity) for ties
+          const scoresMap = new Map();
+          filteredResults.forEach(track => scoresMap.set(track, getScore(track)));
+
           const sortedResults = filteredResults.sort((a, b) => {
-            const scoreA = getScore(a);
-            const scoreB = getScore(b);
+            const scoreA = scoresMap.get(a);
+            const scoreB = scoresMap.get(b);
 
             if (scoreA !== scoreB) {
-              return scoreB - scoreA;
+              return scoreB - scoreA; // Descending score
             }
 
+            // If scores are equal, prioritize non-variants
             const aVariant = isVariant(a.trackName);
             const bVariant = isVariant(b.trackName);
             if (!aVariant && bVariant) return -1;
             if (aVariant && !bVariant) return 1;
 
-            return 0;
+            return 0; // Maintain original iTunes popularity order otherwise
           });
 
           setResults(sortedResults.slice(0, 5));
