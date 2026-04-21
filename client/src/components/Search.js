@@ -153,11 +153,13 @@ const Search = ({ onSelect, disabled, correctTrack }) => {
               return scoreB - scoreA; // Descending score
             }
 
-            // If scores are equal, prioritize non-variants
-            const aVariant = isVariant(a.trackName);
-            const bVariant = isVariant(b.trackName);
-            if (!aVariant && bVariant) return -1;
-            if (aVariant && !bVariant) return 1;
+            // If scores are equal, we used to penalize variants (like acoustic/live).
+            // However, parentheticals on original tracks (like "(who loves me)") would get incorrectly penalized.
+            // With our improved scoring giving +100 for clean title matches, originals and covers often tie at 200.
+            // By deferring strictly to iTunes popularity order on a tie, the original artist (Whitney Houston)
+            // reliably outranks the cover band.
+            //
+            // We intentionally do not penalize variants here anymore to ensure original tracks with parentheticals win.
 
             return 0; // Maintain original iTunes popularity order otherwise
           });
