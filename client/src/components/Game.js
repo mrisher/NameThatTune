@@ -712,10 +712,10 @@ const Game = () => {
                                 )}
                                 <button
                                     className="winamp-btn"
-                                    onClick={() => window.location.reload()}
+                                    onClick={() => window.location.href = '/connectunes'}
                                     style={{ width: "100%" }}
                                 >
-                                    PLAY AGAIN
+                                    PLAY CONNECTUNES
                                 </button>
                                 {yesterdayStats && (
                                     <div style={{ marginTop: "16px", textAlign: "left", fontSize: "11px", color: "#00ff00", borderTop: "1px dotted #00ff00", paddingTop: "8px" }}>
