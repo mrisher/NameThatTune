@@ -222,7 +222,7 @@ const Game = () => {
             }
         }
 
-        const todaysSong = songs.find((s) => s.day === today) || songs[0];
+        const todaysSong = songs.find((s) => s.day === today) || { outOfService: true };
         setTargetSong(todaysSong);
 
         // Fetch yesterday's stats
@@ -583,6 +583,19 @@ const Game = () => {
     };
 
     if (!targetSong) return <div style={{ color: "#00ff00" }}>LOADING...</div>;
+
+    if (targetSong.outOfService || targetSong.audioUrl === "MISSING" || targetSong.audioUrl === "REPLACE_ME") {
+        return (
+            <>
+                <h1 className="dudle-header">DUDLE</h1>
+                <div style={{ color: "#00ff00", textAlign: "center", marginTop: "50px" }}>
+                    <h2>OUT OF SERVICE</h2>
+                    <p>The Dudle is currently out of songs for today.</p>
+                    <p>Please come back later!</p>
+                </div>
+            </>
+        );
+    }
 
     return (
         <>

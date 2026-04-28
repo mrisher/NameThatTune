@@ -49,7 +49,7 @@ export default function ConnecTunes() {
       }
     }
 
-    const todaysConfig = connectunesSongs.find((s) => s.day === today) || connectunesSongs[0];
+    const todaysConfig = connectunesSongs.find((s) => s.day === today) || { outOfService: true };
     setTargetDay(todaysConfig);
 
     return () => {
@@ -233,6 +233,19 @@ export default function ConnecTunes() {
   }, [targetDay]);
 
   if (!targetDay) return <div style={{ color: "#00ff00" }}>LOADING CONNECTUNES...</div>;
+
+  if (targetDay.outOfService || targetDay.songs.some(s => s.audioUrl === "MISSING" || s.audioUrl === "REPLACE_ME")) {
+      return (
+          <>
+              <h1 className="dudle-header">CONNECTUNES</h1>
+              <div style={{ color: "#00ff00", textAlign: "center", marginTop: "50px" }}>
+                  <h2>OUT OF SERVICE</h2>
+                  <p>ConnecTunes is currently out of songs for today.</p>
+                  <p>Please come back later!</p>
+              </div>
+          </>
+      );
+  }
 
   return (
     <>
