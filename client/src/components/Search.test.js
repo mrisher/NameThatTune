@@ -3,26 +3,24 @@ import { render, screen, act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Search from './Search';
 
+const mockResults = [
+  { trackId: '1', trackName: 'Madonna', artistName: 'Drake' },
+  { trackId: '2', trackName: 'Like a Virgin', artistName: 'Madonna' },
+  { trackId: '3', trackName: 'Vogue', artistName: 'Madonna' },
+  { trackId: '4', trackName: "Stayin' Alive", artistName: 'Bee Gees' },
+  { trackId: '5', trackName: 'Staying Alive', artistName: 'Cursed Cover Band' },
+  { trackId: '6', trackName: 'I wanna dance with somebody (who loves me)', artistName: 'Whitney Houston' },
+  { trackId: '7', trackName: 'I wanna dance with somebody', artistName: 'Cover Band' },
+  { trackId: '8', trackName: 'Sing', artistName: 'Ed Sheeran' },
+];
+
 describe('Search Component Ranking', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     jest.useFakeTimers();
-    // Provide a fresh copy of mockResults on every fetch call to avoid mutability issues
-    // caused by adding isSynthetic=true flags to the results during grouping/sorting
     global.fetch = jest.fn(() =>
       Promise.resolve({
-        json: () => Promise.resolve({
-          results: [
-            { trackId: '1', trackName: 'Super Mario Bros. Theme', artistName: 'Boogie Heights' },
-            { trackId: '2', trackName: 'Peaches', artistName: 'Jack Black' },
-            { trackId: '3', trackName: 'Mario Brothers Rap', artistName: 'Ali "Dee" Theodore' },
-            { trackId: '4', trackName: 'Mario Bros', artistName: 'Banda La prestigiada' },
-            { trackId: '5', trackName: 'Creep', artistName: 'Cover Band' },
-            { trackId: '6', trackName: 'Creep (Acoustic)', artistName: 'Other Cover Band' },
-            { trackId: '7', trackName: 'Creep', artistName: 'Radiohead' },
-            { trackId: '8', trackName: 'Creep', artistName: 'Stone Temple Pilots' }
-          ]
-        }),
+        json: () => Promise.resolve({ results: [...mockResults] }),
       })
     );
   });
@@ -31,8 +29,8 @@ describe('Search Component Ranking', () => {
     jest.useRealTimers();
   });
 
-  const setupAndSearch = async (query, correctTrack) => {
-    render(<Search onSelect={() => {}} correctTrack={correctTrack} />);
+  const setupAndSearch = async (query) => {
+    render(<Search onSelect={() => {}} />);
     const input = screen.getByPlaceholderText(/Guess the song/i);
 
     // Type the query
@@ -58,50 +56,29 @@ describe('Search Component Ranking', () => {
     });
   };
 
-  test('prioritizes synthetic exact correct track for "mario bros"', async () => {
-    const correctTrack = { songTitle: 'Super Mario Bros. Theme', artistName: 'Koji Kondo' };
-
-    const results1 = await setupAndSearch('mario bros', correctTrack);
-    expect(results1[0]).toBe('Super Mario Bros. Theme by Koji Kondo');
-    expect(results1[1]).toBe('Super Mario Bros. Theme by Boogie Heights');
-
-    // Reset testing library state for the next render
-    act(() => {
-      document.body.innerHTML = '';
-    });
-
-    const results2 = await setupAndSearch('super mario', correctTrack);
-    expect(results2[0]).toBe('Super Mario Bros. Theme by Koji Kondo');
-
-    // Reset testing library state for the next render
-    act(() => {
-      document.body.innerHTML = '';
-    });
-
-    const results3 = await setupAndSearch('mario', correctTrack);
-    expect(results3[0]).toBe('Super Mario Bros. Theme by Koji Kondo');
+  test('prioritizes exact artist matches similar to exact title matches', async () => {
+    const results = await setupAndSearch('Madonna');
+    expect(results[0]).toBe('Madonna by Drake');
+    expect(results[1]).toBe('Like a Virgin by Madonna');
+    expect(results[2]).toBe('Vogue by Madonna');
   });
 
-  test('prioritizes synthetic exact correct track for "creep"', async () => {
-    const correctTrack = { songTitle: 'Creep', artistName: 'Radiohead' };
-    const results = await setupAndSearch('creep', correctTrack);
-
-    expect(results[0]).toBe('Creep by Radiohead');
-    expect(results[1]).toBe('Super Mario Bros. Theme by Boogie Heights');
-    expect(results[2]).toBe('Peaches by Jack Black');
-    expect(results[3]).toBe('Mario Brothers Rap by Ali "Dee" Theodore');
-    expect(results[4]).toBe('Mario Bros by Banda La prestigiada');
-    // Note: The original iTunes default order dictates that 'Cover Band' is at index 4 (before Radiohead at 6)
-    // The test validates that the synthetic inject properly overrides the order and goes to index 0.
+  test('treats "staying" and "stayin" equally and preserves stable sort', async () => {
+    const results = await setupAndSearch('Staying Alive');
+    expect(results[0]).toBe("Stayin' Alive by Bee Gees");
+    expect(results[1]).toBe('Staying Alive by Cursed Cover Band');
   });
 
-  test('deduplicates variants but relies on iTunes default order without heuristic scoring', async () => {
-    // With an unrelated correct track passed, "mario" simply falls back to standard iTunes + deduplication
-    const correctTrack = { songTitle: 'Not Related', artistName: 'Someone Else' };
-    const results = await setupAndSearch('mario', correctTrack);
+  test('strips parentheticals to allow originals to compete with exact cover matches', async () => {
+    // Both score 200. Because we use stable sort, the original list order determines the tiebreaker.
+    // In our mockResults, Whitney is idx 5 and Cover Band is idx 6, so Whitney stays ahead.
+    const results = await setupAndSearch('I wanna dance with somebody');
+    expect(results[0]).toBe('I wanna dance with somebody (who loves me) by Whitney Houston');
+    expect(results[1]).toBe('I wanna dance with somebody by Cover Band');
+  });
 
-    expect(results[0]).toBe('Super Mario Bros. Theme by Boogie Heights');
-    expect(results[1]).toBe('Peaches by Jack Black');
-    expect(results[2]).toBe('Mario Brothers Rap by Ali "Dee" Theodore');
+  test('lossy "ing" normalization correctly matches root words like Sing', async () => {
+    const results = await setupAndSearch('Sing');
+    expect(results[0]).toBe('Sing by Ed Sheeran');
   });
 });
