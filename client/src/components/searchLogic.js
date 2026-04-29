@@ -34,7 +34,8 @@ export function processSearchResults(fetchedResults, query, correctTrack) {
         t.artistName.toLowerCase() === correctArtistLower
       );
       if (!alreadyExists) {
-        results.push({
+        // Prepend so the guaranteed-correct track survives the slice cap below.
+        results.unshift({
           trackId: `synthetic-${Date.now()}`,
           trackName: correctTrack.songTitle,
           artistName: correctTrack.artistName,

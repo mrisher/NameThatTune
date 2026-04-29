@@ -57,6 +57,23 @@ describe('processSearchResults', () => {
     expect(out).toHaveLength(1);
   });
 
+  test('synthetic correctTrack survives the MAX_RESULTS cap even when iTunes returns enough unique results to fill it', () => {
+    const fetched = [
+      { trackId: '1', trackName: 'Super Mario (Trap Remix)', artistName: 'Trap Remix Guys' },
+      { trackId: '2', trackName: 'Super Mario (Minions Remix)', artistName: 'Funny Minions Guys' },
+      { trackId: '3', trackName: 'Super Mario', artistName: 'Pianos Music' },
+      { trackId: '4', trackName: 'Super Mario', artistName: 'Mario Jay Bee' },
+      { trackId: '5', trackName: 'Super Mario', artistName: 'Super 8 Bit Era' },
+      { trackId: '6', trackName: 'Mario Theme', artistName: 'Filler' },
+    ];
+    const correctTrack = { songTitle: 'Super Mario Bros. Theme', artistName: 'Koji Kondo' };
+    const out = processSearchResults(fetched, 'super mario', correctTrack);
+    expect(out).toHaveLength(MAX_RESULTS);
+    const koji = out.find(t => t.artistName === 'Koji Kondo');
+    expect(koji).toBeDefined();
+    expect(koji.isSynthetic).toBe(true);
+  });
+
   test('does not inject when the query does not match the correct track', () => {
     const fetched = [
       { trackId: '1', trackName: 'Vogue', artistName: 'Madonna' },
