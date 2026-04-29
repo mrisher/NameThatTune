@@ -29,12 +29,16 @@ export function processSearchResults(fetchedResults, query, correctTrack) {
     );
 
     if (matchesCorrect) {
-      const alreadyExists = results.some(t =>
+      const exactIdx = results.findIndex(t =>
         t.trackName.toLowerCase() === correctTitleLower &&
         t.artistName.toLowerCase() === correctArtistLower
       );
-      if (!alreadyExists) {
-        // Prepend so the guaranteed-correct track survives the slice cap below.
+      if (exactIdx !== -1) {
+        // iTunes has the right track — promote it so it survives the slice
+        // and we keep iTunes' real metadata (preview URL, artwork, etc).
+        const [exactTrack] = results.splice(exactIdx, 1);
+        results.unshift(exactTrack);
+      } else {
         results.unshift({
           trackId: `synthetic-${Date.now()}`,
           trackName: correctTrack.songTitle,
