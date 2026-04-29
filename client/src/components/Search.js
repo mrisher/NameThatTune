@@ -40,7 +40,7 @@ const Search = ({ onSelect, disabled, correctTrack }) => {
               };
               
               // Only inject if it's not already perfectly returned by iTunes
-              const alreadyExists = fetchedResults.some(t => 
+              const alreadyExists = fetchedResults.some(t =>
                 t.trackName.toLowerCase() === correctTitleLower && 
                 t.artistName.toLowerCase() === correctArtistLower
               );
