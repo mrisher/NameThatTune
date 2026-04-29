@@ -39,14 +39,16 @@ const Search = ({ onSelect, disabled, correctTrack }) => {
                 isSynthetic: true // Mark as synthetic so we don't accidentally dedupe it away
               };
               
-              // Only inject if it's not already perfectly returned by iTunes
-              const alreadyExists = fetchedResults.some(t => 
+              // If it already exists in the results from iTunes, flag it as synthetic so it sorts to the top
+              const existingIndex = fetchedResults.findIndex(t =>
                 t.trackName.toLowerCase() === correctTitleLower && 
                 t.artistName.toLowerCase() === correctArtistLower
               );
               
-              if (!alreadyExists) {
+              if (existingIndex === -1) {
                 fetchedResults.push(syntheticTrack);
+              } else {
+                fetchedResults[existingIndex].isSynthetic = true;
               }
             }
           }
@@ -89,79 +91,13 @@ const Search = ({ onSelect, disabled, correctTrack }) => {
           });
           const filteredResults = Array.from(groups.values());
 
-          const normalizeStr = (str) => {
-            return str
-              .toLowerCase()
-              .replace(/[^a-z0-9\s]/gi, '')
-              .replace(/ing\b/gi, 'in')
-              .replace(/\s+/g, ' ')
-              .trim();
-          };
-
-          const qNorm = normalizeStr(query);
-          const qWordsNorm = qNorm.split(/\s+/).filter(w => w.length > 0);
-
-          const getScore = (track) => {
-            const titleNorm = normalizeStr(track.trackName);
-            const artistNorm = normalizeStr(track.artistName);
-            const cleanTitleNorm = normalizeStr(getCleanName(track.trackName));
-
-            let score = 0;
-
-            if (titleNorm === qNorm) score += 100;
-            if (artistNorm === qNorm) score += 100;
-            if (cleanTitleNorm === qNorm && titleNorm !== qNorm) score += 100;
-
-            if (titleNorm.includes(qNorm)) score += 50;
-            if (artistNorm.includes(qNorm)) score += 50;
-
-            if (`${titleNorm} ${artistNorm}` === qNorm || `${artistNorm} ${titleNorm}` === qNorm) score += 200;
-
-            if (`${cleanTitleNorm} ${artistNorm}` === qNorm || `${artistNorm} ${cleanTitleNorm}` === qNorm) {
-              score += 150;
-            }
-
-            let titleMatchWords = 0;
-            let artistMatchWords = 0;
-
-            for (const w of qWordsNorm) {
-              const regex = new RegExp(`\\b${w}\\b`, 'i');
-              if (regex.test(titleNorm)) titleMatchWords++;
-              if (regex.test(artistNorm)) artistMatchWords++;
-            }
-
-            if (titleMatchWords > 0 && artistMatchWords > 0) score += 30;
-
-            score += (titleMatchWords * 10);
-            score += (artistMatchWords * 10);
-
-            if (qWordsNorm.includes(cleanTitleNorm)) score += 20;
-            if (qWordsNorm.includes(artistNorm) && qWordsNorm.length === 1) score += 20; // Ensure single word exact artist gets same bonus as clean title
-
-            return score;
-          }
-
-          // Use stable sort to preserve iTunes default ranking (popularity) for ties
-          const scoresMap = new Map();
-          filteredResults.forEach(track => scoresMap.set(track, getScore(track)));
-
+          // We no longer apply manual scoring algorithms that override iTunes' default popularity sort.
+          // By default, iTunes returns the most popular tracks that match the search query.
+          // We simply ensure the synthetic (guaranteed correct) track is always placed at the very top.
           const sortedResults = filteredResults.sort((a, b) => {
-            const scoreA = scoresMap.get(a);
-            const scoreB = scoresMap.get(b);
-
-            if (scoreA !== scoreB) {
-              return scoreB - scoreA; // Descending score
-            }
-
-            // If scores are equal, we used to penalize variants (like acoustic/live).
-            // However, parentheticals on original tracks (like "(who loves me)") would get incorrectly penalized.
-            // With our improved scoring giving +100 for clean title matches, originals and covers often tie at 200.
-            // By deferring strictly to iTunes popularity order on a tie, the original artist (Whitney Houston)
-            // reliably outranks the cover band.
-            //
-            // We intentionally do not penalize variants here anymore to ensure original tracks with parentheticals win.
-
-            return 0; // Maintain original iTunes popularity order otherwise
+            if (a.isSynthetic && !b.isSynthetic) return -1;
+            if (!a.isSynthetic && b.isSynthetic) return 1;
+            return 0; // Otherwise maintain original iTunes popularity order (stable sort)
           });
 
           setResults(sortedResults.slice(0, 5));
