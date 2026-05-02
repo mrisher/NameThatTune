@@ -67,37 +67,17 @@ app.get('/api/stats', async (req, res) => {
     const docRef = firestore.collection('daily_stats').doc(date);
     const doc = await docRef.get();
 
-    let stats = { scores: {} };
+    let stats = { scores: {}, winners: [] };
     if (doc.exists) {
       stats.scores = doc.data().scores || {};
     }
 
-    // Get the most common wrong guess
-    const wrongGuessesQuery = await docRef.collection('wrong_guesses')
-      .orderBy('count', 'desc')
-      .limit(1)
-      .get();
-
-    if (!wrongGuessesQuery.empty) {
-      const topGuessDoc = wrongGuessesQuery.docs[0];
-      stats.mostCommonWrongGuess = topGuessDoc.data();
-    }
-
-    if (doc.exists && doc.data().fastestWin) {
-      const fastestWinData = doc.data().fastestWin;
-      stats.fastestWin = fastestWinData;
-
-      // Attempt to look up current name from users collection
-      if (fastestWinData.uuid) {
-        try {
-          const userDoc = await firestore.collection('users').doc(fastestWinData.uuid).get();
-          if (userDoc.exists) {
-             stats.fastestWin.name = userDoc.data().name || "Anonymous";
-          }
-        } catch (e) {
-          console.error("Error looking up fastest win user:", e);
-        }
-      }
+    const winnersQuery = await docRef.collection('winners').orderBy('score').get();
+    if (!winnersQuery.empty) {
+      stats.winners = winnersQuery.docs.map(d => {
+        const data = d.data();
+        return { name: data.name || "Anonymous", score: data.score };
+      });
     }
 
     res.json(stats);
@@ -127,21 +107,16 @@ app.post('/api/stats', async (req, res) => {
        dailyUpdates.scores[score] = Firestore.FieldValue.increment(1);
     }
 
-    // Check if best/first win and update if necessary using a transaction
-    if (score !== undefined && score !== "X") {
+    // Record this winner so we can list "winners yesterday"
+    if (uuid && score !== undefined && score !== "X") {
         try {
-            await firestore.runTransaction(async (t) => {
-                const doc = await t.get(docRef);
-                const data = doc.data() || {};
-
-                // If there's no fastestWin yet, or this score is strictly lower (better) than the current best.
-                // By doing strictly lower (<), the *first* person to get the score will keep it.
-                if (!data.fastestWin || score < data.fastestWin.score) {
-                    t.set(docRef, { fastestWin: { uuid, score, timestamp: Date.now() } }, { merge: true });
-                }
-            });
+            await docRef.collection('winners').doc(uuid).set({
+                name: name || "Anonymous",
+                score,
+                timestamp: Date.now()
+            }, { merge: true });
         } catch (e) {
-            console.error("Error updating fastest win transaction:", e);
+            console.error("Error recording winner:", e);
         }
     }
 
