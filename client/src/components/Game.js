@@ -8,10 +8,6 @@ import {
     getFriendlyParisDate,
     calculateDaysBetween,
     getAverage,
-    getMedian,
-    getMode,
-    getStdDev,
-    getCoV
 } from "../utils/stats";
 import { getSeededRandom } from "../utils/random";
 
@@ -71,6 +67,10 @@ const Game = () => {
     const unlockDurationRef = useRef(unlockDuration);
     const jumpOffsetRef = useRef(jumpOffset);
     const gameStateRef = useRef(gameState);
+    const startTimeRef = useRef(Date.now());
+    const playCountRef = useRef(0);
+    const winSecondsRef = useRef(null);
+    const winPlaysRef = useRef(null);
 
     useEffect(() => {
         gameStateRef.current = gameState;
@@ -232,7 +232,7 @@ const Game = () => {
         fetch(`/api/stats?date=${yesterdayStr}`)
             .then(res => res.json())
             .then(data => {
-                if (data && (Object.keys(data.scores || {}).length > 0 || data.mostCommonWrongGuess)) {
+                if (data && data.winners && data.winners.length > 0) {
                     setYesterdayStats(data);
                 }
             })
@@ -286,6 +286,7 @@ const Game = () => {
             webampRef.current = webamp;
 
             let lastSeekTime = 0;
+            let lastStatus = null;
 
             // Subscribe to state changes to handle playback duration
             const unsubscribe = webamp.store.subscribe(() => {
@@ -293,6 +294,10 @@ const Game = () => {
                 if (state.media.length && state.media.length > 0) {
                     setSongDuration(state.media.length);
                 }
+                if (state.media.status === "PLAYING" && lastStatus !== "PLAYING") {
+                    playCountRef.current += 1;
+                }
+                lastStatus = state.media.status;
                 // Webamp stores time in seconds
                 if (state.media.status === "PLAYING") {
                     if (gameStateRef.current === "won" || gameStateRef.current === "lost") {
@@ -402,6 +407,10 @@ const Game = () => {
         setGuesses(newGuesses);
 
         if (status === "green") {
+            if (newGuesses.length === 1) {
+                winSecondsRef.current = Math.round((Date.now() - startTimeRef.current) / 1000);
+                winPlaysRef.current = playCountRef.current;
+            }
             setGameState("won");
             setUnlockDuration(15);
         } else {
@@ -521,6 +530,16 @@ const Game = () => {
 
         const score = gameState === "won" ? guesses.length : "X";
 
+        if (
+            gameState === "won" &&
+            guesses.length === 1 &&
+            winSecondsRef.current !== null &&
+            winPlaysRef.current !== null
+        ) {
+            const playsLabel = winPlaysRef.current === 1 ? "play" : "plays";
+            resultEmoji = `🟩 (in ${winSecondsRef.current} seconds with just ${winPlaysRef.current} ${playsLabel})`;
+        }
+
         let statsText = "";
         const storedData = localStorage.getItem("dudle_stats");
         if (storedData) {
@@ -530,12 +549,7 @@ const Game = () => {
                 const last7 = scores.slice(-7);
                 const avg7 = getAverage(last7).toFixed(1);
 
-                const median = getMedian(scores);
-                const mode = getMode(scores);
-                const stdDev = getStdDev(scores).toFixed(2);
-                const cov = getCoV(scores).toFixed(2);
-
-                statsText = `\nWin Streak: ${streak}\n7-Day Avg: ${avg7}\nMed: ${median}\nMo: ${mode}\nσ: ${stdDev}\nCoV: ${cov}`;
+                statsText = `\nWin Streak: ${streak}\n7-Day Avg: ${avg7}`;
             }
         }
 
@@ -554,21 +568,11 @@ const Game = () => {
         }
 
         let yesterdayText = "";
-        if (yesterdayStats) {
-            yesterdayText += "\n\n--- Yesterday's Stats ---\n";
-            if (yesterdayStats.scores && Object.keys(yesterdayStats.scores).length > 0) {
-                const parts = [];
-                ["1", "2", "3", "4", "5", "6", "X"].forEach(s => {
-                    parts.push(`${s}: ${yesterdayStats.scores[s] || 0}`);
-                });
-                yesterdayText += parts.join(" | ") + "\n";
-            }
-            if (yesterdayStats.mostCommonWrongGuess) {
-                yesterdayText += `Most common wrong guess: ${yesterdayStats.mostCommonWrongGuess.guess}\n`;
-            }
-            if (yesterdayStats.fastestWin) {
-                yesterdayText += `Best win: ${yesterdayStats.fastestWin.name} (${yesterdayStats.fastestWin.score}/6)\n`;
-            }
+        if (yesterdayStats && yesterdayStats.winners && yesterdayStats.winners.length > 0) {
+            const winnersList = yesterdayStats.winners
+                .map(w => `${w.name} (${w.score})`)
+                .join(", ");
+            yesterdayText = `\n\nwinners yesterday: ${winnersList}`;
         }
 
         const textToShare = `I ${verb} today's Dudle (${friendlyDate}) ${score}/6:\n\n${resultEmoji}\n\n${window.location.href}${statsText}${yesterdayText}`;
@@ -717,37 +721,14 @@ const Game = () => {
                                 >
                                     PLAY CONNECTUNES
                                 </button>
-                                {yesterdayStats && (
+                                {yesterdayStats && yesterdayStats.winners && yesterdayStats.winners.length > 0 && (
                                     <div style={{ marginTop: "16px", textAlign: "left", fontSize: "11px", color: "#00ff00", borderTop: "1px dotted #00ff00", paddingTop: "8px" }}>
-                                        <div style={{ textAlign: "center", marginBottom: "8px" }}>--- YESTERDAY'S STATS ---</div>
-                                        {yesterdayStats.scores && Object.keys(yesterdayStats.scores).length > 0 && (
-                                            <div style={{ marginBottom: "8px" }}>
-                                                Scores: {" "}
-                                                {["1", "2", "3", "4", "5", "6", "X"].map(s => (
-                                                    <span key={s} style={{ marginRight: "4px" }}>
-                                                        {s}: {yesterdayStats.scores[s] || 0}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                        )}
-                                        {yesterdayStats.mostCommonWrongGuess && (
-                                            <div style={{ marginBottom: "8px" }}>
-                                                Most common wrong guess:<br/>
-                                                <span style={{ color: "#fff" }}>
-                                                    {yesterdayStats.mostCommonWrongGuess.guess}
-                                                </span>
-                                                {" "}({yesterdayStats.mostCommonWrongGuess.count} times)
-                                            </div>
-                                        )}
-                                        {yesterdayStats.fastestWin && (
-                                            <div>
-                                                Best win:<br/>
-                                                <span style={{ color: "#fff" }}>
-                                                    {yesterdayStats.fastestWin.name}
-                                                </span>
-                                                {" "}({yesterdayStats.fastestWin.score}/6)
-                                            </div>
-                                        )}
+                                        <div style={{ marginBottom: "4px" }}>winners yesterday:</div>
+                                        <div style={{ color: "#fff" }}>
+                                            {yesterdayStats.winners
+                                                .map(w => `${w.name} (${w.score})`)
+                                                .join(", ")}
+                                        </div>
                                     </div>
                                 )}
                             </div>
