@@ -110,4 +110,22 @@ describe('Search integration (real iTunes API)', () => {
       seen.add(dedupKey);
     });
   }, TIMEOUT_MS);
+
+  test('"pirates of the caribbean" with He\'s a Pirate correctTrack does not leak the answer as an unfair hint', async () => {
+    if (!requireReachable()) return;
+    const fetched = await search('pirates of the caribbean');
+    const correctTrack = { songTitle: "He's a Pirate", artistName: 'Hans Zimmer' };
+    const out = processSearchResults(fetched, 'pirates of the caribbean', correctTrack);
+    const leak = out.some(t => {
+      const cleanTitle = t.trackName
+        .replace(/\s*\([^)]*\)/g, '')
+        .replace(/\s*\[[^\]]*\]/g, '')
+        .split(' - ')[0]
+        .split(': ')[0]
+        .trim()
+        .toLowerCase();
+      return cleanTitle === "he's a pirate";
+    });
+    expect(leak).toBe(false);
+  }, TIMEOUT_MS);
 });
