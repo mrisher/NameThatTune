@@ -83,13 +83,13 @@ describe('processSearchResults', () => {
     expect(out[0].trackId).toBe('hans');
   });
 
-  test('injects the correctTrack synthetically when the query matches and iTunes did not return it', () => {
+  test('injects the correctTrack synthetically when the query covers the answer (full artist) and iTunes did not return it', () => {
     const fetched = [
       { trackId: '1', trackName: 'Super Mario (Trap Remix)', artistName: 'Trap Remix Guys' },
       { trackId: '2', trackName: 'Super Mario Land', artistName: 'Funny Minions Guys' },
     ];
     const correctTrack = { songTitle: 'Super Mario Bros. Theme', artistName: 'Koji Kondo' };
-    const out = processSearchResults(fetched, 'super mario', correctTrack);
+    const out = processSearchResults(fetched, 'koji kondo', correctTrack);
     const synthetic = out.find(t => t.isSynthetic);
     expect(synthetic).toBeDefined();
     expect(synthetic.trackName).toBe('Super Mario Bros. Theme');
@@ -101,7 +101,7 @@ describe('processSearchResults', () => {
       { trackId: '1', trackName: 'Super Mario Bros. Theme', artistName: 'Koji Kondo' },
     ];
     const correctTrack = { songTitle: 'Super Mario Bros. Theme', artistName: 'Koji Kondo' };
-    const out = processSearchResults(fetched, 'super mario', correctTrack);
+    const out = processSearchResults(fetched, 'koji kondo', correctTrack);
     expect(out.filter(t => t.isSynthetic)).toHaveLength(0);
     expect(out).toHaveLength(1);
   });
@@ -116,7 +116,7 @@ describe('processSearchResults', () => {
       { trackId: '6', trackName: 'Mario Underwater', artistName: 'Filler' },
     ];
     const correctTrack = { songTitle: 'Super Mario Bros. Theme', artistName: 'Koji Kondo' };
-    const out = processSearchResults(fetched, 'super mario', correctTrack);
+    const out = processSearchResults(fetched, 'koji kondo', correctTrack);
     expect(out).toHaveLength(MAX_RESULTS);
     expect(out[0].artistName).toBe('Koji Kondo');
     expect(out[0].isSynthetic).toBe(true);
@@ -140,13 +140,37 @@ describe('processSearchResults', () => {
       koji,
     ];
     const correctTrack = { songTitle: 'Super Mario Bros. Theme', artistName: 'Koji Kondo' };
-    const out = processSearchResults(fetched, 'super mario', correctTrack);
+    const out = processSearchResults(fetched, 'koji kondo', correctTrack);
     expect(out).toHaveLength(MAX_RESULTS);
     expect(out[0].trackId).toBe('koji');
     expect(out[0].isSynthetic).toBeUndefined();
     expect(out[0].previewUrl).toBe(koji.previewUrl);
     expect(out[0].artworkUrl100).toBe(koji.artworkUrl100);
     expect(out.filter(t => t.isSynthetic)).toHaveLength(0);
+  });
+
+  test('a 2+ meaningful-word query whose words all match title/artist tokens promotes the answer ("super mario kondo")', () => {
+    const fetched = [];
+    const correctTrack = { songTitle: 'Super Mario Bros. Theme', artistName: 'Koji Kondo' };
+    const out = processSearchResults(fetched, 'super mario kondo', correctTrack);
+    expect(out[0]).toMatchObject({
+      trackName: 'Super Mario Bros. Theme',
+      artistName: 'Koji Kondo',
+      isSynthetic: true,
+    });
+  });
+
+  test('a single distinctive query word does NOT promote a multi-word answer ("Mario" alone is not enough for "Super Mario Bros. Theme")', () => {
+    const fetched = [];
+    const correctTrack = { songTitle: 'Super Mario Bros. Theme', artistName: 'Koji Kondo' };
+    const out = processSearchResults(fetched, 'Mario', correctTrack);
+    expect(out.find(t => t.isSynthetic)).toBeUndefined();
+  });
+
+  test('a single short query word does NOT promote a multi-word answer ("go" alone is not enough for "Go West")', () => {
+    const correctTrack = { songTitle: 'Go West', artistName: 'Pet Shop Boys' };
+    const out = processSearchResults([], 'go', correctTrack);
+    expect(out.find(t => t.isSynthetic)).toBeUndefined();
   });
 
   test('does not inject when the query does not match the correct track', () => {
@@ -169,5 +193,19 @@ describe('processSearchResults', () => {
     const out = processSearchResults(fetched, 'i love pirate ships', correctTrack);
     expect(out.find(t => t.isSynthetic)).toBeUndefined();
     expect(out.map(t => t.trackId)).toEqual(['a']);
+  });
+
+  test('ignores short stopword-length tokens during matching but falls back when the entire query is short', () => {
+    const correctTrack = { songTitle: 'Go', artistName: 'Travis' };
+
+    // "i" and "a" alone shouldn't make a query "match" — they substring-match
+    // almost every title. Even though "go" is short, with no longer words in
+    // the query we still apply it and promote the answer.
+    const shortQuery = processSearchResults([], 'go', correctTrack);
+    expect(shortQuery[0]).toMatchObject({ trackName: 'Go', artistName: 'Travis', isSynthetic: true });
+
+    // "i a the" is all short tokens — no meaningful words in title/artist.
+    const stopwordsOnly = processSearchResults([], 'i a the', correctTrack);
+    expect(stopwordsOnly.find(t => t.isSynthetic)).toBeUndefined();
   });
 });

@@ -16,8 +16,15 @@ export const ITUNES_SEARCH_URL = (query) =>
 
 export const MAX_RESULTS = 5;
 
+// Skip stopword-length tokens (under MIN_MATCH_LEN chars) when matching the
+// query against the correct title/artist — short substrings like "i", "of",
+// "the" otherwise overlap almost anything.
+const MIN_MATCH_LEN = 3;
+
+const tokenize = (s) =>
+  s.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(w => w.length > 0);
+
 export function processSearchResults(fetchedResults, query, correctTrack) {
-  const qWords = query.toLowerCase().trim().split(/\s+/).filter(w => w.length > 0);
   let results = Array.isArray(fetchedResults) ? [...fetchedResults] : [];
 
   let correctTitle = null;
@@ -26,13 +33,27 @@ export function processSearchResults(fetchedResults, query, correctTrack) {
   if (correctTrack && correctTrack.songTitle && correctTrack.artistName) {
     correctTitle = normalizeTitle(correctTrack.songTitle);
     correctArtist = correctTrack.artistName.toLowerCase();
-    // AND across query words: every typed word must appear in the title or
-    // artist. Loose OR matching let one-word overlaps in long queries (e.g.
-    // "i love pirate ships" hitting "pirate") promote unrelated answers.
-    matchesCorrect = qWords.length > 0 && qWords.every(w =>
-      correctTrack.songTitle.toLowerCase().includes(w) ||
-      correctArtist.includes(w)
-    );
+
+    // matchesCorrect is true under any of three conditions, all using
+    // tokenized exact match (case-insensitive, punctuation stripped):
+    //   (a) The query has 2+ meaningful (>=3 char) words and every one of
+    //       them matches a title or artist token. Lets "super mario kondo"
+    //       or "wanna dance" through while excluding loose single-word
+    //       matches like "pirate" alone or "i love pirate ships".
+    //   (b) The query covers every token of the full title — supports
+    //       short/single-word titles like "Go" or "Hello".
+    //   (c) The query covers every token of the full artist.
+    const titleAllTokens = tokenize(correctTrack.songTitle);
+    const artistAllTokens = tokenize(correctTrack.artistName);
+    const titleArtistTokens = new Set([...titleAllTokens, ...artistAllTokens]);
+    const queryTokens = new Set(tokenize(query));
+    const queryMeaningful = [...queryTokens].filter(w => w.length >= MIN_MATCH_LEN);
+    const coversAll = (tokens) =>
+      tokens.length > 0 && tokens.every(w => queryTokens.has(w));
+    matchesCorrect =
+      (queryMeaningful.length >= 2 && queryMeaningful.every(w => titleArtistTokens.has(w))) ||
+      coversAll(titleAllTokens) ||
+      coversAll(artistAllTokens);
 
     // Filter entries whose normalized title matches the correct answer:
     //  - Drop lookalikes (same title, wrong artist) — e.g. Klaus Badelt's
