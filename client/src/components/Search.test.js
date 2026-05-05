@@ -25,16 +25,16 @@ describe('processSearchResults', () => {
     expect(out[0].trackId).toBe('o');
   });
 
-  test('collapses same-titled tracks across artists, keeping iTunes\' first entry', () => {
+  test('preserves two same-titled tracks from different artists (Adele\'s "Hello" vs Lionel Richie\'s)', () => {
     const fetched = [
-      { trackId: 'a', trackName: 'Sing', artistName: 'Ed Sheeran' },
-      { trackId: 'b', trackName: 'Sing', artistName: 'Travis' },
+      { trackId: 'adele', trackName: 'Hello', artistName: 'Adele' },
+      { trackId: 'lionel', trackName: 'Hello', artistName: 'Lionel Richie' },
     ];
-    const out = processSearchResults(fetched, 'sing');
-    expect(out.map(t => t.trackId)).toEqual(['a']);
+    const out = processSearchResults(fetched, 'hello');
+    expect(out.map(t => t.trackId)).toEqual(['adele', 'lionel']);
   });
 
-  test('collapses near-duplicate titles across artists (parens stripped) so spammy uploads do not crowd out other songs', () => {
+  test('collapses 3+ near-duplicate titles across artists (spammy uploader pattern), keeping iTunes\' first entry', () => {
     const fetched = [
       { trackId: 'a', trackName: 'Mario Brothers Theme', artistName: 'Uploader A' },
       { trackId: 'b', trackName: 'Mario Brothers Theme (Remix)', artistName: 'Uploader B' },
@@ -156,5 +156,18 @@ describe('processSearchResults', () => {
     const correctTrack = { songTitle: 'Super Mario Bros. Theme', artistName: 'Koji Kondo' };
     const out = processSearchResults(fetched, 'vogue', correctTrack);
     expect(out.filter(t => t.isSynthetic)).toHaveLength(0);
+  });
+
+  test('requires every query word to match (AND), not just any (OR), so loose overlap does not promote the answer', () => {
+    const fetched = [
+      { trackId: 'a', trackName: 'Sailing the Open Sea', artistName: 'Some Artist' },
+    ];
+    const correctTrack = { songTitle: "He's a Pirate", artistName: 'Hans Zimmer' };
+    // "pirate" (and "i") appear as substrings inside "he's a pirate", but the
+    // overall query is unrelated to the answer. Under OR matching this would
+    // promote the synthetic answer; under AND it must not.
+    const out = processSearchResults(fetched, 'i love pirate ships', correctTrack);
+    expect(out.find(t => t.isSynthetic)).toBeUndefined();
+    expect(out.map(t => t.trackId)).toEqual(['a']);
   });
 });

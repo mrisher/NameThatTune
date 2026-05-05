@@ -26,7 +26,10 @@ export function processSearchResults(fetchedResults, query, correctTrack) {
   if (correctTrack && correctTrack.songTitle && correctTrack.artistName) {
     correctTitle = normalizeTitle(correctTrack.songTitle);
     correctArtist = correctTrack.artistName.toLowerCase();
-    matchesCorrect = qWords.some(w =>
+    // AND across query words: every typed word must appear in the title or
+    // artist. Loose OR matching let one-word overlaps in long queries (e.g.
+    // "i love pirate ships" hitting "pirate") promote unrelated answers.
+    matchesCorrect = qWords.length > 0 && qWords.every(w =>
       correctTrack.songTitle.toLowerCase().includes(w) ||
       correctArtist.includes(w)
     );
@@ -61,14 +64,21 @@ export function processSearchResults(fetchedResults, query, correctTrack) {
   });
   results = Array.from(groups.values());
 
-  // Across artists, collapse near-duplicate titles. Keeping the iTunes-first
-  // entry per normalized title prunes spammy uploads like "Mario Brothers Theme",
-  // "Mario Brothers Theme (Remix)", etc., posted by different random accounts.
-  const seenTitles = new Set();
+  // Across artists, collapse only when 3+ entries share the same normalized
+  // title — that's the spammy-uploader pattern (random accounts re-posting
+  // "Mario Brothers Theme"). At 2 we keep both, since same-titled songs by
+  // distinct legit artists are common (Adele's "Hello" vs Lionel Richie's).
+  const titleCounts = new Map();
+  results.forEach(t => {
+    const k = normalizeTitle(t.trackName);
+    titleCounts.set(k, (titleCounts.get(k) || 0) + 1);
+  });
+  const seenSpammyTitles = new Set();
   results = results.filter(t => {
     const k = normalizeTitle(t.trackName);
-    if (seenTitles.has(k)) return false;
-    seenTitles.add(k);
+    if ((titleCounts.get(k) || 0) < 3) return true;
+    if (seenSpammyTitles.has(k)) return false;
+    seenSpammyTitles.add(k);
     return true;
   });
 
