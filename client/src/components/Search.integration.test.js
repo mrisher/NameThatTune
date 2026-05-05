@@ -1,9 +1,14 @@
 /**
  * Integration tests that hit the real iTunes Search API. Each case calls
  * processSearchResults with real iTunes response data and asserts the
- * resulting behavior. The suite probes iTunes once at startup; if the
- * network is restricted (sandbox, CI without egress) every case skips
- * cleanly rather than failing.
+ * resulting behavior.
+ *
+ * Behavior depending on environment:
+ *  - Locally / in sandboxes without iTunes egress: the suite probes once and
+ *    silently skips every case if iTunes is unreachable.
+ *  - In GitHub Actions (process.env.GITHUB_ACTIONS === 'true'): a probe
+ *    failure throws from beforeAll, failing the entire suite. A green CI
+ *    check therefore proves the assertions ran against live iTunes.
  *
  * Add a new case by appending to `cases` below — keep assertions loose
  * enough to survive Apple's catalog drift but tight enough to catch
@@ -49,8 +54,15 @@ beforeAll(async () => {
   try {
     await search('madonna');
     iTunesReachable = true;
+    process.stdout.write('[Search.integration] iTunes reachable — assertions will run against live API\n');
   } catch (e) {
-    console.warn(`[Search.integration] iTunes unreachable, skipping suite: ${e.message}`);
+    if (process.env.GITHUB_ACTIONS === 'true') {
+      throw new Error(
+        `iTunes unreachable in GitHub Actions — integration tests must run for real. ` +
+        `Probe failed: ${e.message}`
+      );
+    }
+    process.stdout.write(`[Search.integration] iTunes unreachable, skipping suite locally: ${e.message}\n`);
   }
 }, TIMEOUT_MS);
 
