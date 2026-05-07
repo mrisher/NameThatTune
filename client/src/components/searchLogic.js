@@ -11,6 +11,11 @@ const normalizeTitle = (name) => getCleanName(name).toLowerCase();
 
 const isVariant = (name) => name.toLowerCase().trim() !== normalizeTitle(name);
 
+const normalizeArtist = (artist) => {
+  // Take only the primary artist before any "feat.", "ft.", "&", or ","
+  return artist.toLowerCase().split(/\s+(feat\.?|ft\.?|&|,)\s+/)[0].trim();
+};
+
 export const ITUNES_SEARCH_URL = (query) =>
   `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&entity=song&limit=50&explicit=yes`;
 
@@ -70,10 +75,10 @@ export function processSearchResults(fetchedResults, query, correctTrack) {
     });
   }
 
-  // Within a single artist, prefer the variant-free entry over a remix/acoustic version.
+  // Within a single primary artist, prefer the variant-free entry over a remix/acoustic version.
   const groups = new Map();
   results.forEach(track => {
-    const key = `${track.artistName.toLowerCase()}|${normalizeTitle(track.trackName)}`;
+    const key = `${normalizeArtist(track.artistName)}|${normalizeTitle(track.trackName)}`;
     if (!groups.has(key)) {
       groups.set(key, track);
       return;

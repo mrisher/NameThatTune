@@ -11,21 +11,27 @@ def b64_decode(s):
 
 def fetch_url(artist, title):
     query = f"{artist} {title}"
-    url = f"https://itunes.apple.com/search?term={urllib.parse.quote(query)}&limit=5&media=music"
+    url = f"https://itunes.apple.com/search?term={urllib.parse.quote(query)}&limit=10&media=music"
     try:
         res = subprocess.check_output(['curl', '-s', url])
         if not res: return None
         data = json.loads(res.decode('utf-8', errors='ignore'))
         if 'results' in data and data['results']:
-            # Heuristic: avoid live/remix
-            best = data['results'][0]
+            # Heuristic: avoid live/remix, and avoid DRM .m4p files
             for c in data['results']:
                 t = c.get('trackName', '').lower()
-                if all(x not in t for x in ['live', 'remix', 'karaoke']):
-                    best = c
-                    break
-            return best.get('previewUrl')
-    except:
+                if any(x in t for x in ['live', 'remix', 'karaoke']):
+                    continue
+                
+                preview_url = c.get('previewUrl')
+                if not preview_url:
+                    continue
+
+                if preview_url.endswith('.m4p') or 'mzaf_2143209391192483819' in preview_url:
+                    continue
+
+                return preview_url
+    except Exception as e:
         return None
     return None
 
