@@ -593,7 +593,7 @@ const Game = () => {
             <>
                 <h1 className="dudle-header">DUDLE</h1>
                 <div style={{ color: "#00ff00", textAlign: "center", marginTop: "50px" }}>
-                    <h2>OUT OF SERVICE</h2>
+                    <h2>UNDER CONSTRUCTION</h2>
                     <p>The Dudle is currently out of songs for today.</p>
                     <p>Please come back later!</p>
                 </div>
