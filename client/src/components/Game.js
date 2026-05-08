@@ -299,8 +299,8 @@ const Game = () => {
                     if (state.media.timeElapsed !== lastTimeElapsed) {
                         lastTimeElapsed = state.media.timeElapsed;
                         lastTimeChangeTimestamp = now;
-                    } else if (now - lastTimeChangeTimestamp > 6000) {
-                        console.error("Audio playback stalled for 6s (URL likely invalid). Triggering Out of Service.");
+                    } else if (now - lastTimeChangeTimestamp > 3000) {
+                        console.error("Audio playback stalled for 3s (URL likely invalid). Triggering Out of Service.");
                         setTargetSong(prev => ({ ...prev, outOfService: true }));
                         clearInterval(stallInterval);
                     }

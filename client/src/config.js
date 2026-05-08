@@ -519,7 +519,7 @@ const rawSongs = [
     "day": "2026-05-07",
     "songTitle": "V2lsZCBIdXJzZXM=",
     "artistName": "VGhlIFJvbGxpbmcgU3RvbmVz",
-    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/2a/06/65/2a06657a-75cf-2487-e1b6-e4b42f4bfee9/mzaf_3872235870977535530.plus.aac.p.m4a",
+    "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview/broken-url-for-testing-stall-detector.m4a",
     "offset": 0
   },
   {

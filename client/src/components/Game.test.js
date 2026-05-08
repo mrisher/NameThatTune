@@ -171,12 +171,12 @@ describe('Game Share Functionality', () => {
       jest.advanceTimersByTime(1000);
     });
 
-    // Advance timers by 6+ seconds while timeElapsed stays at 0
+    // Advance timers by 3+ seconds while timeElapsed stays at 0
     act(() => {
-      jest.advanceTimersByTime(6500);
+      jest.advanceTimersByTime(3500);
     });
 
-    // After 6+ seconds of being "PLAYING" with timeElapsed stuck at 0, 
+    // After 3+ seconds of being "PLAYING" with timeElapsed stuck at 0, 
     // it should trigger outOfService.
     expect(await screen.findByText('UNDER CONSTRUCTION')).toBeInTheDocument();
     expect(screen.getByText(/The Dudle is currently out of songs for today/i)).toBeInTheDocument();
