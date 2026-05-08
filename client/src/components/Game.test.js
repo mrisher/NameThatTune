@@ -1,15 +1,17 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import Game from './Game';
 import { getFriendlyParisDate } from '../utils/stats';
+
+let mockWebampState = {
+  media: { status: 'STOPPED', timeElapsed: 0, length: 30 }
+};
 
 jest.mock('webamp', () => {
   class MockWebamp {
     constructor() {
       this.store = {
         subscribe: jest.fn(() => () => {}),
-        getState: jest.fn(() => ({
-          media: { status: 'STOPPED', timeElapsed: 0 }
-        })),
+        getState: jest.fn(() => mockWebampState),
         dispatch: jest.fn()
       };
     }
@@ -19,6 +21,7 @@ jest.mock('webamp', () => {
     seekToTime = jest.fn();
     stop = jest.fn();
     setTracksToPlay = jest.fn();
+    pause = jest.fn();
   }
   return MockWebamp;
 });
@@ -37,6 +40,8 @@ describe('Game Share Functionality', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     localStorage.clear();
+    mockWebampState = { media: { status: 'STOPPED', timeElapsed: 0, length: 30 } };
+    
     // Reset fetch
     global.fetch = jest.fn(() =>
       Promise.resolve({
@@ -147,7 +152,36 @@ describe('Game Share Functionality', () => {
     skipBtn = await screen.findByRole('button', { name: /^SKIP/ });
     expect(skipBtn).toHaveTextContent('SKIP (+1s)');
 
-    // We can also verify that the jump button is now disabled
+    // We can also verify that the jump button is disabled
     expect(jumpBtn).toBeDisabled();
   });
+
+  it('triggers outOfService when playback stalls for more than 6 seconds', async () => {
+    jest.useFakeTimers();
+    
+    render(<Game />);
+    
+    // Ensure normal render first
+    expect(await screen.findByText('DUDLE')).toBeInTheDocument();
+    expect(screen.queryByText('UNDER CONSTRUCTION')).not.toBeInTheDocument();
+    
+    // Simulate webamp starting to play
+    act(() => {
+      mockWebampState = { media: { status: 'PLAYING', timeElapsed: 0, length: 30 } };
+      jest.advanceTimersByTime(1000);
+    });
+
+    // Advance timers by 6+ seconds while timeElapsed stays at 0
+    act(() => {
+      jest.advanceTimersByTime(6500);
+    });
+
+    // After 6+ seconds of being "PLAYING" with timeElapsed stuck at 0, 
+    // it should trigger outOfService.
+    expect(await screen.findByText('UNDER CONSTRUCTION')).toBeInTheDocument();
+    expect(screen.getByText(/The Dudle is currently out of songs for today/i)).toBeInTheDocument();
+    
+    jest.useRealTimers();
+  });
 });
+
