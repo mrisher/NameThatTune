@@ -108,7 +108,8 @@ export default function ConnecTunes() {
           setPlayingIndex(null);
         }, SAMPLE_LENGTH_MS);
       }).catch(err => {
-        console.error("Audio play failed:", err);
+        console.error("Audio play failed (URL likely invalid):", err);
+        setTargetDay(prev => ({ ...prev, outOfService: true }));
       });
     } else {
       setPlayCounts(prev => {
