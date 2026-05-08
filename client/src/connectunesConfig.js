@@ -1397,7 +1397,7 @@ const rawConnectunesSongs = [
       {
         "songTitle": "Um9ja2V0IE1hbg==",
         "artistName": "RWx0b24gSm9obg==",
-        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/09/33/33/09333333-3333-3333-3333-333333333333/mzaf_1354444444444444444.plus.aac.p.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/8c/09/6d/8c096da7-10b6-422b-51b6-f1f97a66380d/mzaf_5290536375751623365.plus.aac.p.m4a"
       }
     ]
   },
@@ -1422,7 +1422,7 @@ const rawConnectunesSongs = [
       {
         "songTitle": "R28gWW91ciBPd24gV2F5",
         "artistName": "RmxlZXR3b29kIE1hYw==",
-        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/81/1b/0e/811b0e3a-2693-9934-9994-999499949994/mzaf_1354444444444444444.plus.aac.p.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d1/37/68/d1376853-ec1e-cce0-4ac9-2e98fc9d9c51/mzaf_7672022765745493173.plus.aac.p.m4a"
       }
     ]
   },
@@ -1442,12 +1442,12 @@ const rawConnectunesSongs = [
       {
         "songTitle": "RHJlYW1z",
         "artistName": "RmxlZXR3b29kIE1hYw==",
-        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/7e/8e/8e/7e8e8e8e-8e8e-8e8e-8e8e-8e8e8e8e8e8e/mzaf_1354444444444444444.plus.aac.p.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/cb/87/29/cb872937-bebb-f309-821e-5459a873f1b6/mzaf_13232595752463797281.plus.aac.p.m4a"
       },
       {
         "songTitle": "U3dlZXQgQ2Fyb2xpbmU=",
         "artistName": "TmVpbCBEaWFtb25k",
-        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/0c/66/66/0c666666-6666-6666-6666-666666666666/mzaf_1354444444444444444.plus.aac.p.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/3b/5f/ed/3b5fedd7-e603-2bb6-92eb-598570796849/mzaf_4289799664177677527.plus.aac.p.m4a"
       }
     ]
   },
@@ -1622,7 +1622,7 @@ const rawConnectunesSongs = [
       {
         "songTitle": "Um9ja2V0IE1hbg==",
         "artistName": "RWx0b24gSm9obg==",
-        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/09/33/33/09333333-3333-3333-3333-333333333333/mzaf_1354444444444444444.plus.aac.p.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/8c/09/6d/8c096da7-10b6-422b-51b6-f1f97a66380d/mzaf_5290536375751623365.plus.aac.p.m4a"
       }
     ]
   },
@@ -1647,7 +1647,7 @@ const rawConnectunesSongs = [
       {
         "songTitle": "R28gWW91ciBPd24gV2F5",
         "artistName": "RmxlZXR3b29kIE1hYw==",
-        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/81/1b/0e/811b0e3a-2693-9934-9994-999499949994/mzaf_1354444444444444444.plus.aac.p.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d1/37/68/d1376853-ec1e-cce0-4ac9-2e98fc9d9c51/mzaf_7672022765745493173.plus.aac.p.m4a"
       }
     ]
   },
@@ -1667,12 +1667,12 @@ const rawConnectunesSongs = [
       {
         "songTitle": "RHJlYW1z",
         "artistName": "RmxlZXR3b29kIE1hYw==",
-        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/7e/8e/8e/7e8e8e8e-8e8e-8e8e-8e8e-8e8e8e8e8e8e/mzaf_1354444444444444444.plus.aac.p.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/cb/87/29/cb872937-bebb-f309-821e-5459a873f1b6/mzaf_13232595752463797281.plus.aac.p.m4a"
       },
       {
         "songTitle": "U3dlZXQgQ2Fyb2xpbmU=",
         "artistName": "TmVpbCBEaWFtb25k",
-        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/0c/66/66/0c666666-6666-6666-6666-666666666666/mzaf_1354444444444444444.plus.aac.p.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/3b/5f/ed/3b5fedd7-e603-2bb6-92eb-598570796849/mzaf_4289799664177677527.plus.aac.p.m4a"
       }
     ]
   },
@@ -1847,7 +1847,7 @@ const rawConnectunesSongs = [
       {
         "songTitle": "Um9ja2V0IE1hbg==",
         "artistName": "RWx0b24gSm9obg==",
-        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/09/33/33/09333333-3333-3333-3333-333333333333/mzaf_1354444444444444444.plus.aac.p.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/8c/09/6d/8c096da7-10b6-422b-51b6-f1f97a66380d/mzaf_5290536375751623365.plus.aac.p.m4a"
       }
     ]
   },
@@ -1872,7 +1872,7 @@ const rawConnectunesSongs = [
       {
         "songTitle": "R28gWW91ciBPd24gV2F5",
         "artistName": "RmxlZXR3b29kIE1hYw==",
-        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/81/1b/0e/811b0e3a-2693-9934-9994-999499949994/mzaf_1354444444444444444.plus.aac.p.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d1/37/68/d1376853-ec1e-cce0-4ac9-2e98fc9d9c51/mzaf_7672022765745493173.plus.aac.p.m4a"
       }
     ]
   },
@@ -1892,12 +1892,12 @@ const rawConnectunesSongs = [
       {
         "songTitle": "RHJlYW1z",
         "artistName": "RmxlZXR3b29kIE1hYw==",
-        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/7e/8e/8e/7e8e8e8e-8e8e-8e8e-8e8e-8e8e8e8e8e8e/mzaf_1354444444444444444.plus.aac.p.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/cb/87/29/cb872937-bebb-f309-821e-5459a873f1b6/mzaf_13232595752463797281.plus.aac.p.m4a"
       },
       {
         "songTitle": "U3dlZXQgQ2Fyb2xpbmU=",
         "artistName": "TmVpbCBEaWFtb25k",
-        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/0c/66/66/0c666666-6666-6666-6666-666666666666/mzaf_1354444444444444444.plus.aac.p.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/3b/5f/ed/3b5fedd7-e603-2bb6-92eb-598570796849/mzaf_4289799664177677527.plus.aac.p.m4a"
       }
     ]
   },
