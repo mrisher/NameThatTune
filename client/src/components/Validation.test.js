@@ -60,6 +60,18 @@ describe('validateGuess with Real Logic', () => {
         expect(validateGuess(targetSong, guess, Fuse)).toBe("red");
     });
 
+    test('matches "Santa Tell Me" as green even if target is "Santa Tell Me (Remix ft. Dua Lipa)"', () => {
+        const complexTarget = {
+            artistName: "Ariana Grande",
+            songTitle: "Santa Tell Me (Remix ft. Dua Lipa)"
+        };
+        const guess = {
+            artistName: "Ariana Grande",
+            trackName: "Santa Tell Me"
+        };
+        expect(validateGuess(complexTarget, guess, Fuse)).toBe("green");
+    });
+
     test('matches correctly when artist is right but title is wrong', () => {
         const guess = {
             artistName: "Ariana Grande",
