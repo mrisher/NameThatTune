@@ -3,6 +3,7 @@ import Webamp from "webamp";
 import Search from "./Search";
 import { songs } from "../config";
 import Fuse from "fuse.js";
+import { validateGuess, STOPWORDS } from "./searchLogic";
 import {
     getParisDateString,
     getFriendlyParisDate,
@@ -378,52 +379,7 @@ const Game = () => {
     const handleGuess = (selectedTrack) => {
         if (!targetSong) return;
 
-        const normalizeFuzzy = (str) =>
-            str
-                .toLowerCase()
-                .replace(/\([^)]*\)/g, "")
-                .replace(/\[[^\]]*\]/g, "")
-                .replace(/[^\w\s]/g, "")
-                .trim();
-
-        const normalizeExact = (str) => str.toLowerCase().trim();
-
-        const targetArtistFuzzy = normalizeFuzzy(targetSong.artistName);
-        const targetTitleFuzzy = normalizeFuzzy(targetSong.songTitle);
-        const guessArtistFuzzy = normalizeFuzzy(selectedTrack.artistName || "");
-        const guessTitleFuzzy = normalizeFuzzy(selectedTrack.trackName || "");
-
-        const targetArtistExact = normalizeExact(targetSong.artistName);
-        const targetTitleExact = normalizeExact(targetSong.songTitle);
-        const guessArtistExact = normalizeExact(selectedTrack.artistName || "");
-        const guessTitleExact = normalizeExact(selectedTrack.trackName || "");
-
-        const options = { includeScore: true, threshold: 0.4 };
-
-        const artistFuse = new Fuse([targetArtistFuzzy], options);
-        const titleFuse = new Fuse([targetTitleFuzzy], options);
-
-        const isArtistFuzzy =
-            targetArtistFuzzy === guessArtistFuzzy ||
-            targetArtistFuzzy.includes(guessArtistFuzzy) ||
-            guessArtistFuzzy.includes(targetArtistFuzzy) ||
-            artistFuse.search(guessArtistFuzzy).length > 0;
-
-        const isTitleFuzzy =
-            targetTitleFuzzy === guessTitleFuzzy ||
-            targetTitleFuzzy.includes(guessTitleFuzzy) ||
-            guessTitleFuzzy.includes(targetTitleFuzzy) ||
-            titleFuse.search(guessTitleFuzzy).length > 0;
-
-        const isArtistExact = targetArtistExact === guessArtistExact;
-        const isTitleExact = targetTitleExact === guessTitleExact;
-
-        let status = "red";
-        if (isTitleExact && isArtistExact) {
-            status = "green";
-        } else if (isArtistFuzzy || isTitleFuzzy) {
-            status = "yellow";
-        }
+        const status = validateGuess(targetSong, selectedTrack, Fuse);
 
         const newGuesses = [...guesses, { ...selectedTrack, status }];
         setGuesses(newGuesses);
@@ -462,14 +418,11 @@ const Game = () => {
     const handleHint = () => {
         if (!targetSong) return;
 
-        // Hint logic
-        const stopwords = ["the", "a", "an", "and", "or", "of", "in", "to", "for", "with", "on", "at", "by", "from", "is", "it", "that", "this", "but", "not"];
-
         // Title words
         const titleWords = targetSong.songTitle
             .replace(/[^\w\s]/g, "")
             .split(/\s+/)
-            .filter(word => word.length > 0 && !stopwords.includes(word.toLowerCase()));
+            .filter(word => word.length > 0 && !STOPWORDS.includes(word.toLowerCase()));
 
         // Artist hint
         let artistForHint = targetSong.artistName;

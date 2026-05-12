@@ -19,10 +19,74 @@ export const MAX_RESULTS = 5;
 // Skip stopword-length tokens (under MIN_MATCH_LEN chars) when matching the
 // query against the correct title/artist — short substrings like "i", "of",
 // "the" otherwise overlap almost anything.
-const MIN_MATCH_LEN = 3;
+export const MIN_MATCH_LEN = 3;
+
+export const STOPWORDS = ["the", "a", "an", "and", "or", "of", "in", "to", "for", "with", "on", "at", "by", "from", "is", "it", "that", "this", "but", "not", "me", "my", "you", "your", "its", "was", "were", "has", "have", "had"];
 
 const tokenize = (s) =>
   s.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(w => w.length > 0);
+
+export function validateGuess(targetSong, selectedTrack, Fuse) {
+  const targetArtistClean = targetSong.artistName.toLowerCase().trim();
+  const targetTitleClean = normalizeTitle(targetSong.songTitle);
+  const guessArtistClean = (selectedTrack.artistName || "").toLowerCase().trim();
+  const guessTitleClean = normalizeTitle(selectedTrack.trackName || "");
+
+  if (targetTitleClean === guessTitleClean && targetArtistClean === guessArtistClean) {
+    return "green";
+  }
+
+  const normalizeFuzzy = (str) =>
+    str
+      .toLowerCase()
+      .replace(/[^\w\s]/g, "")
+      .trim();
+
+  const targetArtistFuzzy = normalizeFuzzy(targetSong.artistName);
+  const targetTitleFuzzy = normalizeFuzzy(targetSong.songTitle);
+  const guessArtistFuzzy = normalizeFuzzy(selectedTrack.artistName || "");
+  const guessTitleFuzzy = normalizeFuzzy(selectedTrack.trackName || "");
+
+  const isMeaningful = (s) => s.length >= MIN_MATCH_LEN && !STOPWORDS.includes(s.toLowerCase());
+
+  const checkFuzzy = (guess, target, FuseCtor) => {
+    if (!guess || !target) return false;
+    if (guess === target) return true;
+
+    // Substring match: only if guess is meaningful
+    if (target.includes(guess) && isMeaningful(guess)) return true;
+
+    // Superstring match: guess contains target. 
+    // Penalize if guess has extra meaningful words that are NOT in target.
+    if (guess.includes(target)) {
+      const gTokens = tokenize(guess);
+      const tTokens = new Set(tokenize(target));
+      const extraMeaningful = gTokens.filter(w => !tTokens.has(w) && isMeaningful(w));
+      return extraMeaningful.length === 0;
+    }
+
+    // Fuse match: stricter threshold and require at least one meaningful word overlap
+    if (FuseCtor) {
+      const fuse = new FuseCtor([target], { threshold: 0.35 });
+      if (fuse.search(guess).length > 0) {
+        const gTokens = tokenize(guess);
+        const tTokens = new Set(tokenize(target));
+        return gTokens.some(w => tTokens.has(w) && isMeaningful(w));
+      }
+    }
+
+    return false;
+  };
+
+  const artistMatch = checkFuzzy(guessArtistFuzzy, targetArtistFuzzy, Fuse);
+  const titleMatch = checkFuzzy(guessTitleFuzzy, targetTitleFuzzy, Fuse);
+
+  if (artistMatch || titleMatch) {
+    return "yellow";
+  }
+
+  return "red";
+}
 
 export function processSearchResults(fetchedResults, query, correctTrack) {
   let results = Array.isArray(fetchedResults) ? [...fetchedResults] : [];
