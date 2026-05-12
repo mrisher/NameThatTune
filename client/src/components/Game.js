@@ -3,6 +3,7 @@ import Webamp from "webamp";
 import Search from "./Search";
 import { songs } from "../config";
 import Fuse from "fuse.js";
+import { validateGuess, STOPWORDS } from "./searchLogic";
 import {
     getParisDateString,
     getFriendlyParisDate,
@@ -378,52 +379,7 @@ const Game = () => {
     const handleGuess = (selectedTrack) => {
         if (!targetSong) return;
 
-        const normalizeFuzzy = (str) =>
-            str
-                .toLowerCase()
-                .replace(/\([^)]*\)/g, "")
-                .replace(/\[[^\]]*\]/g, "")
-                .replace(/[^\w\s]/g, "")
-                .trim();
-
-        const normalizeExact = (str) => str.toLowerCase().trim();
-
-        const targetArtistFuzzy = normalizeFuzzy(targetSong.artistName);
-        const targetTitleFuzzy = normalizeFuzzy(targetSong.songTitle);
-        const guessArtistFuzzy = normalizeFuzzy(selectedTrack.artistName || "");
-        const guessTitleFuzzy = normalizeFuzzy(selectedTrack.trackName || "");
-
-        const targetArtistExact = normalizeExact(targetSong.artistName);
-        const targetTitleExact = normalizeExact(targetSong.songTitle);
-        const guessArtistExact = normalizeExact(selectedTrack.artistName || "");
-        const guessTitleExact = normalizeExact(selectedTrack.trackName || "");
-
-        const options = { includeScore: true, threshold: 0.4 };
-
-        const artistFuse = new Fuse([targetArtistFuzzy], options);
-        const titleFuse = new Fuse([targetTitleFuzzy], options);
-
-        const isArtistFuzzy =
-            targetArtistFuzzy === guessArtistFuzzy ||
-            targetArtistFuzzy.includes(guessArtistFuzzy) ||
-            guessArtistFuzzy.includes(targetArtistFuzzy) ||
-            artistFuse.search(guessArtistFuzzy).length > 0;
-
-        const isTitleFuzzy =
-            targetTitleFuzzy === guessTitleFuzzy ||
-            targetTitleFuzzy.includes(guessTitleFuzzy) ||
-            guessTitleFuzzy.includes(targetTitleFuzzy) ||
-            titleFuse.search(guessTitleFuzzy).length > 0;
-
-        const isArtistExact = targetArtistExact === guessArtistExact;
-        const isTitleExact = targetTitleExact === guessTitleExact;
-
-        let status = "red";
-        if (isTitleExact && isArtistExact) {
-            status = "green";
-        } else if (isArtistFuzzy || isTitleFuzzy) {
-            status = "yellow";
-        }
+        const status = validateGuess(targetSong, selectedTrack, Fuse);
 
         const newGuesses = [...guesses, { ...selectedTrack, status }];
         setGuesses(newGuesses);
@@ -462,14 +418,11 @@ const Game = () => {
     const handleHint = () => {
         if (!targetSong) return;
 
-        // Hint logic
-        const stopwords = ["the", "a", "an", "and", "or", "of", "in", "to", "for", "with", "on", "at", "by", "from", "is", "it", "that", "this", "but", "not"];
-
         // Title words
         const titleWords = targetSong.songTitle
             .replace(/[^\w\s]/g, "")
             .split(/\s+/)
-            .filter(word => word.length > 0 && !stopwords.includes(word.toLowerCase()));
+            .filter(word => word.length > 0 && !STOPWORDS.includes(word.toLowerCase()));
 
         // Artist hint
         let artistForHint = targetSong.artistName;
@@ -580,13 +533,13 @@ const Game = () => {
         const getRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
         let verb = "played";
         if (gameState === "won") {
-            if (score === 1) verb = getRandom(["crushed", "demolished", "destroyed", "aced", "nailed", "obliterated", "dominated", "totally qwerted", "decimated", "absolutely styled on", "dismantled", "flexed on", "speedran", "pulled a Rafael Devers on", "went deep over the Green Monster on"]);
-            else if (score <= 3) verb = getRandom(["won", "beat", "conquered", "solved", "bested", "triumphed over", "handled", "outsmarted", "finessed", "took care of", "breezed through", "painted the corners on"]);
-            else if (score === 4) verb = getRandom(["eeked by on", "squeaked by on", "scraped by on", "managed to beat", "muddled through", "stumbled my way through", "fumbled successfully through", "sweatily beat", "won extra innings against"]);
-            else if (score === 5) verb = getRandom(["barely made it on", "survived", "just about got", "limped past", "lived to tell the tale on", "almost threw on", "clung to dear life on", "bumbled my way past", "dug deep on"]);
-            else if (score === 6) verb = getRandom(["narrowly escaped defeat on", "pulled off a miracle on", "escaped by the skin of my teeth on", "clutched up on", "survived", "sweated bullets on", "defied all odds on", "snatched victory from the jaws of defeat on", "Dave Roberts stolen base'd my way past", "came back from 3-0 down against"]);
+            if (score === 1) verb = getRandom(["was in perfect harmony with", "hit a high note on", "composed a masterpiece on", "was instrumental in beating", "conducted a clinic on", "hit a grand slam (not the baseball kind) on", "played first chair on", "was pitch-perfect on", "cranked the volume to 11 on", "unlocked the secret track on", "never missed a beat in", "started on a high note in", "rocked the world in", "flaunted my flawless scales in", "drummed up some excitement in"]);
+            else if (score <= 3) verb = getRandom(["found the rhythm on", "stayed on beat for", "soundchecked", "tuned up on", "headlined", "remixed", "amplified", "orchestrated a win on", "jammed out to", "trebled my way through", "made sound decisions in", "scaled up"]);
+            else if (score === 4) verb = getRandom(["stayed in the groove on", "didn't miss a beat on", "slow-danced through", "found the right key on", "harmonized with", "improvised a win on", "kept the tempo on", "scratched the surface of", "played it by ear in", "rolled with the rhythm in"]);
+            else if (score === 5) verb = getRandom(["barely made the encore on", "survived the mosh pit on", "strummed past", "limped to the finish line on", "beat the drum for", "was a bit sharp/flat on", "almost hit a sour note on", "fumbled the sheet music for", "bassed it out in", "strummed up some courage for"]);
+            else if (score === 6) verb = getRandom(["narrowly escaped the gong on", "pulled a miracle out of the hat on", "clutched the final chord on", "barely heard the music on", "just about stayed in tune for", "sweated through the solo on", "found the hidden track on", "survived the feedback on", "dodged the flat notes in", "conducted myself even in treble during"]);
         } else {
-            verb = getRandom(["whiffed on", "got housed by", "screwed the pooch on", "did a Jeter on", "bombed", "got completely stumped by", "took an L on", "fumbled the bag on", "choked on", "got absolutely washed by", "got absolutely cooked by", "faceplanted on", "epic failed", "pulled a Bill Buckner on", "got Aaron Judge'd by", "struck out looking against Gerrit Cole on", "got Giancarlo Stanton'd by", "got spaghettified by", "succumbed to the gravity of", "experienced total entropy on", "fell into a black hole on", "got absolutely railed by", "couldn't get it up for", "finished prematurely on", "got screwed over by"]);
+            verb = getRandom(["got gonged by", "was totally tone-deaf on", "broke a string on", "forgot the lyrics to", "hit a sour note on", "got stage fright on", "was out of sync with", "lost the beat on", "tanked the audition for", "got booed off the stage on", "experienced technical difficulties with", "got stuck in a loop on", "lost the sheet music for", "fumbled the mic on", "got upstaged by", "was a one-hit wonder on", "got drowned out by", "faced the music in", "missed the cue for", "was off-key for", "got skipped on", "blew the speakers on", "was in treble during", "hit a flat note in", "was out of tune in", "couldn't handle the pitch of", "sang the blues after", "took a wrong turn at B-flat in", "was tuning the wrong instrument in"]);
         }
 
         let yesterdayText = "";
