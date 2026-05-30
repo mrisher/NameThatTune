@@ -200,7 +200,10 @@ const Game = () => {
         const day = parts.find((p) => p.type === "day").value;
         const today = `${year}-${month}-${day}`;
 
-        fetch(`/api/daily?date=${today}`)
+        const isForceCold = params.get("forceCold") === "1";
+        const apiUrl = `/api/daily?date=${today}${isForceCold ? '&forceCold=1' : ''}`;
+
+        fetch(apiUrl)
             .then(res => res.json())
             .then(todaysSong => {
                 if (todaysSong.error) {
@@ -568,7 +571,35 @@ const Game = () => {
         }
     };
 
-    if (!targetSong) return <div style={{ color: "#00ff00" }}>LOADING...</div>;
+    if (!targetSong) {
+        return (
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh',
+                backgroundColor: '#000',
+                color: '#00ff00',
+                fontFamily: 'monospace'
+            }}>
+                <div className="unicode-spinner" style={{ fontSize: '24px', marginBottom: '10px' }}>
+                   ◌
+                </div>
+                <div>fetching today's song...</div>
+                <style>{`
+                    @keyframes spin {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                    }
+                    .unicode-spinner {
+                        animation: spin 1s linear infinite;
+                    }
+                `}</style>
+            </div>
+        );
+    }
+
 
     if (targetSong.outOfService || targetSong.audioUrl === "MISSING" || targetSong.audioUrl === "REPLACE_ME") {
         return (

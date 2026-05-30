@@ -145,7 +145,7 @@ app.get('/api/stats', async (req, res) => {
 
 app.get('/api/daily', async (req, res) => {
   try {
-    const { date } = req.query; // YYYY-MM-DD
+    const { date, forceCold } = req.query; // YYYY-MM-DD
     if (!date) return res.status(400).json({ error: "date is required" });
 
     // Phase 4: Background Update Check
@@ -190,29 +190,34 @@ app.get('/api/daily', async (req, res) => {
     // Phase 3: Firestore-based iTunes population
     // Use a hash of artist|title as document ID
     let audioUrl = "";
+    let isCold = forceCold === '1';
     try {
       const cacheId = Buffer.from(`${selected.artist}|${selected.song_title}`).toString('hex');
       const cacheRef = firestore.collection('song_cache').doc(cacheId);
       const cacheDoc = await cacheRef.get();
 
-      if (cacheDoc.exists) {
+      if (cacheDoc.exists && !isCold) {
         audioUrl = cacheDoc.data().audioUrl;
       } else {
+        isCold = true; // Cache miss or forced
         console.log(`Fetching iTunes URL for ${selected.artist} - ${selected.song_title}`);
         const itunes = await fetchItunesUrl(selected.artist, selected.song_title);
         if (itunes) {
           audioUrl = itunes.audioUrl;
-          await cacheRef.set({
-            artist: selected.artist,
-            songTitle: selected.song_title,
-            audioUrl: itunes.audioUrl,
-            itunesTrackId: itunes.itunesTrackId,
-            timestamp: Date.now()
-          }).catch(e => console.error("Failed to save to Firestore cache:", e));
+          if (forceCold !== '1') {
+            await cacheRef.set({
+              artist: selected.artist,
+              songTitle: selected.song_title,
+              audioUrl: itunes.audioUrl,
+              itunesTrackId: itunes.itunesTrackId,
+              timestamp: Date.now()
+            }).catch(e => console.error("Failed to save to Firestore cache:", e));
+          }
         }
       }
     } catch (e) {
       console.warn("Firestore cache access failed (likely local dev):", e.message);
+      isCold = true;
       // Fallback for local dev: fetch from iTunes but don't worry about caching
       const itunes = await fetchItunesUrl(selected.artist, selected.song_title);
       if (itunes) {
@@ -225,7 +230,8 @@ app.get('/api/daily', async (req, res) => {
       songTitle: selected.song_title,
       artistName: selected.artist,
       audioUrl: audioUrl,
-      offset: 0
+      offset: 0,
+      isCold: isCold
     });
   } catch (err) {
     console.error("Daily song failed:", err);
