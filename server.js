@@ -12,19 +12,27 @@ app.use(express.json());
 const PORT = process.env.PORT || 8080;
 
 const AGGREGATES_PATH = 'billboard_aggregates.parquet';
-const LAST_UPDATE_FILE = 'last_update.json';
 
 let db;
 async function initDb() {
   try {
-    db = await Database.create(':memory:');
-    // Load community extensions for advanced fuzzy search
-    await db.run("INSTALL rapidfuzz FROM community; LOAD rapidfuzz;");
+    // If db already exists, we are re-initializing (e.g. after background update)
+    if (db) {
+      await db.run("DROP TABLE IF EXISTS billboard_aggregates");
+    } else {
+      db = await Database.create(':memory:');
+      // Load community extensions for advanced fuzzy search
+      await db.run("INSTALL rapidfuzz FROM community; LOAD rapidfuzz;");
+    }
 
     // Load the parquet file into a table once at startup to improve query speed
-    // This reduces the 'cold start' overhead of reading the file for every request
-    await db.run(`CREATE TABLE billboard_aggregates AS SELECT * FROM '${AGGREGATES_PATH}'`);
-    console.log("Database initialized and Parquet data loaded into memory (with RapidFuzz).");
+    // Check /tmp first for background updates, then fallback to bundled file
+    const localPath = fs.existsSync(path.join('/tmp', AGGREGATES_PATH))
+      ? path.join('/tmp', AGGREGATES_PATH)
+      : path.join(__dirname, AGGREGATES_PATH);
+
+    await db.run(`CREATE TABLE billboard_aggregates AS SELECT * FROM '${localPath}'`);
+    console.log(`Database initialized and Parquet data loaded from ${localPath} into memory.`);
   } catch (err) {
     console.error("Failed to initialize database:", err);
   }
@@ -153,17 +161,31 @@ app.get('/api/daily', async (req, res) => {
 
     // Phase 4: Background Update Check
     let lastUpdate = 0;
-    if (fs.existsSync(LAST_UPDATE_FILE)) {
-      lastUpdate = JSON.parse(fs.readFileSync(LAST_UPDATE_FILE)).timestamp;
+    const updateRef = firestore.collection('app_metadata').doc('billboard_update');
+    try {
+      const updateDoc = await updateRef.get();
+      if (updateDoc.exists) {
+        lastUpdate = updateDoc.data().timestamp || 0;
+      }
+    } catch (e) {
+      console.warn("Failed to fetch last update from Firestore:", e.message);
     }
+
     const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
     if (Date.now() - lastUpdate > SEVEN_DAYS) {
       console.log("Triggering background billboard update...");
-      fs.writeFileSync(LAST_UPDATE_FILE, JSON.stringify({ timestamp: Date.now() }));
+      // Save timestamp to Firestore immediately to prevent concurrent triggers
+      await updateRef.set({ timestamp: Date.now() }, { merge: true }).catch(e => {
+        console.error("Failed to save update timestamp to Firestore:", e);
+      });
+
       // Run in background
       exec('python3 process_billboard.py', (err) => {
         if (err) console.error("Background update failed:", err);
-        else console.log("Background update successful.");
+        else {
+          console.log("Background update successful. Re-initializing database...");
+          initDb();
+        }
       });
     }
 
