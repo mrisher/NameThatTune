@@ -4,10 +4,11 @@ import os
 
 # Download latest if not present or for update
 CSV_URL = "https://raw.githubusercontent.com/utdata/rwd-billboard-data/main/data-out/hot-100-current.csv"
-CSV_FILE = "billboard_hot_100.csv"
+TEMP_DIR = "/tmp" if os.path.exists("/tmp") else "."
+CSV_FILE = os.path.join(TEMP_DIR, "billboard_hot_100.csv")
 
 def download_csv():
-    print(f"Downloading {CSV_URL}...")
+    print(f"Downloading {CSV_URL} to {CSV_FILE}...")
     subprocess.run(["curl", "-L", CSV_URL, "-o", CSV_FILE], check=True)
 
 def process():
@@ -27,7 +28,7 @@ def process():
     df_filtered['points'] = 101 - df_filtered['current_week']
 
     # 1. Raw Filtered Data
-    df_filtered.to_parquet('billboard_1980_present.parquet', index=False)
+    df_filtered.to_parquet(os.path.join(TEMP_DIR, 'billboard_1980_present.parquet'), index=False)
 
     # 2. Aggregates for All Songs
     aggregates = df_filtered.groupby(['performer', 'title']).agg(
@@ -52,11 +53,11 @@ def process():
 
     # Save aggregates
     aggregates.columns = ['artist', 'song_title', 'highest_rank', 'weeks_on_chart', 'total_points', 'average_rank', 'first_appeared', 'last_appeared', 'peak_date', 'popularity_score', 'popularity_quartile', 'peak_year']
-    aggregates.to_parquet('billboard_aggregates.parquet', index=False)
+    aggregates.to_parquet(os.path.join(TEMP_DIR, 'billboard_aggregates.parquet'), index=False)
 
     print(f"Data range: {df_filtered.chart_week.min()} to {df_filtered.chart_week.max()}")
     print(f"Processed {len(aggregates)} unique songs.")
-    print("Saved billboard_1980_present.parquet and billboard_aggregates.parquet")
+    print(f"Saved billboard_1980_present.parquet and billboard_aggregates.parquet to {TEMP_DIR}")
     
     # Cleanup CSV
     if os.path.exists(CSV_FILE):
