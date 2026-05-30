@@ -1,4 +1,3 @@
-import { songs } from './config';
 import { connectunesSongs } from './connectunesConfig';
 
 describe('Song List Capacity', () => {
@@ -21,10 +20,6 @@ describe('Song List Capacity', () => {
       throw new Error(`${name} is missing songs for the following days: ${missingDays.join(', ')}`);
     }
   };
-
-  test('Main game has enough songs for the next 30 days', () => {
-    checkCapacity(songs, 'Main Game');
-  });
 
   test('ConnecTunes has enough songs for the next 30 days', () => {
     checkCapacity(connectunesSongs, 'ConnecTunes');

@@ -21,9 +21,28 @@ jest.mock('webamp', () => {
   return MockWebamp;
 });
 
-test('renders winamp playlist', () => {
-  // Use a mock route environment or just test App mounts since it handles its own routing
+test('renders winamp playlist', async () => {
+  // Mock fetch locally for this test
+  global.fetch = jest.fn((url) => {
+    if (url.includes('/api/daily')) {
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({
+          day: '2026-05-26',
+          songTitle: 'Mock Song',
+          artistName: 'Mock Artist',
+          audioUrl: 'https://example.com/mock.m4a',
+          offset: 0
+        })
+      });
+    }
+    return Promise.resolve({
+      ok: true,
+      json: () => Promise.resolve({ scores: {}, winners: [] })
+    });
+  });
+
   render(<App />);
-  const linkElements = screen.getAllByText(/GUESSES/i);
+  const linkElements = await screen.findAllByText(/GUESSES/i);
   expect(linkElements.length).toBeGreaterThan(0);
 });
