@@ -305,8 +305,8 @@ const Game = () => {
             const stallInterval = setInterval(() => {
                 if (!webampRef.current) return;
                 const state = webampRef.current.store.getState();
-                // ONLY check for stalls if the user has actually attempted to play at least once
-                if (state.media.status === "PLAYING" && playCountRef.current > 0) {
+                // ONLY check for stalls if the game is active AND the user has attempted to play
+                if (gameStateRef.current === "playing" && state.media.status === "PLAYING" && playCountRef.current > 0) {
                     const now = Date.now();
                     if (lastTimeChangeTimestamp === null) {
                         lastTimeChangeTimestamp = now;
