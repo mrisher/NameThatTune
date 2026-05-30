@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Webamp from "webamp";
 import Search from "./Search";
-import { songs } from "../config";
 import Fuse from "fuse.js";
 import { validateGuess, STOPWORDS } from "./searchLogic";
 import {
@@ -51,10 +50,8 @@ const Game = () => {
     const [hasJumped, setHasJumped] = useState(false);
     const [jumpOffset, setJumpOffset] = useState(0);
     const [songDuration, setSongDuration] = useState(0);
-    const [isDebug, setIsDebug] = useState(false);
     const [showShareModal, setShowShareModal] = useState(false);
     const [shareText, setShareText] = useState("");
-    const [scale, setScale] = useState(1);
     const [yesterdayStats, setYesterdayStats] = useState(null);
     const [userName, setUserName] = useState(localStorage.getItem("dudle_name") || "");
     const [isSavingName, setIsSavingName] = useState(false);
@@ -99,7 +96,6 @@ const Game = () => {
             if (window.innerWidth <= 600) {
                 currentScale = window.innerWidth / 275;
             }
-            setScale(currentScale);
             document.documentElement.style.setProperty(
                 "--webamp-scale",
                 currentScale,
@@ -167,7 +163,7 @@ const Game = () => {
                 }
             }
         }
-    }, [gameState]); // guesses is stable when gameState changes to won/lost in this app's flow
+    }, [gameState, guesses]); // guesses is stable when gameState changes to won/lost in this app's flow
 
     const handleSaveName = async () => {
         setIsSavingName(true);
@@ -191,7 +187,7 @@ const Game = () => {
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
-        setIsDebug(params.get("debug") === "1");
+        // setIsDebug(params.get("debug") === "1");
 
         const parts = new Intl.DateTimeFormat("en-US", {
             timeZone: "Europe/Paris",
@@ -203,28 +199,42 @@ const Game = () => {
         const month = parts.find((p) => p.type === "month").value;
         const day = parts.find((p) => p.type === "day").value;
         const today = `${year}-${month}-${day}`;
-        setCurrentDay(today);
 
-        const savedStateJson = localStorage.getItem("dudle_saved_state");
-        if (savedStateJson) {
-            try {
-                const savedState = JSON.parse(savedStateJson);
-                if (savedState.date === today) {
-                    setGuesses(savedState.guesses);
-                    setGameState(savedState.gameState);
-                    setHasJumped(savedState.hasJumped);
-                    setJumpOffset(savedState.jumpOffset);
-                    setUnlockDuration(savedState.unlockDuration);
-                } else {
-                    localStorage.removeItem("dudle_saved_state");
+        const isForceCold = params.get("forceCold") === "1";
+        const apiUrl = `/api/daily?date=${today}${isForceCold ? '&forceCold=1' : ''}`;
+
+        fetch(apiUrl)
+            .then(res => res.json())
+            .then(todaysSong => {
+                if (todaysSong.error) {
+                    setTargetSong({ outOfService: true });
+                    return;
                 }
-            } catch (e) {
-                console.error("Error parsing saved state", e);
-            }
-        }
+                setTargetSong(todaysSong);
+                setCurrentDay(today);
 
-        const todaysSong = songs.find((s) => s.day === today) || { outOfService: true };
-        setTargetSong(todaysSong);
+                const savedStateJson = localStorage.getItem("dudle_saved_state");
+                if (savedStateJson) {
+                    try {
+                        const savedState = JSON.parse(savedStateJson);
+                        if (savedState.date === today) {
+                            setGuesses(savedState.guesses);
+                            setGameState(savedState.gameState);
+                            setHasJumped(savedState.hasJumped);
+                            setJumpOffset(savedState.jumpOffset);
+                            setUnlockDuration(savedState.unlockDuration);
+                        } else {
+                            localStorage.removeItem("dudle_saved_state");
+                        }
+                    } catch (e) {
+                        console.error("Error parsing saved state", e);
+                    }
+                }
+            })
+            .catch(err => {
+                console.error("Error fetching daily song:", err);
+                setTargetSong({ outOfService: true });
+            });
 
         // Fetch yesterday's stats
         const yesterdayDate = new Date();
@@ -289,24 +299,28 @@ const Game = () => {
             let lastSeekTime = 0;
             let lastStatus = null;
             let lastTimeElapsed = -1;
-            let lastTimeChangeTimestamp = Date.now();
+            let lastTimeChangeTimestamp = null;
 
             // Stall detector: if playhead fails to advance while PLAYING, it's a broken URL
             const stallInterval = setInterval(() => {
                 if (!webampRef.current) return;
                 const state = webampRef.current.store.getState();
-                if (state.media.status === "PLAYING") {
+                // ONLY check for stalls if the game is active AND the user has attempted to play
+                if (gameStateRef.current === "playing" && state.media.status === "PLAYING" && playCountRef.current > 0) {
                     const now = Date.now();
+                    if (lastTimeChangeTimestamp === null) {
+                        lastTimeChangeTimestamp = now;
+                    }
                     if (state.media.timeElapsed !== lastTimeElapsed) {
                         lastTimeElapsed = state.media.timeElapsed;
                         lastTimeChangeTimestamp = now;
-                    } else if (now - lastTimeChangeTimestamp > 3000) {
-                        console.error("Audio playback stalled for 3s (URL likely invalid). Triggering Out of Service.");
+                    } else if (now - lastTimeChangeTimestamp > 6000) { // 6s threshold
+                        console.error("Audio playback stalled for 6s (URL likely invalid). Triggering Out of Service.");
                         setTargetSong(prev => ({ ...prev, outOfService: true }));
                         clearInterval(stallInterval);
                     }
                 } else {
-                    lastTimeChangeTimestamp = Date.now();
+                    lastTimeChangeTimestamp = null;
                 }
             }, 1000);
 
@@ -356,7 +370,7 @@ const Game = () => {
                 webampRef.current = null;
             };
         }
-    }, [targetSong]);
+    }, [targetSong, jumpOffset, unlockDuration, gameState]);
 
     useEffect(() => {
         if ((gameState === "won" || gameState === "lost") && targetSong && webampRef.current) {
@@ -561,7 +575,40 @@ const Game = () => {
         }
     };
 
-    if (!targetSong) return <div style={{ color: "#00ff00" }}>LOADING...</div>;
+    if (!targetSong) {
+        return (
+            <div style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                width: '100vw',
+                height: '100vh',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: '#000',
+                color: '#00ff00',
+                fontFamily: 'monospace',
+                zIndex: 9999
+            }}>
+                <div className="unicode-spinner" style={{ fontSize: '24px', marginBottom: '10px' }}>
+                   ◌
+                </div>
+                <div>fetching today's song...</div>
+                <style>{`
+                    @keyframes spin {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                    }
+                    .unicode-spinner {
+                        animation: spin 1s linear infinite;
+                    }
+                `}</style>
+            </div>
+        );
+    }
+
 
     if (targetSong.outOfService || targetSong.audioUrl === "MISSING" || targetSong.audioUrl === "REPLACE_ME") {
         return (

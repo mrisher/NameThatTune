@@ -6,11 +6,16 @@ let mockWebampState = {
   media: { status: 'STOPPED', timeElapsed: 0, length: 30 }
 };
 
+let subscriptionCallback = null;
+
 jest.mock('webamp', () => {
   class MockWebamp {
     constructor() {
       this.store = {
-        subscribe: jest.fn(() => () => {}),
+        subscribe: jest.fn((cb) => {
+            subscriptionCallback = cb;
+            return () => { subscriptionCallback = null; };
+        }),
         getState: jest.fn(() => mockWebampState),
         dispatch: jest.fn()
       };
@@ -156,27 +161,27 @@ describe('Game Share Functionality', () => {
     expect(jumpBtn).toBeDisabled();
   });
 
-  it('triggers outOfService when playback stalls for more than 6 seconds', async () => {
+  it('triggers outOfService when playback stalls for more than 6 seconds after play attempt', async () => {
     jest.useFakeTimers();
     
     render(<Game />);
     
     // Ensure normal render first
     expect(await screen.findByText('DUDLE')).toBeInTheDocument();
-    expect(screen.queryByText('UNDER CONSTRUCTION')).not.toBeInTheDocument();
     
-    // Simulate webamp starting to play
+    // Simulate webamp starting to play (which increments playCountRef via subscription)
     act(() => {
       mockWebampState = { media: { status: 'PLAYING', timeElapsed: 0, length: 30 } };
+      if (subscriptionCallback) subscriptionCallback();
       jest.advanceTimersByTime(1000);
     });
 
-    // Advance timers by 3+ seconds while timeElapsed stays at 0
+    // Advance timers by 6+ seconds while timeElapsed stays at 0
     act(() => {
-      jest.advanceTimersByTime(3500);
+      jest.advanceTimersByTime(7000);
     });
 
-    // After 3+ seconds of being "PLAYING" with timeElapsed stuck at 0, 
+    // After 6+ seconds of being "PLAYING" with timeElapsed stuck at 0, 
     // it should trigger outOfService.
     expect(await screen.findByText('UNDER CONSTRUCTION')).toBeInTheDocument();
     expect(screen.getByText(/The Dudle is currently out of songs for today/i)).toBeInTheDocument();

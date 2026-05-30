@@ -5,3 +5,4 @@ client/build/
 verification/
 test_output.txt
 *.log
+last_update.json

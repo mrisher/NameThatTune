@@ -2,11 +2,66 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const { Firestore } = require('@google-cloud/firestore');
+const { Database } = require('duckdb-async');
+const seedrandom = require('seedrandom');
+const { execSync, exec } = require('child_process');
 
 const app = express();
 app.use(express.json());
 
 const PORT = process.env.PORT || 8080;
+
+const AGGREGATES_PATH = 'billboard_aggregates.parquet';
+const LAST_UPDATE_FILE = 'last_update.json';
+
+let db;
+async function initDb() {
+  try {
+    db = await Database.create(':memory:');
+    // Load community extensions for advanced fuzzy search
+    await db.run("INSTALL rapidfuzz FROM community; LOAD rapidfuzz;");
+
+    // Load the parquet file into a table once at startup to improve query speed
+    // This reduces the 'cold start' overhead of reading the file for every request
+    await db.run(`CREATE TABLE billboard_aggregates AS SELECT * FROM '${AGGREGATES_PATH}'`);
+    console.log("Database initialized and Parquet data loaded into memory (with RapidFuzz).");
+  } catch (err) {
+    console.error("Failed to initialize database:", err);
+  }
+}
+initDb();
+
+function getHistory() {
+  try {
+    const configContent = fs.readFileSync(path.join(__dirname, 'client/src/config.js'), 'utf8');
+    // Simple regex to extract artistName and songTitle from rawSongs array
+    const matches = [...configContent.matchAll(/"songTitle":\s*"([^"]+)",\s*"artistName":\s*"([^"]+)"/g)];
+    return matches.slice(-28).map(m => ({
+      title: Buffer.from(m[1], 'base64').toString(),
+      artist: Buffer.from(m[2], 'base64').toString()
+    }));
+  } catch (e) {
+    console.error("Error reading history from config:", e);
+    return [];
+  }
+}
+
+async function fetchItunesUrl(artist, title) {
+  const query = `${artist} ${title}`;
+  const url = `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&limit=5&media=music`;
+  try {
+    const res = execSync(`curl -s "${url}"`).toString();
+    const data = JSON.parse(res);
+    if (data.results && data.results.length > 0) {
+      // Lexical matching: pick the one with the shortest name as a proxy for "cleanest"
+      const bestMatch = data.results.sort((a, b) => a.trackName.length - b.trackName.length)[0];
+      return { audioUrl: bestMatch.previewUrl, trackId: bestMatch.trackId };
+    }
+  } catch (e) {
+    console.error("iTunes fetch failed:", e);
+  }
+  return null;
+}
 
 const firestore = new Firestore({
   ignoreUndefinedProperties: true,
@@ -88,6 +143,149 @@ app.get('/api/stats', async (req, res) => {
        return res.json({ scores: {} });
     }
     res.status(500).json({ error: "Failed to fetch stats" });
+  }
+});
+
+app.get('/api/daily', async (req, res) => {
+  try {
+    const { date, forceCold } = req.query; // YYYY-MM-DD
+    if (!date) return res.status(400).json({ error: "date is required" });
+
+    // Phase 4: Background Update Check
+    let lastUpdate = 0;
+    if (fs.existsSync(LAST_UPDATE_FILE)) {
+      lastUpdate = JSON.parse(fs.readFileSync(LAST_UPDATE_FILE)).timestamp;
+    }
+    const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
+    if (Date.now() - lastUpdate > SEVEN_DAYS) {
+      console.log("Triggering background billboard update...");
+      fs.writeFileSync(LAST_UPDATE_FILE, JSON.stringify({ timestamp: Date.now() }));
+      // Run in background
+      exec('python3 process_billboard.py', (err) => {
+        if (err) console.error("Background update failed:", err);
+        else console.log("Background update successful.");
+      });
+    }
+
+    // Seeded PRNG for song selection
+    const rng = seedrandom(date);
+    const history = getHistory(); // Seed cooldown with last 4 weeks of config
+    
+    // Fetch all Q2 candidates from the loaded table
+    const candidates = await db.all(
+      `SELECT artist, song_title FROM billboard_aggregates WHERE popularity_quartile = 2`
+    );
+
+    if (candidates.length === 0) {
+        return res.status(500).json({ error: "No candidates found in database" });
+    }
+
+    let selected;
+    let attempts = 0;
+    while (attempts < 100) {
+      const idx = Math.floor(rng() * candidates.length);
+      selected = candidates[idx];
+      const inHistory = history.some(h => h.title === selected.song_title && h.artist === selected.artist);
+      if (!inHistory) break;
+      attempts++;
+    }
+
+    // Phase 3: Firestore-based iTunes population
+    // Use a hash of artist|title as document ID
+    let audioUrl = "";
+    let isCold = forceCold === '1';
+    try {
+      const cacheId = Buffer.from(`${selected.artist}|${selected.song_title}`).toString('hex');
+      const cacheRef = firestore.collection('song_cache').doc(cacheId);
+      const cacheDoc = await cacheRef.get();
+
+      if (cacheDoc.exists && !isCold) {
+        audioUrl = cacheDoc.data().audioUrl;
+      } else {
+        isCold = true; // Cache miss or forced
+        console.log(`Fetching iTunes URL for ${selected.artist} - ${selected.song_title}`);
+        const itunes = await fetchItunesUrl(selected.artist, selected.song_title);
+        if (itunes) {
+          audioUrl = itunes.audioUrl;
+          if (forceCold !== '1') {
+            await cacheRef.set({
+              artist: selected.artist,
+              songTitle: selected.song_title,
+              audioUrl: itunes.audioUrl,
+              itunesTrackId: itunes.itunesTrackId,
+              timestamp: Date.now()
+            }).catch(e => console.error("Failed to save to Firestore cache:", e));
+          }
+        }
+      }
+    } catch (e) {
+      console.warn("Firestore cache access failed (likely local dev):", e.message);
+      isCold = true;
+      // Fallback for local dev: fetch from iTunes but don't worry about caching
+      const itunes = await fetchItunesUrl(selected.artist, selected.song_title);
+      if (itunes) {
+        audioUrl = itunes.audioUrl;
+      }
+    }
+
+    res.json({
+      day: date,
+      songTitle: selected.song_title,
+      artistName: selected.artist,
+      audioUrl: audioUrl,
+      offset: 0,
+      isCold: isCold
+    });
+  } catch (err) {
+    console.error("Daily song failed:", err);
+    res.status(500).json({ error: "Failed to generate daily song" });
+  }
+});
+
+app.get('/api/search', async (req, res) => {
+  try {
+    if (!db) {
+      return res.status(503).json({ error: "Database not ready" });
+    }
+    const { q } = req.query;
+    if (!q) {
+      return res.status(400).json({ error: "query is required" });
+    }
+
+    // Use RapidFuzz for powerful fuzzy matching and ranking
+    // 1. partial_ratio is great for "staying" -> "Stayin' Alive"
+    // 2. token_set_ratio is great for "guns and roses" -> "Guns N' Roses"
+    const cleanQ = q.toLowerCase().replace(/[^a-z0-9\s]/g, '');
+    let results = await db.all(
+      `SELECT artist as artistName, song_title as trackName, total_points,
+          greatest(
+            rapidfuzz_partial_ratio(regexp_replace(lower(artistName), '[^a-z0-9\\s]', '', 'g'), ?),
+            rapidfuzz_partial_ratio(regexp_replace(lower(trackName), '[^a-z0-9\\s]', '', 'g'), ?),
+            rapidfuzz_token_set_ratio(regexp_replace(lower(artistName), '[^a-z0-9\\s]', '', 'g'), ?),
+            rapidfuzz_token_set_ratio(regexp_replace(lower(trackName), '[^a-z0-9\\s]', '', 'g'), ?)
+          ) as score
+       FROM billboard_aggregates 
+       WHERE score > 80 OR (artistName ILIKE ? OR trackName ILIKE ?)
+       ORDER BY score DESC, total_points DESC 
+       LIMIT 5`,
+      cleanQ, cleanQ, cleanQ, cleanQ, `%${q}%`, `%${q}%`
+    );
+
+    // Convert BigInts to Numbers for JSON serialization
+    results = results.map(row => {
+      const newRow = { ...row };
+      for (const key in newRow) {
+        if (typeof newRow[key] === 'bigint') {
+          newRow[key] = Number(newRow[key]);
+        }
+      }
+      return newRow;
+    });
+
+    res.json(results);
+  } catch (err) {
+    console.error("Error during search:", err);
+    res.status(500).json({ error: "Search failed" });
   }
 });
 
