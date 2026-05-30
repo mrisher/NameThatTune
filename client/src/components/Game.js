@@ -59,6 +59,9 @@ const Game = () => {
     const [showHintModal, setShowHintModal] = useState(false);
     const [currentHint, setCurrentHint] = useState("");
     const [currentDay, setCurrentDay] = useState(null);
+    const [yesterdayObscurity, setYesterdayObscurity] = useState(null);
+    const [yesterdayBillboard, setYesterdayBillboard] = useState(null);
+    const [yesterdaySong, setYesterdaySong] = useState(null);
 
     const webampRef = useRef(null);
     const webampContainerRef = useRef(null);
@@ -236,14 +239,32 @@ const Game = () => {
                 setTargetSong({ outOfService: true });
             });
 
-        // Fetch yesterday's stats
+        // Fetch yesterday's stats and obscurity
         const yesterdayDate = new Date();
         yesterdayDate.setDate(yesterdayDate.getDate() - 1);
         const yesterdayStr = getParisDateString(yesterdayDate);
+        
+        // Fetch yesterday's obscurity rating and Billboard stats
+        fetch(`/api/daily?date=${yesterdayStr}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data && data.obscurity) {
+                    setYesterdayObscurity(data.obscurity);
+                }
+                if (data && data.peak && data.weeks) {
+                    setYesterdayBillboard({ peak: data.peak, weeks: data.weeks, year: data.year });
+                }
+                if (data && data.songTitle) {
+                    setYesterdaySong({ title: data.songTitle, artist: data.artistName });
+                }
+            })
+            .catch(err => console.error("Error fetching yesterday's info:", err));
+
+        // Fetch yesterday's community stats
         fetch(`/api/stats?date=${yesterdayStr}`)
             .then(res => res.json())
             .then(data => {
-                if (data && data.winners && data.winners.length > 0) {
+                if (data && ((data.winners && data.winners.length > 0) || (data.scores && Object.keys(data.scores).length > 0))) {
                     setYesterdayStats(data);
                 }
             })
@@ -557,11 +578,46 @@ const Game = () => {
         }
 
         let yesterdayText = "";
-        if (yesterdayStats && yesterdayStats.winners && yesterdayStats.winners.length > 0) {
-            const winnersList = yesterdayStats.winners
-                .map(w => `${w.name} (${w.score})`)
-                .join(", ");
-            yesterdayText = `\n\nwinners yesterday: ${winnersList}`;
+        if (yesterdayStats) {
+            let winnersList = "";
+            if (yesterdayStats.winners && yesterdayStats.winners.length > 0) {
+                winnersList = `\nwinners yesterday: ` + yesterdayStats.winners
+                    .map(w => `${w.name} (${w.score})`)
+                    .join(", ");
+            }
+
+            let communityAnalysis = "";
+            if (yesterdayStats.scores && Object.keys(yesterdayStats.scores).length > 0) {
+                const scores = yesterdayStats.scores;
+                let totalPlays = 0;
+                let totalWins = 0;
+                let weightedSum = 0;
+
+                Object.keys(scores).forEach(s => {
+                    const count = scores[s];
+                    totalPlays += count;
+                    if (s !== "X") {
+                        totalWins += count;
+                        weightedSum += parseInt(s) * count;
+                    } else {
+                        weightedSum += 7 * count; // Count losses as 7 for average
+                    }
+                });
+
+                if (totalPlays > 0) {
+                    const winRate = Math.round((totalWins / totalPlays) * 100);
+                    const avgScore = (weightedSum / totalPlays).toFixed(1);
+                    const obscurity = "💪".repeat(yesterdayObscurity || 0) || "?";
+                    
+                    let billboardText = "";
+                    if (yesterdayBillboard && yesterdaySong) {
+                        billboardText = `Yesterday: "${yesterdaySong.title}" ${obscurity} (${yesterdayBillboard.year}, Peak #${yesterdayBillboard.peak}, ${yesterdayBillboard.weeks} wks in Top 100)`;
+                    }
+
+                    communityAnalysis = `\n${billboardText}\nComm Avg: ${avgScore} (${winRate}% Win)`;
+                }
+            }
+            yesterdayText = communityAnalysis + winnersList;
         }
 
         const textToShare = `I ${verb} today's Dudle (${friendlyDate}) ${score}/6:\n\n${resultEmoji}\n\n${window.location.href}${statsText}${yesterdayText}`;
@@ -626,6 +682,9 @@ const Game = () => {
     return (
         <>
             <h1 className="dudle-header">DUDLE</h1>
+            <div className="obscurity-rating">
+                Obscurity: {"💪".repeat(targetSong.obscurity || 0) || "?"}
+            </div>
             <div className="dudle-container">
                 <div className="left-column">
                     <div id="webamp-container" ref={webampContainerRef}></div>
@@ -743,14 +802,44 @@ const Game = () => {
                                 >
                                     PLAY CONNECTUNES
                                 </button>
-                                {yesterdayStats && yesterdayStats.winners && yesterdayStats.winners.length > 0 && (
+                                {yesterdayStats && (
                                     <div style={{ marginTop: "16px", textAlign: "left", fontSize: "11px", color: "#00ff00", borderTop: "1px dotted #00ff00", paddingTop: "8px" }}>
-                                        <div style={{ marginBottom: "4px" }}>winners yesterday:</div>
-                                        <div style={{ color: "#fff" }}>
-                                            {yesterdayStats.winners
-                                                .map(w => `${w.name} (${w.score})`)
-                                                .join(", ")}
-                                        </div>
+                                        {yesterdayStats.scores && Object.keys(yesterdayStats.scores).length > 0 && (() => {
+                                            const scores = yesterdayStats.scores;
+                                            let totalPlays = 0;
+                                            let totalWins = 0;
+                                            let weightedSum = 0;
+                                            Object.keys(scores).forEach(s => {
+                                                const count = scores[s];
+                                                totalPlays += count;
+                                                if (s !== "X") {
+                                                    totalWins += count;
+                                                    weightedSum += parseInt(s) * count;
+                                                } else {
+                                                    weightedSum += 7 * count;
+                                                }
+                                            });
+                                            if (totalPlays === 0) return null;
+                                            const winRate = Math.round((totalWins / totalPlays) * 100);
+                                            const avgScore = (weightedSum / totalPlays).toFixed(1);
+                                            const songName = yesterdaySong ? `${yesterdaySong.title}` : "Yesterday's Song";
+                                            return (
+                                                <div style={{ marginBottom: "8px", borderBottom: "1px solid #333", paddingBottom: "4px" }}>
+                                                    <div>{songName}: {"💪".repeat(yesterdayObscurity || 0) || "?"}</div>
+                                                    <div>Comm Avg: {avgScore} ({winRate}% Win)</div>
+                                                </div>
+                                            );
+                                        })()}
+                                        {yesterdayStats.winners && yesterdayStats.winners.length > 0 && (
+                                            <>
+                                                <div style={{ marginBottom: "4px" }}>winners yesterday:</div>
+                                                <div style={{ color: "#fff" }}>
+                                                    {yesterdayStats.winners
+                                                        .map(w => `${w.name} (${w.score})`)
+                                                        .join(", ")}
+                                                </div>
+                                            </>
+                                        )}
                                     </div>
                                 )}
                             </div>
