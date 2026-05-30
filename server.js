@@ -11,14 +11,22 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 8080;
 
-let db;
-async function initDb() {
-  db = await Database.create(':memory:');
-}
-initDb();
-
 const AGGREGATES_PATH = 'billboard_aggregates.parquet';
 const LAST_UPDATE_FILE = 'last_update.json';
+
+let db;
+async function initDb() {
+  try {
+    db = await Database.create(':memory:');
+    // Load the parquet file into a table once at startup to improve query speed
+    // This reduces the 'cold start' overhead of reading the file for every request
+    await db.run(`CREATE TABLE billboard_aggregates AS SELECT * FROM '${AGGREGATES_PATH}'`);
+    console.log("Database initialized and Parquet data loaded into memory.");
+  } catch (err) {
+    console.error("Failed to initialize database:", err);
+  }
+}
+initDb();
 
 function getHistory() {
   try {
@@ -160,9 +168,9 @@ app.get('/api/daily', async (req, res) => {
     const rng = seedrandom(date);
     const history = getHistory(); // Seed cooldown with last 4 weeks of config
     
-    // Fetch all Q2 candidates (Medium Difficulty)
+    // Fetch all Q2 candidates from the loaded table
     const candidates = await db.all(
-      `SELECT artist, song_title FROM '${AGGREGATES_PATH}' WHERE popularity_quartile = 2`
+      `SELECT artist, song_title FROM billboard_aggregates WHERE popularity_quartile = 2`
     );
 
     if (candidates.length === 0) {
@@ -235,12 +243,12 @@ app.get('/api/search', async (req, res) => {
       return res.status(400).json({ error: "query is required" });
     }
 
-    // Use DuckDB to search the parquet file
+    // Use DuckDB to search the loaded table
     // We prioritize by total_points to show the most famous versions first
     let results = await db.all(
       `SELECT artist as artistName, song_title as trackName, total_points 
-       FROM 'billboard_aggregates.parquet' 
-       WHERE artist ILIKE ? OR song_title ILIKE ? 
+       FROM billboard_aggregates 
+       WHERE artistName ILIKE ? OR trackName ILIKE ? 
        ORDER BY total_points DESC 
        LIMIT 5`,
       `%${q}%`, `%${q}%`
