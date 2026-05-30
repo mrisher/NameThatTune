@@ -18,10 +18,13 @@ let db;
 async function initDb() {
   try {
     db = await Database.create(':memory:');
+    // Load community extensions for advanced fuzzy search
+    await db.run("INSTALL rapidfuzz FROM community; LOAD rapidfuzz;");
+
     // Load the parquet file into a table once at startup to improve query speed
     // This reduces the 'cold start' overhead of reading the file for every request
     await db.run(`CREATE TABLE billboard_aggregates AS SELECT * FROM '${AGGREGATES_PATH}'`);
-    console.log("Database initialized and Parquet data loaded into memory.");
+    console.log("Database initialized and Parquet data loaded into memory (with RapidFuzz).");
   } catch (err) {
     console.error("Failed to initialize database:", err);
   }
@@ -249,15 +252,23 @@ app.get('/api/search', async (req, res) => {
       return res.status(400).json({ error: "query is required" });
     }
 
-    // Use DuckDB to search the loaded table
-    // We prioritize by total_points to show the most famous versions first
+    // Use RapidFuzz for powerful fuzzy matching and ranking
+    // 1. partial_ratio is great for "staying" -> "Stayin' Alive"
+    // 2. token_set_ratio is great for "guns and roses" -> "Guns N' Roses"
+    const cleanQ = q.toLowerCase().replace(/[^a-z0-9\s]/g, '');
     let results = await db.all(
-      `SELECT artist as artistName, song_title as trackName, total_points 
+      `SELECT artist as artistName, song_title as trackName, total_points,
+          greatest(
+            rapidfuzz_partial_ratio(regexp_replace(lower(artistName), '[^a-z0-9\\s]', '', 'g'), ?),
+            rapidfuzz_partial_ratio(regexp_replace(lower(trackName), '[^a-z0-9\\s]', '', 'g'), ?),
+            rapidfuzz_token_set_ratio(regexp_replace(lower(artistName), '[^a-z0-9\\s]', '', 'g'), ?),
+            rapidfuzz_token_set_ratio(regexp_replace(lower(trackName), '[^a-z0-9\\s]', '', 'g'), ?)
+          ) as score
        FROM billboard_aggregates 
-       WHERE artistName ILIKE ? OR trackName ILIKE ? 
-       ORDER BY total_points DESC 
+       WHERE score > 80 OR (artistName ILIKE ? OR trackName ILIKE ?)
+       ORDER BY score DESC, total_points DESC 
        LIMIT 5`,
-      `%${q}%`, `%${q}%`
+      cleanQ, cleanQ, cleanQ, cleanQ, `%${q}%`, `%${q}%`
     );
 
     // Convert BigInts to Numbers for JSON serialization
