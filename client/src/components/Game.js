@@ -186,7 +186,7 @@ const Game = () => {
     };
 
     useEffect(() => {
-        // const params = new URLSearchParams(window.location.search);
+        const params = new URLSearchParams(window.location.search);
         // setIsDebug(params.get("debug") === "1");
 
         const parts = new Intl.DateTimeFormat("en-US", {
@@ -574,14 +574,19 @@ const Game = () => {
     if (!targetSong) {
         return (
             <div style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                width: '100vw',
+                height: '100vh',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
-                height: '100vh',
                 backgroundColor: '#000',
                 color: '#00ff00',
-                fontFamily: 'monospace'
+                fontFamily: 'monospace',
+                zIndex: 9999
             }}>
                 <div className="unicode-spinner" style={{ fontSize: '24px', marginBottom: '10px' }}>
                    ◌
