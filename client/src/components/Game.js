@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Webamp from "webamp";
 import Search from "./Search";
-import { songs } from "../config";
 import Fuse from "fuse.js";
 import { validateGuess, STOPWORDS } from "./searchLogic";
 import {
@@ -51,10 +50,8 @@ const Game = () => {
     const [hasJumped, setHasJumped] = useState(false);
     const [jumpOffset, setJumpOffset] = useState(0);
     const [songDuration, setSongDuration] = useState(0);
-    const [isDebug, setIsDebug] = useState(false);
     const [showShareModal, setShowShareModal] = useState(false);
     const [shareText, setShareText] = useState("");
-    const [scale, setScale] = useState(1);
     const [yesterdayStats, setYesterdayStats] = useState(null);
     const [userName, setUserName] = useState(localStorage.getItem("dudle_name") || "");
     const [isSavingName, setIsSavingName] = useState(false);
@@ -99,7 +96,6 @@ const Game = () => {
             if (window.innerWidth <= 600) {
                 currentScale = window.innerWidth / 275;
             }
-            setScale(currentScale);
             document.documentElement.style.setProperty(
                 "--webamp-scale",
                 currentScale,
@@ -167,7 +163,7 @@ const Game = () => {
                 }
             }
         }
-    }, [gameState]); // guesses is stable when gameState changes to won/lost in this app's flow
+    }, [gameState, guesses]); // guesses is stable when gameState changes to won/lost in this app's flow
 
     const handleSaveName = async () => {
         setIsSavingName(true);
@@ -190,8 +186,8 @@ const Game = () => {
     };
 
     useEffect(() => {
-        const params = new URLSearchParams(window.location.search);
-        setIsDebug(params.get("debug") === "1");
+        // const params = new URLSearchParams(window.location.search);
+        // setIsDebug(params.get("debug") === "1");
 
         const parts = new Intl.DateTimeFormat("en-US", {
             timeZone: "Europe/Paris",
@@ -203,28 +199,39 @@ const Game = () => {
         const month = parts.find((p) => p.type === "month").value;
         const day = parts.find((p) => p.type === "day").value;
         const today = `${year}-${month}-${day}`;
-        setCurrentDay(today);
 
-        const savedStateJson = localStorage.getItem("dudle_saved_state");
-        if (savedStateJson) {
-            try {
-                const savedState = JSON.parse(savedStateJson);
-                if (savedState.date === today) {
-                    setGuesses(savedState.guesses);
-                    setGameState(savedState.gameState);
-                    setHasJumped(savedState.hasJumped);
-                    setJumpOffset(savedState.jumpOffset);
-                    setUnlockDuration(savedState.unlockDuration);
-                } else {
-                    localStorage.removeItem("dudle_saved_state");
+        fetch(`/api/daily?date=${today}`)
+            .then(res => res.json())
+            .then(todaysSong => {
+                if (todaysSong.error) {
+                    setTargetSong({ outOfService: true });
+                    return;
                 }
-            } catch (e) {
-                console.error("Error parsing saved state", e);
-            }
-        }
+                setTargetSong(todaysSong);
+                setCurrentDay(today);
 
-        const todaysSong = songs.find((s) => s.day === today) || { outOfService: true };
-        setTargetSong(todaysSong);
+                const savedStateJson = localStorage.getItem("dudle_saved_state");
+                if (savedStateJson) {
+                    try {
+                        const savedState = JSON.parse(savedStateJson);
+                        if (savedState.date === today) {
+                            setGuesses(savedState.guesses);
+                            setGameState(savedState.gameState);
+                            setHasJumped(savedState.hasJumped);
+                            setJumpOffset(savedState.jumpOffset);
+                            setUnlockDuration(savedState.unlockDuration);
+                        } else {
+                            localStorage.removeItem("dudle_saved_state");
+                        }
+                    } catch (e) {
+                        console.error("Error parsing saved state", e);
+                    }
+                }
+            })
+            .catch(err => {
+                console.error("Error fetching daily song:", err);
+                setTargetSong({ outOfService: true });
+            });
 
         // Fetch yesterday's stats
         const yesterdayDate = new Date();
@@ -356,7 +363,7 @@ const Game = () => {
                 webampRef.current = null;
             };
         }
-    }, [targetSong]);
+    }, [targetSong, jumpOffset, unlockDuration, gameState]);
 
     useEffect(() => {
         if ((gameState === "won" || gameState === "lost") && targetSong && webampRef.current) {

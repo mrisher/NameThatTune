@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { processSearchResults, ITUNES_SEARCH_URL } from './searchLogic';
 
 const Search = ({ onSelect, disabled, correctTrack }) => {
   const [query, setQuery] = useState('');
@@ -14,10 +13,10 @@ const Search = ({ onSelect, disabled, correctTrack }) => {
 
     const timer = setTimeout(() => {
       setLoading(true);
-      fetch(ITUNES_SEARCH_URL(query))
+      fetch(`/api/search?q=${encodeURIComponent(query)}`)
         .then(res => res.json())
         .then(data => {
-          setResults(processSearchResults(data.results || [], query, correctTrack));
+          setResults(data);
           setLoading(false);
         })
         .catch(err => {
@@ -50,7 +49,7 @@ const Search = ({ onSelect, disabled, correctTrack }) => {
         <ul className="search-menu">
           {results.map((track) => (
             <li
-              key={track.trackId}
+              key={`${track.trackName}-${track.artistName}`}
               onClick={() => handleSelect(track)}
             >
               <div style={{ fontSize: '14px' }}>
