@@ -299,24 +299,28 @@ const Game = () => {
             let lastSeekTime = 0;
             let lastStatus = null;
             let lastTimeElapsed = -1;
-            let lastTimeChangeTimestamp = Date.now();
+            let lastTimeChangeTimestamp = null;
 
             // Stall detector: if playhead fails to advance while PLAYING, it's a broken URL
             const stallInterval = setInterval(() => {
                 if (!webampRef.current) return;
                 const state = webampRef.current.store.getState();
-                if (state.media.status === "PLAYING") {
+                // ONLY check for stalls if the user has actually attempted to play at least once
+                if (state.media.status === "PLAYING" && playCountRef.current > 0) {
                     const now = Date.now();
+                    if (lastTimeChangeTimestamp === null) {
+                        lastTimeChangeTimestamp = now;
+                    }
                     if (state.media.timeElapsed !== lastTimeElapsed) {
                         lastTimeElapsed = state.media.timeElapsed;
                         lastTimeChangeTimestamp = now;
-                    } else if (now - lastTimeChangeTimestamp > 3000) {
-                        console.error("Audio playback stalled for 3s (URL likely invalid). Triggering Out of Service.");
+                    } else if (now - lastTimeChangeTimestamp > 6000) { // 6s threshold
+                        console.error("Audio playback stalled for 6s (URL likely invalid). Triggering Out of Service.");
                         setTargetSong(prev => ({ ...prev, outOfService: true }));
                         clearInterval(stallInterval);
                     }
                 } else {
-                    lastTimeChangeTimestamp = Date.now();
+                    lastTimeChangeTimestamp = null;
                 }
             }, 1000);
 
