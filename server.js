@@ -193,13 +193,24 @@ app.get('/api/daily', async (req, res) => {
     const rng = seedrandom(date);
     const history = getHistory(); // Seed cooldown with last 4 weeks of config
     
-    // Fetch all Q2 candidates from the loaded table
+    // Determine today's target obscurity based on distribution
+    // 30% L1 (Mega), 30% L2 (Major), 20% L3 (Moderate), 10% L4 (Lesser), 10% L5 (Deep Cut)
+    const roll = rng();
+    let targetObscurity = 3; 
+    if (roll < 0.30) targetObscurity = 1;
+    else if (roll < 0.60) targetObscurity = 2;
+    else if (roll < 0.80) targetObscurity = 3;
+    else if (roll < 0.90) targetObscurity = 4;
+    else targetObscurity = 5;
+
+    // Fetch all candidates from the loaded table that match target obscurity
     const candidates = await db.all(
-      `SELECT artist, song_title FROM billboard_aggregates WHERE popularity_quartile = 2`
+      `SELECT artist, song_title, obscurity, highest_rank, weeks_on_chart FROM billboard_aggregates WHERE obscurity = ?`,
+      targetObscurity
     );
 
     if (candidates.length === 0) {
-        return res.status(500).json({ error: "No candidates found in database" });
+        return res.status(500).json({ error: "No candidates found for target obscurity" });
     }
 
     let selected;
@@ -255,6 +266,10 @@ app.get('/api/daily', async (req, res) => {
       songTitle: selected.song_title,
       artistName: selected.artist,
       audioUrl: audioUrl,
+      obscurity: typeof selected.obscurity === 'bigint' ? Number(selected.obscurity) : selected.obscurity,
+      peak: selected.highest_rank,
+      weeks: selected.weeks_on_chart,
+      year: selected.peak_year,
       offset: 0,
       isCold: isCold
     });

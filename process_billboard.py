@@ -24,8 +24,8 @@ def process():
     max_date = df['chart_week'].max()
     df_filtered = df[(df['chart_week'] >= '1980-01-01')].copy()
 
-    # Add Chart Points (101 - Rank)
-    df_filtered['points'] = 101 - df_filtered['current_week']
+    # Add Chart Points (Peak-Weighted: 500 / (Rank + 4))
+    df_filtered['points'] = 500 / (df_filtered['current_week'] + 4)
 
     # 1. Raw Filtered Data
     df_filtered.to_parquet(os.path.join(TEMP_DIR, 'billboard_1980_present.parquet'), index=False)
@@ -45,14 +45,17 @@ def process():
     peak_dates = df_filtered.loc[idx_peak, ['performer', 'title', 'chart_week']]
     aggregates = aggregates.merge(peak_dates, on=['performer', 'title']).rename(columns={'chart_week': 'peak_date'})
 
-    # Add Popularity score and quartile
+    # Filter for Top 40 hits only
+    aggregates = aggregates[aggregates['highest_rank'] <= 40].copy()
+
+    # Add Popularity score and obscurity (1-5, where 1 is most popular)
     max_pts = aggregates['total_points'].max()
     aggregates['popularity_score'] = (aggregates['total_points'] / max_pts * 100).round(2)
-    aggregates['popularity_quartile'] = pd.qcut(aggregates['popularity_score'], 4, labels=[1, 2, 3, 4]).astype(int)
+    aggregates['obscurity'] = pd.qcut(aggregates['popularity_score'], 5, labels=[5, 4, 3, 2, 1]).astype(int)
     aggregates['peak_year'] = pd.to_datetime(aggregates['peak_date']).dt.year
 
     # Save aggregates
-    aggregates.columns = ['artist', 'song_title', 'highest_rank', 'weeks_on_chart', 'total_points', 'average_rank', 'first_appeared', 'last_appeared', 'peak_date', 'popularity_score', 'popularity_quartile', 'peak_year']
+    aggregates.columns = ['artist', 'song_title', 'highest_rank', 'weeks_on_chart', 'total_points', 'average_rank', 'first_appeared', 'last_appeared', 'peak_date', 'popularity_score', 'obscurity', 'peak_year']
     aggregates.to_parquet(os.path.join(TEMP_DIR, 'billboard_aggregates.parquet'), index=False)
 
     print(f"Data range: {df_filtered.chart_week.min()} to {df_filtered.chart_week.max()}")
