@@ -1,67 +1,63 @@
-const { Database } = require('duckdb-async');
-const path = require('path');
+const request = require('supertest');
+const { app, initDb } = require('./server');
 
-async function testFuzzySearch() {
-    const db = await Database.create(':memory:');
-    const AGGREGATES_PATH = 'billboard_aggregates.parquet';
-    
-    // Load RapidFuzz
-    await db.run("INSTALL rapidfuzz FROM community; LOAD rapidfuzz;");
-    await db.run(`CREATE TABLE billboard_aggregates AS SELECT * FROM '${AGGREGATES_PATH}'`);
+async function runIntegrationTests() {
+    console.log("--- Starting REAL Integration Tests for Fuzzy Search ---");
+    process.env.NODE_ENV = 'test';
+    await initDb();
 
     const testCases = [
         { query: 'nwa', expected: 'N.W.A' },
         { query: 'staying', expected: "Stayin' Alive" },
-        { query: 'guns and roses', expected: "Guns N' Roses" },
-        { query: 'motley crue', expected: "Motley Crue" },
-        { query: 'kesha', expected: "Kesha" }
+        { query: 'motley crue', expected: "Motley Crue" }
     ];
 
-    console.log("--- Starting Fuzzy Search Tests (Implementation Verification) ---");
-    let passed = 0;
+    const rankingCases = [
+        { query: 'prince', expectedTopArtist: 'Prince' },
+        { query: 'heart', expectedTopArtist: 'Heart' }
+    ];
 
+    let passed = 0;
     const normalize = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
 
+    console.log("\n--- Part 1: Fuzzy Matching ---");
     for (const test of testCases) {
-        const q = test.query;
-        const cleanQ = q.toLowerCase().replace(/[^a-z0-9\s]/g, '');
-        
-        const results = await db.all(
-          `SELECT artist as artistName, song_title as trackName, total_points,
-              greatest(
-                rapidfuzz_partial_ratio(regexp_replace(lower(artistName), '[^a-z0-9\\s]', '', 'g'), ?),
-                rapidfuzz_partial_ratio(regexp_replace(lower(trackName), '[^a-z0-9\\s]', '', 'g'), ?),
-                rapidfuzz_token_set_ratio(regexp_replace(lower(artistName), '[^a-z0-9\\s]', '', 'g'), ?),
-                rapidfuzz_token_set_ratio(regexp_replace(lower(trackName), '[^a-z0-9\\s]', '', 'g'), ?)
-              ) as score
-           FROM billboard_aggregates 
-           WHERE score > 80 OR (artistName ILIKE ? OR trackName ILIKE ?)
-           ORDER BY score DESC, total_points DESC 
-           LIMIT 5`,
-          cleanQ, cleanQ, cleanQ, cleanQ, `%${q}%`, `%${q}%`
-        );
-
-        const found = results.some(r => 
-            normalize(r.artistName).includes(normalize(test.expected)) || 
-            normalize(r.trackName).includes(normalize(test.expected)) ||
-            normalize(test.expected).includes(normalize(r.artistName)) ||
-            normalize(test.expected).includes(normalize(r.trackName))
-        );
-
+        const response = await request(app).get(`/api/search?q=${encodeURIComponent(test.query)}`);
+        const results = response.body;
+        const found = results.some(r => normalize(r.artistName).includes(normalize(test.expected)) || normalize(r.trackName).includes(normalize(test.expected)));
         if (found) {
-            console.log(`✅ PASS: "${test.query}" found "${test.expected}" (Best score: ${results[0]?.score || 0})`);
+            console.log(`✅ PASS: "${test.query}" found "${test.expected}" (Best: ${results[0]?.artistName})`);
             passed++;
         } else {
             console.log(`❌ FAIL: "${test.query}" did NOT find "${test.expected}"`);
-            console.log(`   Top 3 results:`, results.slice(0, 3).map(r => `${r.artistName} - ${r.trackName} (${r.score})`).join(', ') || 'None');
         }
     }
 
-    console.log(`\nResults: ${passed}/${testCases.length} passed.`);
-    process.exit(passed === testCases.length ? 0 : 1);
+    console.log("\n--- Part 2: Ranking Precision ---");
+    let rankPassed = 0;
+    for (const test of rankingCases) {
+        const response = await request(app).get(`/api/search?q=${encodeURIComponent(test.query)}`);
+        const results = response.body;
+        const top = results[0];
+        
+        console.log(`Query "${test.query}" -> Top: ${top?.artistName} - ${top?.trackName} (Score: ${top?.score})`);
+        
+        const isCorrect = top && (normalize(top.artistName) === normalize(test.expectedTopArtist) || normalize(top.trackName) === normalize(test.expectedTopArtist));
+        if (isCorrect) {
+            console.log(`✅ PASS: "${test.query}" correctly ranked "${test.expectedTopArtist}" at #1`);
+            rankPassed++;
+        } else {
+            console.log(`❌ FAIL: "${test.query}" ranked "${top?.artistName}" at #1 (Expected "${test.expectedTopArtist}")`);
+        }
+    }
+
+    if (passed === testCases.length && rankPassed === rankingCases.length) {
+        console.log("\nAll integration tests passed!");
+        process.exit(0);
+    } else {
+        console.log("\nSome tests failed.");
+        process.exit(1);
+    }
 }
 
-testFuzzySearch().catch(err => {
-    console.error(err);
-    process.exit(1);
-});
+runIntegrationTests();

@@ -252,23 +252,54 @@ app.get('/api/search', async (req, res) => {
       return res.status(400).json({ error: "query is required" });
     }
 
-    // Use RapidFuzz for powerful fuzzy matching and ranking
-    // 1. partial_ratio is great for "staying" -> "Stayin' Alive"
-    // 2. token_set_ratio is great for "guns and roses" -> "Guns N' Roses"
+    // Use RapidFuzz with weighted ranking for precision and recall
+    // 1. Exact field match (is_exact)
+    // 2. Exact word match (is_word_match) - if any word in the title/artist matches the query exactly
+    // 3. Fuzzy score (combination of ratio and partial_ratio)
+    // 4. Popularity (total_points)
+    const normalizedQ = q.toLowerCase().replace(/[^a-z0-9]/g, '');
     const cleanQ = q.toLowerCase().replace(/[^a-z0-9\s]/g, '');
+    
+    // We normalize "staying" to "stayin" and vice versa for better matching of that specific common variant
+    const stemQ = cleanQ.replace(/ing\b/g, 'in');
+
     let results = await db.all(
-      `SELECT artist as artistName, song_title as trackName, total_points,
+      `WITH scored_results AS (
+        SELECT 
+          artist as artistName, 
+          song_title as trackName, 
+          total_points,
+          -- Exact match on the whole field
+          (regexp_replace(lower(artist), '[^a-z0-9]', '', 'g') = ? OR 
+           regexp_replace(lower(song_title), '[^a-z0-9]', '', 'g') = ?) as is_exact,
+          -- Exact match on any word
+          (list_contains(str_split(regexp_replace(lower(artist), '[^a-z0-9 ]', '', 'g'), ' '), ?) OR
+           list_contains(str_split(regexp_replace(lower(song_title), '[^a-z0-9 ]', '', 'g'), ' '), ?) OR
+           list_contains(str_split(regexp_replace(lower(artist), '[^a-z0-9 ]', '', 'g'), ' '), ?) OR
+           list_contains(str_split(regexp_replace(lower(song_title), '[^a-z0-9 ]', '', 'g'), ' '), ?)) as is_word_match,
           greatest(
-            rapidfuzz_partial_ratio(regexp_replace(lower(artistName), '[^a-z0-9\\s]', '', 'g'), ?),
-            rapidfuzz_partial_ratio(regexp_replace(lower(trackName), '[^a-z0-9\\s]', '', 'g'), ?),
-            rapidfuzz_token_set_ratio(regexp_replace(lower(artistName), '[^a-z0-9\\s]', '', 'g'), ?),
-            rapidfuzz_token_set_ratio(regexp_replace(lower(trackName), '[^a-z0-9\\s]', '', 'g'), ?)
+            rapidfuzz_partial_ratio(regexp_replace(lower(artist), '[^a-z0-9 ]', '', 'g'), ?),
+            rapidfuzz_partial_ratio(regexp_replace(lower(song_title), '[^a-z0-9 ]', '', 'g'), ?),
+            rapidfuzz_partial_ratio(regexp_replace(lower(artist), '[^a-z0-9 ]', '', 'g'), ?),
+            rapidfuzz_partial_ratio(regexp_replace(lower(song_title), '[^a-z0-9 ]', '', 'g'), ?),
+            rapidfuzz_token_set_ratio(regexp_replace(lower(artist), '[^a-z0-9 ]', '', 'g'), ?),
+            rapidfuzz_token_set_ratio(regexp_replace(lower(song_title), '[^a-z0-9 ]', '', 'g'), ?)
           ) as score
-       FROM billboard_aggregates 
-       WHERE score > 80 OR (artistName ILIKE ? OR trackName ILIKE ?)
-       ORDER BY score DESC, total_points DESC 
-       LIMIT 5`,
-      cleanQ, cleanQ, cleanQ, cleanQ, `%${q}%`, `%${q}%`
+        FROM billboard_aggregates
+      )
+      SELECT artistName, trackName, total_points, score, is_exact, is_word_match
+      FROM scored_results
+      WHERE is_exact OR is_word_match OR score > 80 OR (artistName ILIKE ? OR trackName ILIKE ?)
+      ORDER BY 
+        is_exact DESC,
+        is_word_match DESC,
+        score DESC, 
+        total_points DESC 
+      LIMIT 5`,
+      normalizedQ, normalizedQ, 
+      cleanQ, cleanQ, stemQ, stemQ,
+      cleanQ, cleanQ, stemQ, stemQ, cleanQ, cleanQ,
+      `%${q}%`, `%${q}%`
     );
 
     // Convert BigInts to Numbers for JSON serialization
@@ -395,6 +426,10 @@ app.get('*', (req, res) => {
   serveIndex(req, res);
 });
 
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`);
+  });
+}
+
+module.exports = { app, initDb };

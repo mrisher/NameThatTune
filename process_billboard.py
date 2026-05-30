@@ -18,10 +18,8 @@ def process():
     df = pd.read_csv(CSV_FILE)
     df['chart_week'] = pd.to_datetime(df['chart_week'])
 
-    # Filter for 1980 to present
-    # We use a dynamic upper bound to include the latest data
-    max_date = df['chart_week'].max()
-    df_filtered = df[(df['chart_week'] >= '1980-01-01')].copy()
+    # Include full history from 1958 to present
+    df_filtered = df.copy()
 
     # Add Chart Points (101 - Rank)
     df_filtered['points'] = 101 - df_filtered['current_week']
