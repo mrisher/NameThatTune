@@ -193,15 +193,21 @@ app.get('/api/daily', async (req, res) => {
     const rng = seedrandom(date);
     const history = getHistory(); // Seed cooldown with last 4 weeks of config
     
-    // Determine today's target obscurity based on distribution
-    // 30% L1 (Mega), 30% L2 (Major), 20% L3 (Moderate), 10% L4 (Lesser), 10% L5 (Deep Cut)
-    const roll = rng();
-    let targetObscurity = 3; 
-    if (roll < 0.30) targetObscurity = 1;
-    else if (roll < 0.60) targetObscurity = 2;
-    else if (roll < 0.80) targetObscurity = 3;
-    else if (roll < 0.90) targetObscurity = 4;
-    else targetObscurity = 5;
+    // Determine today's target obscurity based on distribution or override
+    let targetObscurity;
+    const obscurityOverride = parseInt(req.query.obscurity);
+    if (obscurityOverride >= 1 && obscurityOverride <= 5) {
+      targetObscurity = obscurityOverride;
+      console.log(`Using target obscurity override: ${targetObscurity}`);
+    } else {
+      // 30% L1 (Mega), 30% L2 (Major), 20% L3 (Moderate), 10% L4 (Lesser), 10% L5 (Deep Cut)
+      const roll = rng();
+      if (roll < 0.30) targetObscurity = 1;
+      else if (roll < 0.60) targetObscurity = 2;
+      else if (roll < 0.80) targetObscurity = 3;
+      else if (roll < 0.90) targetObscurity = 4;
+      else targetObscurity = 5;
+    }
 
     // Fetch all candidates from the loaded table that match target obscurity
     const candidates = await db.all(
@@ -213,11 +219,41 @@ app.get('/api/daily', async (req, res) => {
         return res.status(500).json({ error: "No candidates found for target obscurity" });
     }
 
+    // Calibrated Weighted Selection Logic
+    const weightedCandidates = candidates.map(c => {
+      let weight = 1.0;
+      const peak = Number(c.highest_rank);
+      const weeks = Number(c.weeks_on_chart);
+      const year = Number(c.peak_year);
+
+      // Major Hits Boost
+      if (peak <= 10) weight *= 4.0;
+      else if (peak <= 20) weight *= 2.0;
+
+      // Longevity Boost (Proxy for Radio Popularity)
+      if (weeks >= 20) weight *= 3.0;
+      else if (weeks >= 10) weight *= 1.5;
+
+      // Era Preference (Sweet Spot 1980-2005)
+      if (year >= 1980 && year <= 2005) weight *= 1.5;
+
+      return { ...c, weight };
+    });
+
+    const totalWeight = weightedCandidates.reduce((acc, c) => acc + c.weight, 0);
+
     let selected;
     let attempts = 0;
     while (attempts < 100) {
-      const idx = Math.floor(rng() * candidates.length);
-      selected = candidates[idx];
+      let roll = rng() * totalWeight;
+      for (const c of weightedCandidates) {
+        roll -= c.weight;
+        if (roll <= 0) {
+          selected = c;
+          break;
+        }
+      }
+      
       const inHistory = history.some(h => h.title === selected.song_title && h.artist === selected.artist);
       if (!inHistory) break;
       attempts++;
