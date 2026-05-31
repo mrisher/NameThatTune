@@ -284,9 +284,8 @@ body {
   }
   #webamp-container {
     width: 275px;
-    /* This height controls where the next panel (guesses) starts. 
-       We set it to match the player footprint (100px offset + scaled height) + a small gap. */
-    height: calc(116px * var(--webamp-scale, 1) + 105px);
+    /* Negative offset (-20px) to pull guesses panel up and eliminate remaining gap */
+    height: calc(116px * var(--webamp-scale, 1) - 20px);
     position: relative;
     overflow: visible;
   }
