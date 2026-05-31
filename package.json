@@ -8,6 +8,7 @@
     "dev": "run-p dev:server dev:client",
     "dev:server": "nodemon server.js",
     "dev:client": "cd client && npm start",
+    "test": "node search_fuzzy.test.js && node api_daily.test.js",
     "heroku-postbuild": "cd client && npm install && npm run build",
     "gcp-build": "cd client && npm install && npm run build",
     "deploy": "CLOUDSDK_ACTIVE_CONFIG_NAME=dudle gcloud app deploy --project=dudle-488408"
