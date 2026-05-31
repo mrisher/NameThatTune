@@ -205,7 +205,7 @@ app.get('/api/daily', async (req, res) => {
 
     // Fetch all candidates from the loaded table that match target obscurity
     const candidates = await db.all(
-      `SELECT artist, song_title, obscurity, highest_rank, weeks_on_chart FROM billboard_aggregates WHERE obscurity = ?`,
+      `SELECT artist, song_title, obscurity, highest_rank, weeks_on_chart, peak_year FROM billboard_aggregates WHERE obscurity = ?`,
       targetObscurity
     );
 
@@ -261,15 +261,17 @@ app.get('/api/daily', async (req, res) => {
       }
     }
 
+    const toNum = (val) => typeof val === 'bigint' ? Number(val) : val;
+
     res.json({
       day: date,
       songTitle: selected.song_title,
       artistName: selected.artist,
       audioUrl: audioUrl,
-      obscurity: typeof selected.obscurity === 'bigint' ? Number(selected.obscurity) : selected.obscurity,
-      peak: selected.highest_rank,
-      weeks: selected.weeks_on_chart,
-      year: selected.peak_year,
+      obscurity: toNum(selected.obscurity),
+      peak: toNum(selected.highest_rank),
+      weeks: toNum(selected.weeks_on_chart),
+      year: toNum(selected.peak_year),
       offset: 0,
       isCold: isCold
     });
