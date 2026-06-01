@@ -391,7 +391,7 @@ const Game = () => {
                 webampRef.current = null;
             };
         }
-    }, [targetSong, jumpOffset, unlockDuration, gameState]);
+    }, [targetSong]);
 
     useEffect(() => {
         if ((gameState === "won" || gameState === "lost") && targetSong && webampRef.current) {
