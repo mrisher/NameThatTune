@@ -327,23 +327,30 @@ app.get('/api/search', async (req, res) => {
       return res.status(400).json({ error: "query is required" });
     }
 
-    // Use RapidFuzz for powerful fuzzy matching and ranking
-    // 1. partial_ratio is great for "staying" -> "Stayin' Alive"
-    // 2. token_set_ratio is great for "guns and roses" -> "Guns N' Roses"
-    const cleanQ = q.toLowerCase().replace(/[^a-z0-9\s]/g, '');
+    // Multi-word search logic:
+    // 1. Split query into words
+    // 2. Each word must match either artist or track (AND logic)
+    // 3. Score based on full query similarity
+    const words = q.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(w => w.length > 0);
+    const cleanQ = words.join(' ');
+    
+    if (words.length === 0) return res.json([]);
+
+    const whereClause = words.map(w => `(artistName ILIKE '%${w}%' OR trackName ILIKE '%${w}%')`).join(' AND ');
+
     let results = await db.all(
       `SELECT artist as artistName, song_title as trackName, total_points,
           greatest(
-            rapidfuzz_partial_ratio(regexp_replace(lower(artistName), '[^a-z0-9\\s]', '', 'g'), ?),
-            rapidfuzz_partial_ratio(regexp_replace(lower(trackName), '[^a-z0-9\\s]', '', 'g'), ?),
-            rapidfuzz_token_set_ratio(regexp_replace(lower(artistName), '[^a-z0-9\\s]', '', 'g'), ?),
-            rapidfuzz_token_set_ratio(regexp_replace(lower(trackName), '[^a-z0-9\\s]', '', 'g'), ?)
+            rapidfuzz_ratio(regexp_replace(lower(artistName), '[^a-z0-9\\s]', '', 'g'), ?),
+            rapidfuzz_ratio(regexp_replace(lower(trackName), '[^a-z0-9\\s]', '', 'g'), ?),
+            rapidfuzz_token_sort_ratio(regexp_replace(lower(artistName), '[^a-z0-9\\s]', '', 'g'), ?),
+            rapidfuzz_token_sort_ratio(regexp_replace(lower(trackName), '[^a-z0-9\\s]', '', 'g'), ?)
           ) as score
        FROM billboard_aggregates 
-       WHERE score > 80 OR (artistName ILIKE ? OR trackName ILIKE ?)
+       WHERE ${whereClause}
        ORDER BY score DESC, total_points DESC 
        LIMIT 5`,
-      cleanQ, cleanQ, cleanQ, cleanQ, `%${q}%`, `%${q}%`
+      cleanQ, cleanQ, cleanQ, cleanQ
     );
 
     // Convert BigInts to Numbers for JSON serialization
