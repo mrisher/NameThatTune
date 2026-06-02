@@ -684,6 +684,7 @@ const Game = () => {
             <h1 className="dudle-header">DUDLE</h1>
             <div className="obscurity-rating">
                 Obscurity: {"💪".repeat(targetSong.obscurity || 0) || "?"}
+                {targetSong.obscurity >= 3 && ` (Hint: ${targetSong.year})`}
             </div>
             <div className="dudle-container">
                 <div className="left-column">

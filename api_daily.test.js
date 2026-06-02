@@ -16,10 +16,10 @@ async function testDailyApi() {
     // 1. Roll for obscurity
     const roll = rng();
     let targetObscurity = 3; 
-    if (roll < 0.30) targetObscurity = 1;
-    else if (roll < 0.60) targetObscurity = 2;
-    else if (roll < 0.80) targetObscurity = 3;
-    else if (roll < 0.90) targetObscurity = 4;
+    if (roll < 0.40) targetObscurity = 1;
+    else if (roll < 0.80) targetObscurity = 2;
+    else if (roll < 0.90) targetObscurity = 3;
+    else if (roll < 0.95) targetObscurity = 4;
     else targetObscurity = 5;
 
     console.log(`Testing selection for date ${date} (Target Obscurity: ${targetObscurity})`);
