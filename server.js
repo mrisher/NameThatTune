@@ -200,12 +200,12 @@ app.get('/api/daily', async (req, res) => {
       targetObscurity = obscurityOverride;
       console.log(`Using target obscurity override: ${targetObscurity}`);
     } else {
-      // 30% L1 (Mega), 30% L2 (Major), 20% L3 (Moderate), 10% L4 (Lesser), 10% L5 (Deep Cut)
+      // 40% L1 (Mega), 40% L2 (Major), 10% L3 (Moderate), 5% L4 (Lesser), 5% L5 (Deep Cut)
       const roll = rng();
-      if (roll < 0.30) targetObscurity = 1;
-      else if (roll < 0.60) targetObscurity = 2;
-      else if (roll < 0.80) targetObscurity = 3;
-      else if (roll < 0.90) targetObscurity = 4;
+      if (roll < 0.40) targetObscurity = 1;
+      else if (roll < 0.80) targetObscurity = 2;
+      else if (roll < 0.90) targetObscurity = 3;
+      else if (roll < 0.95) targetObscurity = 4;
       else targetObscurity = 5;
     }
 
