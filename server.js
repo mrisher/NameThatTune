@@ -211,7 +211,7 @@ app.get('/api/daily', async (req, res) => {
 
     // Fetch all candidates from the loaded table that match target obscurity
     const candidates = await db.all(
-      `SELECT artist, song_title, obscurity, highest_rank, weeks_on_chart, peak_year FROM billboard_aggregates WHERE obscurity = ?`,
+      `SELECT artist, song_title, obscurity, highest_rank, weeks_on_chart, weeks_in_top_40, peak_year FROM billboard_aggregates WHERE obscurity = ?`,
       targetObscurity
     );
 
@@ -263,7 +263,14 @@ app.get('/api/daily', async (req, res) => {
     // Use a hash of artist|title as document ID
     let audioUrl = "";
     let isCold = forceCold === '1';
+    let artistTop40Count = 0;
     try {
+      const stats = await db.all(
+        `SELECT count(*) as count FROM billboard_aggregates WHERE artist = ?`,
+        selected.artist
+      );
+      artistTop40Count = stats.length > 0 ? toNum(stats[0].count) : 0;
+
       const cacheId = Buffer.from(`${selected.artist}|${selected.song_title}`).toString('hex');
       const cacheRef = firestore.collection('song_cache').doc(cacheId);
       const cacheDoc = await cacheRef.get();
@@ -307,7 +314,9 @@ app.get('/api/daily', async (req, res) => {
       obscurity: toNum(selected.obscurity),
       peak: toNum(selected.highest_rank),
       weeks: toNum(selected.weeks_on_chart),
+      weeksInTop40: toNum(selected.weeks_in_top_40),
       year: toNum(selected.peak_year),
+      artistTop40Count: artistTop40Count,
       offset: 0,
       isCold: isCold
     });

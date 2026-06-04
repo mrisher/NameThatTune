@@ -28,7 +28,7 @@ async function testDailyApi() {
     // This query would have failed if columns were missing
     try {
         const candidates = await db.all(
-          `SELECT artist, song_title, obscurity, highest_rank, weeks_on_chart, peak_year FROM billboard_aggregates WHERE obscurity = ?`,
+          `SELECT artist, song_title, obscurity, highest_rank, weeks_on_chart, weeks_in_top_40, peak_year FROM billboard_aggregates WHERE obscurity = ?`,
           targetObscurity
         );
 
@@ -37,9 +37,16 @@ async function testDailyApi() {
             passed++;
             
             const selected = candidates[0]; // Just test the first one for serialization
-            
-            // 3. Test JSON Serialization (Catching BigInt error)
             const toNum = (val) => typeof val === 'bigint' ? Number(val) : val;
+
+            // 3. Test artist top 40 count query
+            const stats = await db.all(
+                `SELECT count(*) as count FROM billboard_aggregates WHERE artist = ?`,
+                selected.artist
+            );
+            const artistTop40Count = stats.length > 0 ? toNum(stats[0].count) : 0;
+            
+            // 4. Test JSON Serialization (Catching BigInt error)
             const response = {
                 day: date,
                 songTitle: selected.song_title,
@@ -47,7 +54,9 @@ async function testDailyApi() {
                 obscurity: toNum(selected.obscurity),
                 peak: toNum(selected.highest_rank),
                 weeks: toNum(selected.weeks_on_chart),
+                weeksInTop40: toNum(selected.weeks_in_top_40),
                 year: toNum(selected.peak_year),
+                artistTop40Count: artistTop40Count
             };
 
             try {

@@ -453,14 +453,40 @@ const Game = () => {
     const handleHint = () => {
         if (!targetSong) return;
 
-        // Title words
-        const titleWords = targetSong.songTitle
+        const songTitle = targetSong.songTitle || "";
+        const artistName = targetSong.artistName || "";
+
+        // Word pattern logic: only show for actual ambiguity (hyphens or leading 'The'/'A')
+        const getWordPattern = (str) => {
+            const needsPattern = str.includes("-") || 
+                               str.toLowerCase().startsWith("the ") || 
+                               str.toLowerCase().startsWith("a ");
+            
+            if (!needsPattern) return "";
+
+            const pattern = str
+                .replace(/\([^)]*\)/g, "")
+                .replace(/\[[^\]]*\]/g, "")
+                .trim()
+                .split(/\s+/)
+                .map(word => {
+                    if (word.includes("-")) {
+                        return word.split("-").map(part => "_".repeat(part.length)).join("-");
+                    }
+                    return "_".repeat(word.length);
+                })
+                .join(" ");
+            return ` (${pattern})`;
+        };
+
+        // Title words: include words length 2+ unless they are common stopwords
+        const titleWords = songTitle
             .replace(/[^\w\s]/g, "")
             .split(/\s+/)
-            .filter(word => word.length > 0 && !STOPWORDS.includes(word.toLowerCase()));
+            .filter(word => word.length >= 2 && !STOPWORDS.includes(word.toLowerCase()));
 
         // Artist hint
-        let artistForHint = targetSong.artistName;
+        let artistForHint = artistName;
         if (artistForHint.toLowerCase().startsWith("the ")) artistForHint = artistForHint.substring(4);
         if (artistForHint.toLowerCase().startsWith("a ")) artistForHint = artistForHint.substring(2);
         const artistFirstLetter = artistForHint.charAt(0).toUpperCase();
@@ -470,10 +496,39 @@ const Game = () => {
 
         const possibleHints = [
             `Artist starts with: ${artistFirstLetter}`,
-            `Artist has ${countWords(targetSong.artistName)} word(s)`,
-            `Title has ${countWords(targetSong.songTitle)} word(s)`,
-            ...titleWords.map(w => `Title word: ${w}`)
+            `Artist has ${countWords(artistName)} word(s)${getWordPattern(artistName)}`,
+            `Title has ${countWords(songTitle)} word(s)${getWordPattern(songTitle)}`,
         ];
+
+        // Add Billboard stats if available
+        if (targetSong.peak) possibleHints.push(`Song peaked at #${targetSong.peak} on Billboard`);
+        if (targetSong.weeksInTop40) {
+            possibleHints.push(`Song spent ${targetSong.weeksInTop40} week(s) in the Top 40`);
+        } else if (targetSong.weeks) {
+            possibleHints.push(`Song spent ${targetSong.weeks} week(s) on the charts`);
+        }
+        if (targetSong.artistTop40Count) {
+            possibleHints.push(`Artist has ${targetSong.artistTop40Count} total Top 40 hit(s)`);
+        }
+
+        // Only add year hint if it's not already revealed by the Obscurity hint
+        if (targetSong.year && targetSong.obscurity < 3) {
+            possibleHints.push(`Release year: ${targetSong.year}`);
+        }
+
+        // Title first letter
+        const titleFirstLetter = targetSong.songTitle.trim().charAt(0).toUpperCase();
+        possibleHints.push(`Title starts with: ${titleFirstLetter}`);
+
+        // One-hit wonder status
+        if (targetSong.artistTop40Count === 1) {
+            possibleHints.push("Artist is a one-hit wonder (only one Top 40 hit)");
+        } else if (targetSong.artistTop40Count >= 4) {
+            possibleHints.push("Artist is a chart-topper with 4+ Top 40 hits");
+        }
+
+        // Add meaningful title words
+        titleWords.forEach(w => possibleHints.push(`Title word: ${w}`));
 
         // Deduplicate
         const uniqueHints = Array.from(new Set(possibleHints));
