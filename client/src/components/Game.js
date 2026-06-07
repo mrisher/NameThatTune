@@ -58,6 +58,8 @@ const Game = () => {
     const [showNameModal, setShowNameModal] = useState(false);
     const [showHintModal, setShowHintModal] = useState(false);
     const [currentHint, setCurrentHint] = useState("");
+    const [currentHintType, setCurrentHintType] = useState("text"); // "text" or "photo"
+    const [artistPhotoHint, setArtistPhotoHint] = useState(null); // URL to the photo
     const [currentDay, setCurrentDay] = useState(null);
     const [yesterdayObscurity, setYesterdayObscurity] = useState(null);
     const [yesterdayBillboard, setYesterdayBillboard] = useState(null);
@@ -411,6 +413,47 @@ const Game = () => {
         }
     }, [gameState, targetSong]);
 
+    useEffect(() => {
+        if (targetSong) {
+            // Fetch photo hint from Wikipedia
+            const fetchPhotoHint = async () => {
+                const searchWiki = async (query) => {
+                    const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(query)}&gsrlimit=3&prop=pageimages&pithumbsize=500&format=json&origin=*`;
+                    try {
+                        const res = await fetch(searchUrl, {
+                            headers: { 'User-Agent': 'DudleApp/1.0' }
+                        });
+                        const data = await res.json();
+                        if (data && data.query && data.query.pages) {
+                            const pagesArr = Object.values(data.query.pages).sort((a,b) => (a.index || 0) - (b.index || 0));
+                            for (const page of pagesArr) {
+                                if (page.thumbnail) {
+                                    return { title: page.title, url: page.thumbnail.source };
+                                }
+                            }
+                        }
+                    } catch (e) {
+                        console.error("Error fetching Wikipedia image:", e);
+                    }
+                    return null;
+                };
+
+                let imgData = await searchWiki(targetSong.artistName);
+                if (!imgData || !imgData.title.toLowerCase().includes(targetSong.artistName.toLowerCase())) {
+                    const fallbackImgData = await searchWiki(`${targetSong.artistName} (band)`);
+                    if (fallbackImgData) {
+                        imgData = fallbackImgData;
+                    }
+                }
+
+                if (imgData) {
+                    setArtistPhotoHint(imgData.url);
+                }
+            };
+            fetchPhotoHint();
+        }
+    }, [targetSong]);
+
     const handleGuess = (selectedTrack) => {
         if (!targetSong) return;
 
@@ -453,6 +496,8 @@ const Game = () => {
     const handleHint = () => {
         if (!targetSong) return;
 
+        const forceHint = new URLSearchParams(window.location.search).get("force_hint");
+
         // Title words
         const titleWords = targetSong.songTitle
             .replace(/[^\w\s]/g, "")
@@ -468,15 +513,19 @@ const Game = () => {
         // Word counts
         const countWords = (str) => str.replace(/\([^)]*\)/g, "").replace(/\[[^\]]*\]/g, "").trim().split(/\s+/).filter(w => w.length > 0).length;
 
-        const possibleHints = [
+        let possibleHints = [
             `Artist starts with: ${artistFirstLetter}`,
             `Artist has ${countWords(targetSong.artistName)} word(s)`,
             `Title has ${countWords(targetSong.songTitle)} word(s)`,
             ...titleWords.map(w => `Title word: ${w}`)
         ];
 
+        if (artistPhotoHint) {
+            possibleHints.push("PHOTO_HINT_PLACEHOLDER");
+        }
+
         // Deduplicate
-        const uniqueHints = Array.from(new Set(possibleHints));
+        let uniqueHints = Array.from(new Set(possibleHints));
 
         // Seeded shuffle so everyone gets the same hints in the same order
         const seedStr = targetSong.songTitle + targetSong.artistName;
@@ -490,11 +539,26 @@ const Game = () => {
         const previousHints = guesses.filter(g => g.status === "hint").length;
 
         let hintText = "No more hints available";
-        if (previousHints < uniqueHints.length) {
+        let isPhotoHint = false;
+
+        if (forceHint === "photo" && artistPhotoHint) {
+            hintText = "photo hint";
+            isPhotoHint = true;
+        } else if (previousHints < uniqueHints.length) {
             hintText = uniqueHints[previousHints];
+            if (hintText === "PHOTO_HINT_PLACEHOLDER") {
+                hintText = "photo hint";
+                isPhotoHint = true;
+            }
         }
 
-        setCurrentHint(hintText);
+        if (isPhotoHint) {
+            setCurrentHintType("photo");
+            setCurrentHint(artistPhotoHint);
+        } else {
+            setCurrentHintType("text");
+            setCurrentHint(hintText);
+        }
         setShowHintModal(true);
 
         const newGuesses = [
@@ -937,7 +1001,15 @@ const Game = () => {
                             </span>
                         </div>
                         <div className="share-modal-content">
-                            <div>{currentHint}</div>
+                            {currentHintType === "photo" ? (
+                                <img
+                                    src={currentHint}
+                                    alt="Artist hint"
+                                    style={{ maxWidth: '100%', maxHeight: '60vh', objectFit: 'contain', display: 'block', margin: '0 auto' }}
+                                />
+                            ) : (
+                                <div>{currentHint}</div>
+                            )}
                             <button
                                 className="winamp-btn"
                                 onClick={() => setShowHintModal(false)}
