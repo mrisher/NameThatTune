@@ -57,6 +57,7 @@ const Game = () => {
     const [isSavingName, setIsSavingName] = useState(false);
     const [showNameModal, setShowNameModal] = useState(false);
     const [showHintModal, setShowHintModal] = useState(false);
+    const [showVideoModal, setShowVideoModal] = useState(false);
     const [currentHint, setCurrentHint] = useState("");
     const [currentHintType, setCurrentHintType] = useState("text"); // "text" or "photo"
     const [artistPhotoHint, setArtistPhotoHint] = useState(null); // URL to the photo
@@ -206,40 +207,53 @@ const Game = () => {
         const today = `${year}-${month}-${day}`;
 
         const isForceCold = params.get("forceCold") === "1";
+        const isSpecial = params.get("special") === "1";
         const apiUrl = `/api/daily?date=${today}${isForceCold ? '&forceCold=1' : ''}`;
 
-        fetch(apiUrl)
-            .then(res => res.json())
-            .then(todaysSong => {
-                if (todaysSong.error) {
-                    setTargetSong({ outOfService: true });
-                    return;
-                }
-                setTargetSong(todaysSong);
-                setCurrentDay(today);
-
-                const savedStateJson = localStorage.getItem("dudle_saved_state");
-                if (savedStateJson) {
-                    try {
-                        const savedState = JSON.parse(savedStateJson);
-                        if (savedState.date === today) {
-                            setGuesses(savedState.guesses);
-                            setGameState(savedState.gameState);
-                            setHasJumped(savedState.hasJumped);
-                            setJumpOffset(savedState.jumpOffset);
-                            setUnlockDuration(savedState.unlockDuration);
-                        } else {
-                            localStorage.removeItem("dudle_saved_state");
-                        }
-                    } catch (e) {
-                        console.error("Error parsing saved state", e);
-                    }
-                }
-            })
-            .catch(err => {
-                console.error("Error fetching daily song:", err);
+        const processTargetSong = (todaysSong) => {
+            if (todaysSong.error) {
                 setTargetSong({ outOfService: true });
+                return;
+            }
+            setTargetSong(todaysSong);
+            setCurrentDay(today);
+
+            const savedStateJson = localStorage.getItem("dudle_saved_state");
+            if (savedStateJson) {
+                try {
+                    const savedState = JSON.parse(savedStateJson);
+                    if (savedState.date === today) {
+                        setGuesses(savedState.guesses);
+                        setGameState(savedState.gameState);
+                        setHasJumped(savedState.hasJumped);
+                        setJumpOffset(savedState.jumpOffset);
+                        setUnlockDuration(savedState.unlockDuration);
+                    } else {
+                        localStorage.removeItem("dudle_saved_state");
+                    }
+                } catch (e) {
+                    console.error("Error parsing saved state", e);
+                }
+            }
+        };
+
+        if (isSpecial) {
+            processTargetSong({
+                day: today,
+                songTitle: "Happy Birthday to You",
+                artistName: "Happy Birthday To You",
+                audioUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/c2/46/1c/c2461c6b-a13e-c425-c387-3d8fcc515a92/mzaf_6487544679093548009.plus.aac.p.m4a",
+                offset: 0
             });
+        } else {
+            fetch(apiUrl)
+                .then(res => res.json())
+                .then(processTargetSong)
+                .catch(err => {
+                    console.error("Failed to fetch daily song:", err);
+                    setTargetSong({ outOfService: true });
+                });
+        }
 
         // Fetch yesterday's stats and obscurity
         const yesterdayDate = new Date();
@@ -469,6 +483,10 @@ const Game = () => {
             }
             setGameState("won");
             setUnlockDuration(15);
+            const params = new URLSearchParams(window.location.search);
+            if (params.get("special") === "1") {
+                setShowVideoModal(true);
+            }
         } else {
             if (newGuesses.length >= 6) {
                 setGameState("lost");
@@ -983,6 +1001,31 @@ const Game = () => {
                             >
                                 {shareText}
                             </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {showVideoModal && (
+                <div className="share-modal-overlay" style={{ zIndex: 9999 }}>
+                    <div className="share-modal" style={{ width: "90%", maxWidth: "800px" }}>
+                        <div className="share-modal-titlebar">
+                            <span>HAPPY BIRTHDAY</span>
+                            <span
+                                className="close-btn"
+                                onClick={() => setShowVideoModal(false)}
+                            >
+                                🗙
+                            </span>
+                        </div>
+                        <div className="share-modal-content" style={{ padding: 0 }}>
+                            <video
+                                src="/happy-birthday.mp4"
+                                autoPlay
+                                controls
+                                playsInline
+                                style={{ width: "100%", height: "auto", display: "block" }}
+                            />
                         </div>
                     </div>
                 </div>
