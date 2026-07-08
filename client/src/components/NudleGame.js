@@ -69,9 +69,9 @@ const validateNudleGuess = (selectedMovie) => {
 const HINTS_POOL = [
     "Released in 1998.",
     "Genres: Crime, Drama, Mystery, Thriller.",
-    "Directed by John McNaughton.",
     "Stars Neve Campbell, Denise Richards, Kevin Bacon, and Matt Dillon.",
-    "It is a notorious Florida-set noir thriller featuring a series of wild plot twists and double-crosses."
+    "It is a notorious Florida-set noir thriller featuring a series of wild plot twists and double-crosses.",
+    "Directed by John McNaughton."
 ];
 
 // NudleSearch: client-side fuzzy search on local nudle_movies.json list
