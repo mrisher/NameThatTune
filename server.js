@@ -94,25 +94,27 @@ const serveIndex = (req, res) => {
       console.error('Error reading index.html', err);
       return res.status(500).end();
     }
-    
+
     const host = req.get('host') || 'localhost:8080';
     const protocol = req.headers['x-forwarded-proto'] || req.protocol;
     const origin = `${protocol}://${host}`;
-    
+
     // Inject the absolute origin into OpenGraph tags and add a cache-buster
-    // let injectedHtml = htmlData.replace(/"\/dudle\.png"/g, `"${origin}/dudle.png?v=1"`);
     let injectedHtml = htmlData;
-    
-    /* 
-    // Dynamically adjust OpenGraph tags for different routes
-    if (req.path.startsWith('/connectunes')) {
+
+    if (req.path.startsWith('/nudle')) {
+      injectedHtml = injectedHtml
+        .replace(/content="Dudle"/g, 'content="Nudle"')
+        .replace(/<title>Dudle<\/title>/g, '<title>Nudle</title>')
+        .replace(/content="Guess the band, quick as you can"/g, 'content="FFTN"')
+        .replace(/content="%PUBLIC_URL%\/dudle\.png"/g, `content="${origin}/wild_things.jpg"`);
+    } else if (req.path.startsWith('/connectunes')) {
       injectedHtml = injectedHtml
         .replace(/content="Dudle"/g, 'content="ConnecTunes"')
         .replace(/<title>Dudle<\/title>/g, '<title>ConnecTunes</title>')
         .replace(/content="Guess the band, quick as you can"/g, 'content="Find the 2 songs that share a word in their title!"');
     }
-    */
-    
+
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.send(injectedHtml);
   });
@@ -192,7 +194,7 @@ app.get('/api/daily', async (req, res) => {
     // Seeded PRNG for song selection
     const rng = seedrandom(date);
     const history = getHistory(); // Seed cooldown with last 4 weeks of config
-    
+
     // Determine today's target obscurity based on distribution or override
     let targetObscurity;
     const obscurityOverride = parseInt(req.query.obscurity);
@@ -253,7 +255,7 @@ app.get('/api/daily', async (req, res) => {
           break;
         }
       }
-      
+
       const inHistory = history.some(h => h.title === selected.song_title && h.artist === selected.artist);
       if (!inHistory) break;
       attempts++;
@@ -333,7 +335,7 @@ app.get('/api/search', async (req, res) => {
     // 3. Score based on full query similarity
     const words = q.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(w => w.length > 0);
     const cleanQ = words.join(' ');
-    
+
     if (words.length === 0) return res.json([]);
 
     const whereClause = words.map(w => `(artistName ILIKE '%${w}%' OR trackName ILIKE '%${w}%')`).join(' AND ');
@@ -346,9 +348,9 @@ app.get('/api/search', async (req, res) => {
             rapidfuzz_token_sort_ratio(regexp_replace(lower(artistName), '[^a-z0-9\\s]', '', 'g'), ?),
             rapidfuzz_token_sort_ratio(regexp_replace(lower(trackName), '[^a-z0-9\\s]', '', 'g'), ?)
           ) as score
-       FROM billboard_aggregates 
+       FROM billboard_aggregates
        WHERE ${whereClause}
-       ORDER BY score DESC, total_points DESC 
+       ORDER BY score DESC, total_points DESC
        LIMIT 5`,
       cleanQ, cleanQ, cleanQ, cleanQ
     );
