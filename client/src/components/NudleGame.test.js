@@ -84,26 +84,20 @@ describe('NudleGame Component', () => {
       expect(screen.getByRole('heading', { name: 'NUDLE' })).toBeInTheDocument();
     });
 
-    // Simulate Webamp starting playback (Round 1 = 1s duration)
+    // Simulate Webamp starting playback (Round 0 = 1s duration)
     act(() => {
       mockWebampState = { media: { status: 'PLAYING', timeElapsed: 0, length: 30 } };
       if (mockActiveSubscriber) mockActiveSubscriber();
     });
 
-    // Crop viewer modal should now be open
+    // Crop viewer modal should now be open with a 1s countdown
     expect(screen.getByText('NUDLE CROP VIEWER')).toBeInTheDocument();
     expect(screen.getByText('CLOSING IN 1s')).toBeInTheDocument();
 
-    // Advance playback time elapsed to 1s to trigger auto-pause inside subscription
-    act(() => {
-      mockWebampState = { media: { status: 'PLAYING', timeElapsed: 1.0, length: 30 } };
-      if (mockActiveSubscriber) mockActiveSubscriber();
-    });
-
-    // Modal should close!
+    // The modal's self-contained timer ticks down; after ~1s it auto-closes.
     await waitFor(() => {
       expect(screen.queryByText('NUDLE CROP VIEWER')).not.toBeInTheDocument();
-    });
+    }, { timeout: 3000 });
   });
 
   test('displays progressive hints and uses up guess slots when Hint is clicked', async () => {
