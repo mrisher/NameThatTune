@@ -265,29 +265,32 @@ const NudleGame = () => {
                 webamp.seekToTime(0);
             });
 
-            // Subscribe to state changes of the actual Webamp store to show the crops!
+            // Subscribe to Webamp state changes to open/close the crop viewer.
+            // We only react to play/pause *transitions* — the crop viewer's own
+            // countdown timer (see useEffect below) handles the visible countdown
+            // and auto-close. Reacting to every timeupdate/playing event re-rendered
+            // the modal several times per second, which (a) left the countdown stuck
+            // on mobile where timeupdate stalls, and (b) drowned the close button in
+            // a re-render storm so its tap never registered as a click on touch.
+            let lastStatus = null;
             const unsubscribe = webamp.store.subscribe(() => {
                 const state = webamp.store.getState();
-                
-                if (state.media.status === "PLAYING") {
+                const status = state.media.status;
+
+                if (status === "PLAYING") {
                     if (gameStateRef.current !== "playing") {
+                        lastStatus = status;
                         return; // Let them listen to audio freely if they won/lost!
                     }
-
-                    const duration = DURATION_MAP[guessesRef.current.length] || 5;
-
-                    if (state.media.timeElapsed >= duration) {
-                        webamp.pause();
-                        webamp.seekToTime(0);
-                    } else {
+                    if (lastStatus !== "PLAYING") {
                         setIsPlaying(true);
                         setShowCropModal(true);
-                        setTimeLeft(Math.ceil(duration - state.media.timeElapsed));
                     }
                 } else {
                     setIsPlaying(false);
                     setShowCropModal(false);
                 }
+                lastStatus = status;
             });
 
             return () => {
@@ -297,6 +300,36 @@ const NudleGame = () => {
             };
         }
     }, [webampContainerRef]);
+
+    // Self-contained countdown timer for the crop viewer modal. Decoupling the
+    // countdown from Webamp's `timeupdate` events keeps it ticking reliably on
+    // mobile (where timeupdate can stall) and stops the modal from re-rendering
+    // several times per second. This single effect owns the countdown AND the
+    // auto-close, so there's no race with a stale `timeLeft` on the opening render.
+    useEffect(() => {
+        if (!showCropModal) return;
+        const duration = DURATION_MAP[guessesRef.current.length] || 5;
+        let remaining = duration;
+        setTimeLeft(remaining);
+        const id = setInterval(() => {
+            remaining -= 1;
+            setTimeLeft(Math.max(0, remaining));
+            if (remaining <= 0) {
+                clearInterval(id);
+                if (webampRef.current) {
+                    try {
+                        webampRef.current.pause();
+                        webampRef.current.seekToTime(0);
+                    } catch (e) {
+                        console.error("Failed to auto-close crop viewer:", e);
+                    }
+                }
+                setShowCropModal(false);
+                setIsPlaying(false);
+            }
+        }, 1000);
+        return () => clearInterval(id);
+    }, [showCropModal]);
 
     // When gameState changes, update the Webamp track title metadata
     useEffect(() => {
