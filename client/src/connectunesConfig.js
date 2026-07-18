@@ -3434,22 +3434,22 @@ const rawConnectunesSongs = [
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       }
     ]
   },
@@ -3460,22 +3460,22 @@ const rawConnectunesSongs = [
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       }
     ]
   },
@@ -3486,22 +3486,22 @@ const rawConnectunesSongs = [
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       }
     ]
   },
@@ -3512,22 +3512,22 @@ const rawConnectunesSongs = [
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       }
     ]
   },
@@ -3538,22 +3538,22 @@ const rawConnectunesSongs = [
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       }
     ]
   },
@@ -3564,22 +3564,22 @@ const rawConnectunesSongs = [
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       }
     ]
   },
@@ -3590,22 +3590,22 @@ const rawConnectunesSongs = [
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       }
     ]
   },
@@ -3616,22 +3616,22 @@ const rawConnectunesSongs = [
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       }
     ]
   },
@@ -3642,22 +3642,22 @@ const rawConnectunesSongs = [
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       }
     ]
   },
@@ -3668,22 +3668,22 @@ const rawConnectunesSongs = [
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       }
     ]
   },
@@ -3694,22 +3694,22 @@ const rawConnectunesSongs = [
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       },
       {
         "songTitle": "UGxhY2Vob2xkZXI=",
         "artistName": "UGxhY2Vob2xkZXI=",
-        "audioUrl": "https://example.com/audio.m4a"
+        "audioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b4/87/68/b487687d-25aa-8a8e-91cf-11b9a7734ab3/mzaf_4781010252683956610.plus.aac.p.m4a"
       }
     ]
   }];
