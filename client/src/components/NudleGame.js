@@ -13,7 +13,7 @@ const DURATION_MAP = {
     5: 5,
 };
 
-const getStatusIcon = (status) => {
+const getStatusIcon = (status, index = -1, guesses = []) => {
     switch (status) {
         case "green":
             return "🟩";
@@ -23,6 +23,14 @@ const getStatusIcon = (status) => {
             return "🟥";
         case "skipped":
             return "⏩";
+        case "hint":
+            if (index >= 0 && guesses.length > 0) {
+                const hintNumber = guesses.slice(0, index + 1).filter(g => g.status === "hint").length;
+                if (hintNumber === 4) return "😔";
+                if (hintNumber === 5) return "🙄";
+                if (hintNumber >= 6) return "🤮";
+            }
+            return "❓";
         default:
             return "⬜";
     }
@@ -308,7 +316,7 @@ const NudleGame = () => {
     // auto-close, so there's no race with a stale `timeLeft` on the opening render.
     useEffect(() => {
         if (!showCropModal) return;
-        const duration = DURATION_MAP[guessesRef.current.length] || 5;
+        const duration = DURATION_MAP[guessesRef.current.filter(g => g.status !== "hint").length] || 5;
         let remaining = duration;
         setTimeLeft(remaining);
         const id = setInterval(() => {
@@ -443,7 +451,7 @@ const NudleGame = () => {
         const friendlyDate = getFriendlyParisDate(new Date());
         const score = gameState === "won" ? guesses.length : "X";
         const resultEmoji = guesses
-            .map((g) => getStatusIcon(g.status))
+            .map((g, i) => getStatusIcon(g.status, i, guesses))
             .join("");
         const blankEmoji = "⬜".repeat(Math.max(0, 6 - guesses.length));
         
@@ -479,7 +487,7 @@ const NudleGame = () => {
                             {guesses.map((g, i) => (
                                 <div key={i} className={`playlist-entry ${g.status}`}>
                                     <span>
-                                        {i + 1}. {getStatusIcon(g.status)}{" "}
+                                        {i + 1}. {getStatusIcon(g.status, i, guesses)}{" "}
                                         {g.trackName}
                                     </span>
                                     <span>{g.artistName}</span>

@@ -21,7 +21,7 @@ const DURATION_MAP = {
     5: 5,
 };
 
-const getStatusIcon = (status) => {
+const getStatusIcon = (status, index = -1, guesses = []) => {
     switch (status) {
         case "green":
             return "🟩";
@@ -36,6 +36,12 @@ const getStatusIcon = (status) => {
         case "jump_penalty":
             return "⬛";
         case "hint":
+            if (index >= 0 && guesses.length > 0) {
+                const hintNumber = guesses.slice(0, index + 1).filter(g => g.status === "hint").length;
+                if (hintNumber === 4) return "😔";
+                if (hintNumber === 5) return "🙄";
+                if (hintNumber >= 6) return "🤮";
+            }
             return "❓";
         default:
             return "⬜";
@@ -492,7 +498,7 @@ const Game = () => {
                 setGameState("lost");
                 setUnlockDuration(15);
             } else {
-                setUnlockDuration(DURATION_MAP[newGuesses.length] || 5);
+                setUnlockDuration(DURATION_MAP[newGuesses.filter(g => g.status !== "hint").length] || 5);
             }
         }
     };
@@ -507,7 +513,7 @@ const Game = () => {
             setGameState("lost");
             setUnlockDuration(15);
         } else {
-            setUnlockDuration(DURATION_MAP[newGuesses.length] || 5);
+            setUnlockDuration(DURATION_MAP[newGuesses.filter(g => g.status !== "hint").length] || 5);
         }
     };
 
@@ -588,7 +594,7 @@ const Game = () => {
             setGameState("lost");
             setUnlockDuration(15);
         } else {
-            setUnlockDuration(DURATION_MAP[newGuesses.length] || 5);
+            setUnlockDuration(DURATION_MAP[newGuesses.filter(g => g.status !== "hint").length] || 5);
         }
     };
 
@@ -606,7 +612,7 @@ const Game = () => {
             setGameState("lost");
             setUnlockDuration(15);
         } else {
-            setUnlockDuration(DURATION_MAP[newGuesses.length] || 5);
+            setUnlockDuration(DURATION_MAP[newGuesses.filter(g => g.status !== "hint").length] || 5);
         }
 
         if (webampRef.current) {
@@ -616,8 +622,8 @@ const Game = () => {
 
     const handleShare = () => {
         let resultEmoji = "";
-        guesses.forEach((g) => {
-            resultEmoji += getStatusIcon(g.status);
+        guesses.forEach((g, i) => {
+            resultEmoji += getStatusIcon(g.status, i, guesses);
         });
 
         const score = gameState === "won" ? guesses.length : "X";
@@ -785,7 +791,7 @@ const Game = () => {
                                     className={`playlist-entry ${g.status}`}
                                 >
                                     <span>
-                                        {i + 1}. {getStatusIcon(g.status)}{" "}
+                                        {i + 1}. {getStatusIcon(g.status, i, guesses)}{" "}
                                         {g.trackName}
                                     </span>
                                     <span>{g.artistName}</span>
