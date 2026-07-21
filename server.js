@@ -55,10 +55,13 @@ function getHistory() {
 }
 
 const cleanTitle = (t) => {
+  if (!t) return '';
   let cleaned = t.toLowerCase();
   cleaned = cleaned.replace(/\[.*?\]|\(.*?\)/g, ''); // removes (acoustic), [radio edit], etc.
   cleaned = cleaned.replace(/\s*(?:ft\.|feat\.)\s+.*$/g, ''); // removes ft. Collaborator
-  return cleaned.trim();
+  cleaned = cleaned.replace(/['’‘"`]/g, ''); // remove apostrophes and quotes (including smart quotes)
+  cleaned = cleaned.replace(/[^a-z0-9\s]/g, ' '); // replace other punctuation with space
+  return cleaned.replace(/\s+/g, ' ').trim();
 };
 
 async function fetchItunesUrl(artist, title) {
@@ -78,9 +81,10 @@ async function fetchItunesUrl(artist, title) {
         // Lexical matching: among exact title matches, pick the one with the shortest full name as a proxy for "cleanest"
         bestMatch = exactMatches.sort((a, b) => a.trackName.length - b.trackName.length)[0];
       } else {
-        bestMatch = data.results.sort((a, b) => a.trackName.length - b.trackName.length)[0];
+        // Safe fallback: trust iTunes' relevance ranking instead of sorting unrelated tracks by length
+        bestMatch = data.results[0];
       }
-      return { audioUrl: bestMatch.previewUrl, trackId: bestMatch.trackId };
+      return { audioUrl: bestMatch.previewUrl, trackId: bestMatch.trackId, trackName: bestMatch.trackName };
     }
   } catch (e) {
     console.error("iTunes fetch failed:", e);
@@ -496,6 +500,10 @@ app.get('*', (req, res) => {
   serveIndex(req, res);
 });
 
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`);
+  });
+}
+
+module.exports = { cleanTitle, fetchItunesUrl };
