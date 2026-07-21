@@ -56,13 +56,24 @@ function getHistory() {
 
 async function fetchItunesUrl(artist, title) {
   const query = `${artist} ${title}`;
-  const url = `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&limit=5&media=music`;
+  // Ensure we fetch explicit tracks and use a User-Agent per memory instructions
+  const url = `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&limit=50&media=music&explicit=yes`;
   try {
-    const res = execSync(`curl -s "${url}"`).toString();
+    const res = execSync(`curl -s -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" "${url}"`).toString();
     const data = JSON.parse(res);
     if (data.results && data.results.length > 0) {
-      // Lexical matching: pick the one with the shortest name as a proxy for "cleanest"
-      const bestMatch = data.results.sort((a, b) => a.trackName.length - b.trackName.length)[0];
+      const cleanTitle = (t) => t.replace(/\[.*?\]|\(.*?\)/g, '').trim().toLowerCase();
+      const cleanTarget = cleanTitle(title);
+
+      const exactMatches = data.results.filter(r => cleanTitle(r.trackName) === cleanTarget);
+
+      let bestMatch;
+      if (exactMatches.length > 0) {
+        // Lexical matching: among exact title matches, pick the one with the shortest full name as a proxy for "cleanest"
+        bestMatch = exactMatches.sort((a, b) => a.trackName.length - b.trackName.length)[0];
+      } else {
+        bestMatch = data.results.sort((a, b) => a.trackName.length - b.trackName.length)[0];
+      }
       return { audioUrl: bestMatch.previewUrl, trackId: bestMatch.trackId };
     }
   } catch (e) {
